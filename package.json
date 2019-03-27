@@ -8,8 +8,17 @@
   },
   "dependencies": {
     "expo": "^32.0.0",
+    "moment": "^2.24.0",
     "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz"
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-easy-toast": "^1.2.0",
+    "react-native-elements": "^1.1.0",
+    "react-native-i18n": "^2.0.15",
+    "react-native-image-zoom-viewer": "^2.2.25",
+    "react-native-navbar": "^2.1.0",
+    "react-native-render-html": "^4.1.2",
+    "react-native-router-flux": "^4.0.6",
+    "react-native-snap-carousel": "^3.7.5"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"
