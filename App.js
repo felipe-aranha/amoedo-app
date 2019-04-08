@@ -1,21 +1,40 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+
+import { Routes } from './src/routes';
+import { AppLoading } from 'expo';
 
 export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
-    );
-  }
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+	constructor(props,state){
+		super(props,state);
+		this.state = {
+			isReady: false
+		}
+	}
+
+
+	_init(){
+		return Promise.all();
+	}
+
+	_finish(){
+		this.setState({
+			isReady: true
+		})
+	}
+
+	_error(){
+
+	}
+
+	render() {
+		return this.state.isReady ? 
+				<Routes />
+			:
+				<AppLoading 
+					startAsync={this._init.bind(this)}
+					onFinish={this._finish.bind(this)}
+					onError={this._error.bind(this)}
+				/>
+	}
+}
