@@ -7,10 +7,10 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "expo": "^32.0.0",
+    "expo": "32.0.6",
     "moment": "^2.24.0",
-    "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react": "16.8.2",
+    "react-native": "git+https://github.com/the-atelier/react-native.git#sdk-32",
     "react-native-easy-toast": "^1.2.0",
     "react-native-elements": "^1.1.0",
     "react-native-i18n": "^2.0.15",
@@ -19,12 +19,12 @@
     "react-native-render-html": "^4.1.2",
     "react-native-router-flux": "^4.0.6",
     "react-native-snap-carousel": "^3.7.5",
-    "react-redux": "^7.0.1",
-    "redux": "^4.0.1"
+    "react-native-swiper": "^1.5.14"
   },
   "devDependencies": {
     "babel-plugin-transform-remove-console": "^6.9.4",
-    "babel-preset-expo": "^5.0.0"
+    "babel-preset-expo": "^5.0.0",
+    "schedule": "^0.4.0"
   },
   "private": true
 }

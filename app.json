@@ -2,7 +2,7 @@
   "expo": {
     "name": "Amoedo Arquiteto",
     "slug": "amoedo-arquiteto",
-    "privacy": "private",
+    "privacy": "unlisted",
     "sdkVersion": "32.0.0",
     "platforms": [
       "ios",

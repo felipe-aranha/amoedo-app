@@ -7,7 +7,10 @@ import {
     Tabs
 } from 'react-native-router-flux';
 import { View, StyleSheet } from 'react-native';
-import { MainView } from '../view';
+import { 
+    Wizard,
+    AccountType
+} from '../view';
 import Toast from 'react-native-easy-toast';
 
 export class Routes extends React.Component{
@@ -33,7 +36,7 @@ export class Routes extends React.Component{
             <View style={StyleSheet.absoluteFill}>
                 <Router>
                     <Modal key='main'>
-                        <Scene hideNavBar key='intial' component={MainView} />
+                        <Scene hideNavBar key='intial' component={AccountType} />
                     </Modal>
                 </Router>   
                 <Toast position={'center'} ref={this.toast} />

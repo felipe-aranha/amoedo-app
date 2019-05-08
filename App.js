@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Routes } from './src/routes';
-import { AppLoading } from 'expo';
+import { AppLoading, Font } from 'expo';
 
 export default class App extends React.Component {
 
@@ -14,6 +14,11 @@ export default class App extends React.Component {
 
 
 	_init(){
+		p1 = Font.loadAsync({
+			'system-semibold': require('./assets/fonts/system-semibold.ttf'),
+			'system': require('./assets/fonts/system-regular.ttf'),
+			'system-bold': require('./assets/fonts/system-bold.ttf'),
+		});
 		return Promise.all();
 	}
 

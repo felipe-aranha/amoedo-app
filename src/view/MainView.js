@@ -1,11 +1,15 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { mainStyle } from '../style'
 
 export class MainView extends React.Component{
+
+    renderCenter(){}
+
     render(){
         return(
-            <View>
-                <Text></Text>
+            <View style={[StyleSheet.absoluteFill, mainStyle.mainView]}>
+                {this.renderCenter()}
             </View>
         )
     }
