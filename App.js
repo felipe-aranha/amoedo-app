@@ -19,7 +19,7 @@ export default class App extends React.Component {
 			'system': require('./assets/fonts/system-regular.ttf'),
 			'system-bold': require('./assets/fonts/system-bold.ttf'),
 		});
-		return Promise.all();
+		return Promise.all([p1]);
 	}
 
 	_finish(){
