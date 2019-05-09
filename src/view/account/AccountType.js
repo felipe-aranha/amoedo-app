@@ -21,10 +21,11 @@ export default class AccountType extends AccountBase{
                 <View style={{flex:1}}>
                 </View>
                 <View style={{flex:1}}>
-                    <View style={{flex:1}}>
+                    <View style={accountStyle.innerContentView}>
                         <Text>
                             <Text>{I18n.t('account.accountType.mainText')}</Text>
                             <Text>{I18n.t('account.accountType.highlight')}</Text>
+                            <Text>.</Text>
                         </Text>
                     </View>
                     <View style={{flex:1}}>
