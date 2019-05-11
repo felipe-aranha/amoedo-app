@@ -45,5 +45,43 @@ export default StyleSheet.create({
     },
     accountCustomerButton: {
         borderColor: '#fff'
+    },
+    loginNavBarBackground: {
+        width: '100%',
+        height: 200
+    },
+    inputContainterStyle: {
+        backgroundColor: 'rgba(52,52,52,0.4)',
+        borderBottomWidth: 0,
+        borderRadius: 5,
+        paddingVertical: 5
+    },
+    inputStyle: {
+        color: '#fff',
+        paddingLeft: 10,
+        fontFamily: 'system',
+        fontSize: 14
+    },
+    inputWrapperStyle: {
+        marginVertical: 10
+    },
+    loginMainView: {
+        marginTop: 50
+    },
+    loginButton: {
+        backgroundColor: '#fff'
+    },
+    loginButtonContainter: {
+        marginVertical: 30,
+        paddingHorizontal: 10
+    },
+    loginButtonTitle: {
+        color: '#000'
+    },
+    forgotPasswordText: {
+        color: '#fff',
+        textAlign: 'right',
+        paddingTop: 10,
+        fontSize: 12
     }
 })
