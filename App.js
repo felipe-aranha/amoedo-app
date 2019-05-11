@@ -30,7 +30,7 @@ export default class App extends React.Component {
 			'system-medium': require('./assets/fonts/system-medium.ttf'),
 			'system-bold': require('./assets/fonts/system-bold.ttf'),
 		});
-		p2 = this.cacheImages([require('./assets/images/account-bg-x2.jpg')])
+		p2 = this.cacheImages([require('./assets/images/account/account-bg-x2.jpg')])
 		return Promise.all([p1,p2]);
 	}
 

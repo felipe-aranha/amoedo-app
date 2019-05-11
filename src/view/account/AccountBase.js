@@ -15,7 +15,7 @@ export class AccountBase extends MainView{
 
     renderContent(){}
 
-    imageBackground = require('../../../assets/images/account-bg-x2.jpg');
+    imageBackground = require('../../../assets/images/account/account-bg-x2.jpg');
 
     renderCenter(){
         return(
