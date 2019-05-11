@@ -4,12 +4,14 @@ import {
     Scene, 
     Drawer, 
     Modal,
-    Tabs
+    Tabs,
+    Stack
 } from 'react-native-router-flux';
 import { View, StyleSheet } from 'react-native';
 import { 
     Wizard,
-    AccountType
+    AccountType,
+    Login
 } from '../view';
 import Toast from 'react-native-easy-toast';
 
@@ -36,7 +38,10 @@ export class Routes extends React.Component{
             <View style={StyleSheet.absoluteFill}>
                 <Router>
                     <Modal key='main'>
-                        <Scene hideNavBar key='intial' component={AccountType} />
+                        <Stack hideNavBar key='account'>
+                            <Scene hideNavBar key='accountType' component={AccountType} />
+                            <Scene hideNavBar key='login' component={Login} />
+                        </Stack>
                     </Modal>
                 </Router>   
                 <Toast position={'center'} ref={this.toast} />

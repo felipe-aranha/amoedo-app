@@ -1,6 +1,9 @@
 import React from 'react';
-import { Text } from 'react-native-elements';
+import { Text as _Text } from 'react-native-elements';
 
-export default (props) => {
-    return <Text {...props} style={[{fontFamily: props.type ? `system-${type}` : 'system'},props.style]}>{props.children}</Text>
+export default class Text extends React.PureComponent{
+    render(){
+        const props = this.props;
+        return <_Text {...props} style={[{fontFamily: props.weight ? `system-${props.weight}` : 'system'},props.style]}>{props.children}</_Text>
+    }
 }

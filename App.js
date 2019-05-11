@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Routes } from './src/routes';
-import { AppLoading, Font } from 'expo';
+import { AppLoading, Font , Asset } from 'expo';
 
 export default class App extends React.Component {
 
@@ -12,14 +12,26 @@ export default class App extends React.Component {
 		}
 	}
 
+	cacheImages(images) {
+        return images.map(image => {
+          if (typeof image === 'string') {
+            return Image.prefetch(image);
+          } else {
+            return Asset.fromModule(image).downloadAsync();
+          }
+        });
+    }
+
 
 	_init(){
 		p1 = Font.loadAsync({
 			'system-semibold': require('./assets/fonts/system-semibold.ttf'),
 			'system': require('./assets/fonts/system-regular.ttf'),
+			'system-medium': require('./assets/fonts/system-medium.ttf'),
 			'system-bold': require('./assets/fonts/system-bold.ttf'),
 		});
-		return Promise.all([p1]);
+		p2 = this.cacheImages([require('./assets/images/account-bg-x2.jpg')])
+		return Promise.all([p1,p2]);
 	}
 
 	_finish(){

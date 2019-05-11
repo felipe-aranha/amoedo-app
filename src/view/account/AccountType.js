@@ -7,12 +7,18 @@ import {
 import I18n from '../../i18n';
 import { accountStyle } from '../../style';
 import { Text } from '../../components';
+import { Button } from 'react-native-elements';
+import { Actions } from 'react-native-router-flux';
 
 export default class AccountType extends AccountBase{
 
     constructor(props,context){
         super(props,context);
 
+    }
+
+    handleButtonPress(){
+        Actions.push('login');
     }
 
     renderContent(){
@@ -23,12 +29,27 @@ export default class AccountType extends AccountBase{
                 <View style={{flex:1}}>
                     <View style={accountStyle.innerContentView}>
                         <Text>
-                            <Text>{I18n.t('account.accountType.mainText')}</Text>
-                            <Text>{I18n.t('account.accountType.highlight')}</Text>
-                            <Text>.</Text>
+                            <Text style={accountStyle.accountText}>{I18n.t('account.accountType.mainText')}</Text>
+                            <Text style={[accountStyle.accountText,accountStyle.accountTypeTextHighlight]}>{I18n.t('account.accountType.highlight')}</Text>
+                            <Text style={accountStyle.accountText}>.</Text>
                         </Text>
                     </View>
-                    <View style={{flex:1}}>
+                    <View style={[accountStyle.innerContentView,accountStyle.accountTypeButtonsArea]}>
+                        <Button
+                            title={I18n.t('entity.architect')}
+                            containerStyle={accountStyle.accountTypeButtonContainer}
+                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountButtonArchitectButton]}
+                            titleStyle={accountStyle.accountTypeButtonTitle}
+                            onPress={this.handleButtonPress}
+                        />
+                        <Button 
+                            title={I18n.t('entity.customer')}
+                            type={'outline'}
+                            containerStyle={accountStyle.accountTypeButtonContainer}
+                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountCustomerButton]}
+                            titleStyle={accountStyle.accountTypeButtonTitle}
+                            onPress={this.handleButtonPress}
+                        />
                     </View>
                 </View>
             </>
