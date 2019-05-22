@@ -103,7 +103,7 @@ export default class Login extends AccountBase{
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            <TouchableOpacity onPress={Actions.push('')} style={accountStyle.loginSignInButton}>
+                            <TouchableOpacity onPress={Actions.push('profileSelection')} style={accountStyle.loginSignInButton}>
                                 <Text style={accountStyle.loginSignInButtonText}>
                                     {I18n.t('account.login.register')}
                                     <Text style={accountStyle.loginSignInButtonTextHighlight}>{I18n.t('account.login.here')}</Text>!
