@@ -5,7 +5,7 @@ export class CustomerService extends HttpClient {
     basePath = 'rest/V1/customers';
 
     async isEmailAvailable(customerEmail){
-        return await this.postAsync(`${basePath}/isEmailAvailable`, customerEmail)
+        return this.postAsync(`${basePath}/isEmailAvailable`, customerEmail)
     }
 
     async register(customer, password){
@@ -13,7 +13,11 @@ export class CustomerService extends HttpClient {
             customer,
             password
         }
-        return await this.postAsync(`${this.basePath}`, data);
+        return this.postAsync(`${this.basePath}`, data);
+    }
+
+    async getCustomerGroups(){
+        return this.getAsync('rest/V1/customerGroups/search?searchCriteria[currentPage]=0');
     }
 
 }

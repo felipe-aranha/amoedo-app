@@ -1,5 +1,4 @@
 import { Constants } from 'expo';
-import { IConstants, defaultContext } from '../reducer';
 import { variables } from '../utils';
 
 export class HttpClient {
@@ -9,10 +8,9 @@ export class HttpClient {
     variables;
 
     constructor(token=null){
-        this.token = token;
+        this.token = token != null ? token : variables.magento.auth.accessToken;
         this.variables = variables.magento;
         this.baseUrl = this.variables.baseURL;
-        this.constants = defaultContext.constants;
         
     }
 
@@ -66,15 +64,15 @@ export class HttpClient {
     }
 
     async postAsync(url, data, options={}){
-        return this.sendAsync(url, "POST", data, options || {});
+        return await this.sendAsync(url, "POST", data, options || {});
     }
 
     async putAsync(url, data, options={}){
-        return this.sendAsync(url, "PUT", data, options || {});
+        return await this.sendAsync(url, "PUT", data, options || {});
     }
 
     async deleteAsync(url, data, options={}){
-        return this.sendAsync(url, "DELETE", data, options || {});
+        return await this.sendAsync(url, "DELETE", data, options || {});
     }
 
 }
