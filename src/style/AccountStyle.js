@@ -48,7 +48,7 @@ export default StyleSheet.create({
     },
     loginNavBarBackground: {
         width: '100%',
-        height: 200
+        height: 180
     },
     inputContainterStyle: {
         backgroundColor: 'rgba(52,52,52,0.4)',
@@ -83,5 +83,35 @@ export default StyleSheet.create({
         textAlign: 'right',
         paddingTop: 10,
         fontSize: 12
+    },
+    loginHeaderBackArea: {
+        marginTop: 35,
+        marginLeft: 20
+    },
+    loginLogoArea: {
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        top: -40
+    },
+    loginLogoImage: {
+        width: 120        
+    },
+    loginFormArea: {
+        paddingHorizontal: 30
+    },
+    loginSignInButton: {
+        borderWidth: 2,
+        borderColor: '#fff',
+        borderRadius: 15,
+        paddingVertical: 15,
+        paddingHorizontal: 10,
+        width: '80%'
+    },
+    loginSignInButtonText: {
+        color: '#fff',
+        textAlign: 'center'
+    },
+    loginSignInButtonTextHighlight: {
+        color: 'rgb(241,207,0)'
     }
 })

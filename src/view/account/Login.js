@@ -4,7 +4,7 @@ import { ImageBackground, View, Image, TouchableOpacity, ScrollView } from 'reac
 import { Ionicons } from '@expo/vector-icons';
 import { Actions } from 'react-native-router-flux';
 import { Input, Button } from 'react-native-elements';
-import { AppIcon, Text } from '../../components';
+import { AppIcon, Text, KeyboardSpacer } from '../../components';
 import I18n from '../../i18n';
 import { accountStyle } from '../../style';
 
@@ -34,10 +34,7 @@ export default class Login extends AccountBase{
                     style={accountStyle.loginNavBarBackground}
                 >
                     <View style={{flex:1}}>
-                        <View style={{
-                            marginTop: 35,
-                            marginLeft: 20
-                        }}>
+                        <View style={accountStyle.loginHeaderBackArea}>
                             <TouchableOpacity
                                 hitSlop={{
                                     top:10,
@@ -54,24 +51,16 @@ export default class Login extends AccountBase{
                                 />
                             </TouchableOpacity>
                         </View>
-                        <View style={{
-                            justifyContent: 'flex-start',
-                            alignItems: 'center',
-                            top: -30
-                        }}>
+                        <View style={accountStyle.loginLogoArea}>
                             <Image 
                                 source={require('../../../assets/images/brand-logo-x2.png')}
-                                style={{
-                                    width: 150
-                                }}
+                                style={accountStyle.loginLogoImage}
                                 resizeMode={'contain'}
                             />
                         </View>
                     </View>
                 </ImageBackground>
-                <ScrollView style={{
-                    paddingHorizontal: 30
-                }}>
+                <ScrollView style={accountStyle.loginFormArea}>
                     <View style={accountStyle.loginMainView}>
                         <Input 
                             keyboardType={'email-address'}
@@ -110,8 +99,20 @@ export default class Login extends AccountBase{
                                 <Text style={accountStyle.forgotPasswordText}>{I18n.t('account.login.forgot')}</Text>
                             </TouchableOpacity>
                         </View>
+                        <View style={{
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            <TouchableOpacity onPress={Actions.push('')} style={accountStyle.loginSignInButton}>
+                                <Text style={accountStyle.loginSignInButtonText}>
+                                    {I18n.t('account.login.register')}
+                                    <Text style={accountStyle.loginSignInButtonTextHighlight}>{I18n.t('account.login.here')}</Text>!
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </ScrollView>
+                <KeyboardSpacer />
             </View>
         )
     }

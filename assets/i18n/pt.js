@@ -13,7 +13,7 @@ export default {
             password: "Senha",
             forgot: "Esqueceu sua senha?",
             enter: "ACESSAR",
-            register: "Novo, cadastre-se {{here}}.",
+            register: "Novo? Cadastre-se ",
             here: "aqui",
         }
     }

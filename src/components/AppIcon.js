@@ -22,13 +22,13 @@ export default class AppIcon extends React.PureComponent{
     }
 
     small = {
-        width: 10,
-        height: 10
+        width: 8,
+        height: 8
     }
 
     medium = { 
-        width: 20,
-        height: 20
+        width: 16,
+        height: 16
     }
 
     render(){
