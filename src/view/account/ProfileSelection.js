@@ -1,7 +1,7 @@
 import React from 'react';
 import { MainView } from '../MainView';
 import { View, ScrollView, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { secondaryColor } from '../../style';
 import { Header, Text, Select } from '../../components';
 import I18n from '../../i18n';
@@ -67,7 +67,6 @@ export default class ProfileSelection extends MainView {
 
     selectMainProfile(option){
         selected = this.state.profiles.find(profile => profile.id == option.value) || null;
-        console.log(option,selected);
         this.setState({
             mainProfile: selected,
             profile: null
@@ -79,6 +78,10 @@ export default class ProfileSelection extends MainView {
         this.setState({
             profile: selected
         })
+    }
+
+    goToRegister(){
+        
     }
 
     getOptions(options){
@@ -119,7 +122,9 @@ export default class ProfileSelection extends MainView {
                                 <Text weight={'bold'}>{I18n.t('account.profileSelection.desc2')}</Text>
                             </Text>
                         </View>
-                        <View>
+                        <View style={{
+                            marginTop: 20
+                        }}>
                             <Select 
                                 options={this.getOptions(this.state.profiles)}
                                 onOptionSelected={this.selectMainProfile.bind(this)}
@@ -127,7 +132,18 @@ export default class ProfileSelection extends MainView {
                             />
                         </View>
                         {this.state.mainProfile != null && this.state.mainProfile.children.length > 0 &&
-                            <View>
+                            <View style={{
+                                marginTop: 20
+                            }}>
+                                <View>
+                                    <Text weight={'medium'}
+                                        style={{
+                                            fontSize: 14,
+                                            textTransform: 'uppercase',
+                                            color: 'rgb(121,121,121)'
+                                        }}
+                                    >{I18n.t('account.profileSelection.typeOf', { type: this.state.mainProfile.name})}</Text>
+                                </View>
                                 <Select
                                     options={this.getOptions(this.state.mainProfile.children)}
                                     onOptionSelected={this.selectProfile.bind(this)}
@@ -136,6 +152,22 @@ export default class ProfileSelection extends MainView {
                             </View>
                         }
                     </ScrollView>
+                    {this.state.profile != null && 
+                        <TouchableOpacity
+                            style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                paddingBottom: 50
+                            }}
+                            onPress={this.goToRegister.bind(this)}
+                        >
+                            <SimpleLineIcons 
+                                name={'arrow-down-circle'}
+                                color={secondaryColor}
+                                size={40}
+                            />
+                        </TouchableOpacity>
+                    }
                 </View>
             </View>
         )

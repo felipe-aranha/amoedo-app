@@ -32,6 +32,7 @@ export default {
             highlightDesc2: 'perfil',
             desc2: '.',
             select: 'Selecione',
+            typeOf: 'tipo de {{type}}'
         }
     }
 }
