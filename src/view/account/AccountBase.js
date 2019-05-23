@@ -1,5 +1,5 @@
 import React from 'react';
-import { MainView } from '../';
+import { MainView } from '../MainView';
 import {
     ImageBackground,
     StatusBar

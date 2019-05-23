@@ -1,4 +1,4 @@
-import { HttpClient } from '.';
+import { HttpClient } from './HttpClient';
 
 export class CustomerService extends HttpClient {
 
