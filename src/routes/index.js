@@ -12,7 +12,8 @@ import {
     Wizard,
     AccountType,
     Login,
-    ProfileSelection
+    ProfileSelection,
+    Register
 } from '../view';
 import Toast from 'react-native-easy-toast';
 
@@ -42,7 +43,8 @@ export class Routes extends React.Component{
                         <Stack hideNavBar key='account'>
                             <Scene hideNavBar key='accountType' component={AccountType} />
                             <Scene hideNavBar key='login' component={Login} />
-                            <Scene initial hideNavBar key='profileSelection' component={ProfileSelection} />
+                            <Scene hideNavBar key='profileSelection' component={ProfileSelection} />
+                            <Scene initial key='register' component={Register} />
                         </Stack>
                     </Modal>
                 </Router>   

@@ -6,6 +6,7 @@ import { secondaryColor } from '../../style';
 import { Header, Text, Select } from '../../components';
 import I18n from '../../i18n';
 import { CustomerService } from '../../service';
+import { Actions } from 'react-native-router-flux';
 
 export default class ProfileSelection extends MainView {
 
@@ -81,7 +82,7 @@ export default class ProfileSelection extends MainView {
     }
 
     goToRegister(){
-        
+        Actions.push('register', {profile: this.state.profile})
     }
 
     getOptions(options){

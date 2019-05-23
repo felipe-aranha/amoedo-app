@@ -15,7 +15,18 @@ export default class AppIcon extends React.PureComponent{
                 return large ? 
                     require('../../assets/images/icons/password-x2.png'):
                     require('../../assets/images/icons/password.png');
-                    
+            case 'personal-data':
+                return large ? 
+                    require('../../assets/images/icons/personal-data-x2.png'):
+                    require('../../assets/images/icons/personal-data.png');
+            case 'professional-data':
+                return large ? 
+                    require('../../assets/images/icons/professional-data-x2.png'):
+                    require('../../assets/images/icons/professional-data.png');
+            case 'upload-files':
+                return large ? 
+                    require('../../assets/images/icons/upload-files-x2.png'):
+                    require('../../assets/images/icons/upload-files.png');
             default:
                 return false;
         }
