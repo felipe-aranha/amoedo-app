@@ -9,7 +9,7 @@ export default class AppHeader extends React.PureComponent{
     render(){
         return (
             <Header 
-                containerStyle={{
+                containerStyle={[{
                     alignItems: 'center',
                     ...Platform.select({
                         ios: {
@@ -19,7 +19,7 @@ export default class AppHeader extends React.PureComponent{
                             paddingTop: StatusBar.currentHeight
                         }
                     })
-                }}
+                },this.props.containerStyle]}
                 backgroundColor={this.props.backgroundColor || 'transparent'}
                 centerComponent={<Text style={this.props.titleStyle}>{this.props.title}</Text>}
                 leftComponent={
