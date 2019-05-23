@@ -65,8 +65,23 @@ export default class ProfileSelection extends MainView {
         
     }
 
+    selectMainProfile(option){
+        selected = this.state.profiles.find(profile => profile.id == option.value) || null;
+        console.log(option,selected);
+        this.setState({
+            mainProfile: selected,
+            profile: null
+        })
+    }
+
+    selectProfile(option){
+        selected = this.state.mainProfile.children.find(profile => profile.id == option.value) || null;
+        this.setState({
+            profile: selected
+        })
+    }
+
     getOptions(options){
-        console.log(options)
         if(options && options.length)
             return options.map(option => {
                 return {
@@ -107,8 +122,19 @@ export default class ProfileSelection extends MainView {
                         <View>
                             <Select 
                                 options={this.getOptions(this.state.profiles)}
+                                onOptionSelected={this.selectMainProfile.bind(this)}
+                                loading={this.state.loading}
                             />
                         </View>
+                        {this.state.mainProfile != null && this.state.mainProfile.children.length > 0 &&
+                            <View>
+                                <Select
+                                    options={this.getOptions(this.state.mainProfile.children)}
+                                    onOptionSelected={this.selectProfile.bind(this)}
+                                    loading={this.state.loading}
+                                />
+                            </View>
+                        }
                     </ScrollView>
                 </View>
             </View>

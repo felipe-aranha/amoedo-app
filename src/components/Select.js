@@ -22,6 +22,9 @@ export default class Select extends React.PureComponent{
     }
 
     handleOptionSelect(option){
+        this.setState({
+            selected: option.label
+        })
         if(this.props.onOptionSelected)
             this.props.onOptionSelected(option)
         this.toggleModal();
@@ -49,7 +52,7 @@ export default class Select extends React.PureComponent{
                             }}
                         >
                             <Text weight={'medium'} style={{
-                                fontSize: 15,
+                                fontSize: 14,
                                 color: 'rgb(77,77,77)'
                             }}>{option.label}</Text>
                         </TouchableOpacity>
@@ -101,8 +104,8 @@ export default class Select extends React.PureComponent{
 
     render(){
         const { selected } = this.state;
-        const { options } = this.props;
-        if(!options || !options.length)
+        const { options, loading } = this.props;
+        if(loading)
             return <ActivityIndicator color={secondaryColor} />
         return(
             <>
