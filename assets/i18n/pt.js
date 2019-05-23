@@ -4,6 +4,7 @@ export default {
         customer: "cliente"
     },
     common: {
+        select: 'Selecione',
         cancel: 'Cancelar',
     },
     profile: {
@@ -27,7 +28,7 @@ export default {
         profileSelection: {
             title: 'PERFIL',
             highlightDesc1: 'Seja bem-vindo',
-            desc1: ',\npara iniciar o seu\ncadastro,selecione\n o seu',
+            desc1: ',\npara iniciar o seu\ncadastro, selecione\no seu ',
             highlightDesc2: 'perfil',
             desc2: '.',
             select: 'Selecione',
