@@ -15,8 +15,111 @@ export class PersonalData extends MainView {
         super(props,context);
         this.state = {
             showPassword: false,
-            showPasswordConfirmation: false
+            showPasswordConfirmation: false,
+            password: '',
+            confirmPassword: '',
+            cau: '',
+            email: '',
+            cpf: '',
+            rg: '',
+            name: '',
+            dob: '',
+            linkedin: '',
+            phone: '',
+            cell: '',
+            zipCode: '',
+            address: '',
+            number: '',
+            complement: '',
+            city:'',
+            state: ''
         }
+    }
+
+    handlePasswordChange(text){
+        this.setState({
+            password: text
+        })
+    }
+    handlePasswordConfirmationChange(text){
+        this.setState({
+            confirmPassword: text
+        })
+    }
+    handleCauChange(text){
+        this.setState({
+            cau: text
+        })
+    }
+    handleEmailChange(text){
+        this.setState({
+            email: text
+        })
+    }
+    handleCpfChange(text){
+        this.setState({
+            cpf: text
+        })
+    }
+    handleRgChange(text){
+        this.setState({
+            rg: text
+        })
+    }
+    handleNameChange(text){
+        this.setState({
+            name: text
+        })
+    }
+    handleDobChange(text){
+        this.setState({
+            dob: text
+        })
+    }
+    handleLinkedinChange(text){
+        this.setState({
+            linkedin: text
+        })
+    }
+    handlePhoneChange(text){
+        this.setState({
+            phone: text
+        })
+    }
+    handleCellChange(text){
+        this.setState({
+            cell: text
+        })
+    }
+    handleZipCodeChange(text){
+        this.setState({
+            zipCode: text
+        })
+    }
+    handleAddressChange(text){
+        this.setState({
+            address: text
+        })
+    }
+    handleNumberChange(text){
+        this.setState({
+            number: text
+        })
+    }
+    handleComplementChange(text){
+        this.setState({
+            complement: text
+        })
+    }
+    handleCityChange(text){
+        this.setState({
+            city: text
+        })
+    }
+    handleStateChange(text){
+        this.setState({
+            state: text
+        })
     }
 
     togglePasswordField(){
@@ -78,6 +181,8 @@ export class PersonalData extends MainView {
                                 />
                             </TouchableOpacity>
                             <Input 
+                                onChangeText={this.handlePasswordChange.bind(this)}
+                                value={this.state.password}
                                 label='senha'
                                 secureTextEntry={!this.state.showPassword}
                                 rightIcon={{
@@ -89,6 +194,8 @@ export class PersonalData extends MainView {
                                 }}
                             />
                             <Input 
+                                onChangeText={this.handlePasswordConfirmationChange.bind(this)}
+                                value={this.state.confirmPassword}
                                 label='repetir senha'
                                 secureTextEntry={!this.state.showPasswordConfirmation}
                                 rightIcon={{
@@ -103,68 +210,98 @@ export class PersonalData extends MainView {
                         <View style={formRow}>
                             <Input 
                                 label='registro do cau'
+                                value={this.state.cau}
+                                onChangeText={this.handleCauChange.bind(this)}
                             />
                             <View style={{flex:1}} />
                         </View>
                         <View style={formRow}>
                             <Input 
                                 label='e-mail'
+                                value={this.state.email}
+                                onChangeText={this.handleEmailChange.bind(this)}
                             />
                         </View>
                         <View style={formRow}>
                             <Input 
                                 label='cpf'
+                                value={this.state.cpf}
+                                onChangeText={this.handleCpfChange.bind(this)}
                             />
                             <Input 
                                 label='rg'
+                                value={this.state.rg}
+                                onChangeText={this.handleRgChange.bind(this)}
                             />
                         </View>
                         <View style={formRow}>
                             <Input 
                                 label='nome'
+                                value={this.state.name}
+                                onChangeText={this.handleNameChange.bind(this)}
                             />
                         </View>
                         <View style={formRow}>
                             <Input 
                                 label='nascimento'
+                                value={this.state.dob}
+                                onChangeText={this.handleDobChange.bind(this)}
                             />
                             <Input 
                                 label='linkedin'
+                                value={this.state.linkedin}
+                                onChangeText={this.handleLinkedinChange.bind(this)}
                             />
                         </View>
                         <View style={formRow}>
                             <Input 
                                 label='telefone'
+                                value={this.state.phone}
+                                onChangeText={this.handlePhoneChange.bind(this)}
                             />
                             <Input 
                                 label='celular'
+                                value={this.state.cell}
+                                onChangeText={this.handleCellChange.bind(this)}
                             />
                         </View>
                         <View style={formRow}>
                             <Input 
                                 label='cep'
+                                value={this.state.zipCode}
+                                onChangeText={this.handleZipCodeChange.bind(this)}
                             />
                             <View style={{flex:1}} />
                         </View>
                         <View style={formRow}>
                             <Input 
                                 label='endereço'
+                                value={this.state.address}
+                                onChangeText={this.handleAddressChange.bind(this)}
                             />
                         </View>
                         <View style={formRow}>
                             <Input 
                                 label='número'
+                                value={this.state.number}
+                                onChangeText={this.handleNumberChange.bind(this)}
                             />
                             <Input 
                                 label='complemento'
+                                value={this.state.complement}
+                                onChangeText={this.handleComplementChange.bind(this)}
                             />
                         </View>
                         <View style={formRow}>
                             <Input 
                                 label='cidade'
+                                value={this.state.city}
+                                onChangeText={this.handleCityChange.bind(this)}
                             />
                             <Input 
                                 label='uf'
+                                value={this.state.state}
+                                onChangeText={this.handleStateChange.bind(this)}
                             />
                         </View>
                     </View>
