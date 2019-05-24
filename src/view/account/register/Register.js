@@ -45,6 +45,24 @@ export default class Register extends MainView{
         }
     }
 
+    goToProfessionalData(){
+        this.setState({
+            activeSection: 'professional-data'
+        })
+    }
+
+    goToPersonalData(){
+        this.setState({
+            activeSection: 'personal-data'
+        })
+    }
+
+    goToDocuments(){
+        this.setState({
+            activeSection: 'upload-files'
+        })
+    }
+
     renderSteps(){
         switch(this.state.activeSection){
             case 'professional-data':
@@ -52,7 +70,21 @@ export default class Register extends MainView{
             case 'upload-files':
                 return <Documents />
             default: 
-                return <PersonalData />
+                return <PersonalData onContinue={this.goToProfessionalData.bind(this)} />
+        }
+    }
+
+    handleBack(){
+        switch(this.state.activeSection){
+            case 'upload-files':
+                this.goToProfessionalData();
+                break;
+            case 'professional-data':
+                this.goToPersonalData();
+                break;
+            default:
+                super.handleBack();
+                break;
         }
     }
 
@@ -66,7 +98,7 @@ export default class Register extends MainView{
                         borderBottomWidth: 0
                     }}
                     title={this.profile.name}
-                    handleBack={this.handleBack}
+                    handleBack={this.handleBack.bind(this)}
                     leftIconColor={'rgb(242,242,242)'}
                     titleStyle={{
                         fontFamily: 'system-medium',

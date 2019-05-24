@@ -169,6 +169,21 @@ export class PersonalData extends MainView {
                         </View>
                     </View>
                 </View>
+                <TouchableOpacity
+                    onPress={this.props.onContinue}
+                    style={{
+                        backgroundColor: 'rgb(50,0,14)',
+                        width: '100%',
+                        paddingVertical: 20,
+                        justifyContent:'center',
+                        alignItems: 'center'
+                    }}
+                >
+                    <Text weight={'medium'} style={{
+                        color: '#fff',
+                        fontSize: 14
+                    }}>{I18n.t('common.continue').toUpperCase()}</Text>
+                </TouchableOpacity>
             </View>
         )
     }

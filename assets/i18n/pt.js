@@ -6,6 +6,7 @@ export default {
     common: {
         select: 'Selecione',
         cancel: 'Cancelar',
+        continue: 'Continuar'
     },
     profile: {
         student: 'Estudante',
