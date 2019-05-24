@@ -8,7 +8,8 @@ import { Documents } from './Documents';
 import { ProfessionalData } from './ProfessionalData';
 
 const initialState = {
-    activeSection: 'personal-data'
+    activeSection: 'personal-data',
+    personalData: undefined
 }
 
 export const RegisterContext = React.createContext(initialState);
@@ -63,6 +64,13 @@ export default class Register extends MainView{
         })
     }
 
+    handlePersonalDataContinue(state){
+        this.setState({
+            personalData: state
+        })
+        this.goToProfessionalData();
+    }
+
     renderSteps(){
         switch(this.state.activeSection){
             case 'professional-data':
@@ -70,7 +78,7 @@ export default class Register extends MainView{
             case 'upload-files':
                 return <Documents />
             default: 
-                return <PersonalData onContinue={this.goToProfessionalData.bind(this)} />
+                return <PersonalData initialState={this.state.personalData} onContinue={this.handlePersonalDataContinue.bind(this)} />
         }
     }
 
@@ -122,9 +130,10 @@ export default class Register extends MainView{
                         return(
                             <TouchableOpacity 
                                 key={key}
-                                onPress={this.changeSection.bind(this,section)}
+                                // onPress={this.changeSection.bind(this,section)}
                             >
                                 <AppIcon 
+                                    key={key}
                                     name={section.name}
                                     style={{
                                         tintColor: this.state.activeSection == section.name ? '#fff' : undefined,

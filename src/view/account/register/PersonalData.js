@@ -15,7 +15,7 @@ export class PersonalData extends MainView {
     constructor(props,context){
         super(props,context);
         this.customerService = new CustomerService();
-        this.state = {
+        this.state = this.props.initialState || {
             showPassword: false,
             showPasswordConfirmation: false,
             password: '',
@@ -159,6 +159,10 @@ export class PersonalData extends MainView {
                 })
         }).catch( e => { console.log(e) })
         
+    }
+
+    handleContinue(){
+        this.props.onContinue(this.state)
     }
 
     render(){
@@ -343,7 +347,7 @@ export class PersonalData extends MainView {
                     </View>
                 </View>
                 <TouchableOpacity
-                    onPress={this.props.onContinue}
+                    onPress={this.handleContinue.bind(this)}
                     style={{
                         backgroundColor: 'rgb(50,0,14)',
                         width: '100%',
