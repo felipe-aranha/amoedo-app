@@ -155,7 +155,7 @@ export class PersonalData extends MainView {
                         marginHorizontal: 20,
                         marginBottom: 30
                     }}>
-                        <View style={[formRow,{marginBottom: 10}]}>
+                        <View style={[formRow,{marginBottom: 20}]}>
                             <TouchableOpacity style={{
                                 width: 60,
                                 height: 60,
@@ -343,6 +343,13 @@ class Input extends React.PureComponent{
             inputStyle={{
                 fontFamily: 'system-medium',
                 color: secondaryColor
+            }}
+            errorStyle={{
+                position: 'absolute',
+                bottom: -20,
+                color: 'rgb(177,3,3)',
+                fontFamily: 'system-medium',
+                fontSize: 10
             }}
         />
     }
