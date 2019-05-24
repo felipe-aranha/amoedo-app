@@ -33,6 +33,10 @@ export default {
             desc2: '.',
             select: 'Selecione',
             typeOf: 'tipo de {{type}}'
+        },
+        register: {
+            personalDataTitle: 'DADOS ',
+            personalDataHighlight: 'PESSOAIS'
         }
     }
 }

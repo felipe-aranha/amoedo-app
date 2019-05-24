@@ -7,7 +7,11 @@ import { PersonalData } from './PersonalData';
 import { Documents } from './Documents';
 import { ProfessionalData } from './ProfessionalData';
 
-export const RegisterContext = React.createContext({});
+const initialState = {
+    activeSection: 'personal-data'
+}
+
+export const RegisterContext = React.createContext(initialState);
 
 export default class Register extends MainView{
 
@@ -30,9 +34,7 @@ export default class Register extends MainView{
                 name: 'upload-files'
             }
         ],
-        this.state = {
-            activeSection: 'personal-data'
-        }
+        this.state = initialState;
     }
 
     changeSection(section){
@@ -45,12 +47,12 @@ export default class Register extends MainView{
 
     renderSteps(){
         switch(this.state.activeSection){
-            case 'personal-data':
-                return <PersonalData />
             case 'professional-data':
                 return <ProfessionalData />
             case 'upload-files':
                 return <Documents />
+            default: 
+                return <PersonalData />
         }
     }
 
@@ -103,11 +105,13 @@ export default class Register extends MainView{
                         )
                     })}
                 </View>
-                <ScrollView>
-                    <RegisterContext.Provider value={this.state}>
-                        {this.renderSteps()}
-                    </RegisterContext.Provider>
-                </ScrollView>
+                <View style={{flex:1}}>
+                    <ScrollView>
+                        <RegisterContext.Provider value={this.state}>
+                            {this.renderSteps()}
+                        </RegisterContext.Provider>
+                    </ScrollView>
+                </View>
                 <KeyboardSpacer />
             </View>
         )
