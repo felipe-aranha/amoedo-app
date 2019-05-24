@@ -1,6 +1,6 @@
 import React from 'react';
 import { MainView } from '../MainView';
-import { View, ScrollView, TouchableOpacity } from 'react-native';
+import { View, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
 import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { secondaryColor } from '../../style';
 import { Header, Text, Select } from '../../components';
@@ -14,6 +14,7 @@ export default class ProfileSelection extends MainView {
 
     constructor(props,context){
         super(props,context);
+        StatusBar.setBarStyle("dark-content",true);
         this.customerService = new CustomerService();
         this.state = {
             profiles: [],
@@ -114,7 +115,7 @@ export default class ProfileSelection extends MainView {
                         <View>
                             <Text style={{
                                 fontFamily: 'system-bold',
-                                fontSize: 22,
+                                fontSize: 26,
                                 color: 'rgb(116,116,116)'
                             }}>
                                 <Text weight={'bold'} style={{color: 'rgb(77,77,77)'}}>{I18n.t('account.profileSelection.highlightDesc1')}</Text>

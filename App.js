@@ -30,7 +30,18 @@ export default class App extends React.Component {
 			'system-medium': require('./assets/fonts/system-medium.ttf'),
 			'system-bold': require('./assets/fonts/system-bold.ttf'),
 		});
-		p2 = this.cacheImages([require('./assets/images/account/account-bg-x2.jpg')])
+		p2 = this.cacheImages([
+			require('./assets/images/account/account-bg-x2.jpg'),
+			require('./assets/images/account/login-bg-x2.png'),
+			require('./assets/images/account/login-navbar-x2.png'),
+			require('./assets/images/brand-logo-x2.png'),
+			require('./assets/images/icons/camera-x2.png'),
+			require('./assets/images/icons/email-x2.png'),
+			require('./assets/images/icons/password-x2.png'),
+			require('./assets/images/icons/personal-data-x2.png'),
+			require('./assets/images/icons/professional-data-x2.png'),
+			require('./assets/images/icons/upload-files-x2.png'),
+		])
 		return Promise.all([p1,p2]);
 	}
 

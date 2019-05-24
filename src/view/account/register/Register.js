@@ -6,10 +6,12 @@ import { secondaryColor } from '../../../style';
 import { PersonalData } from './PersonalData';
 import { Documents } from './Documents';
 import { ProfessionalData } from './ProfessionalData';
+import { CustomerService } from '../../../service';
 
 const initialState = {
     activeSection: 'personal-data',
-    personalData: undefined
+    personalData: undefined,
+    userRegistered: false
 }
 
 export const RegisterContext = React.createContext(initialState);
@@ -19,10 +21,7 @@ export default class Register extends MainView{
     constructor(props,context){
         super(props,context);
         StatusBar.setBarStyle("light-content",true);
-        this.profile = {
-            id: 9,
-            name: 'Arquiteto'
-        }
+        this.profile = this.props.profile;
         this.sections = [
             {
                 name: 'personal-data',
@@ -36,6 +35,7 @@ export default class Register extends MainView{
             }
         ],
         this.state = initialState;
+        this.customerService = new CustomerService();
     }
 
     changeSection(section){
@@ -67,7 +67,32 @@ export default class Register extends MainView{
     handlePersonalDataContinue(state){
         this.setState({
             personalData: state
-        })
+        });
+        if(!this.state.userRegistered){
+            fullName = state.name.split(" ");
+            firstname = fullName[0];
+            fullName.shift();
+            lastname = fullName.length > 0 ? fullName.join(" ") : "";
+            data = {
+                customer: {
+                    email: state.email,
+                    firstname,
+                    lastname,
+                    taxvat: state.cpf,
+                    group_id: this.profile.id
+                },
+                password: state.password
+            } 
+            this.customerService.register(data.customer,data.password).then(response => {
+                if(response.id){
+                    this.setState({
+                        userRegistered: true
+                    })
+                }
+            }).catch(e => {
+                
+            })
+        }
         this.goToProfessionalData();
     }
 

@@ -37,10 +37,14 @@ export default class Login extends AccountBase{
                         <View style={accountStyle.loginHeaderBackArea}>
                             <TouchableOpacity
                                 hitSlop={{
-                                    top:10,
-                                    bottom: 10,
-                                    left:10,
-                                    right:10
+                                    top:20,
+                                    bottom: 20,
+                                    left:20,
+                                    right:20
+                                }}
+                                style={{
+                                    width: 30,
+                                    height: 30
                                 }}
                                 onPress={this.handleBack}
                             >
@@ -103,7 +107,7 @@ export default class Login extends AccountBase{
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            <TouchableOpacity onPress={Actions.push('profileSelection')} style={accountStyle.loginSignInButton}>
+                            <TouchableOpacity onPress={() => { Actions.push('profileSelection') }} style={accountStyle.loginSignInButton}>
                                 <Text style={accountStyle.loginSignInButtonText}>
                                     {I18n.t('account.login.register')}
                                     <Text style={accountStyle.loginSignInButtonTextHighlight}>{I18n.t('account.login.here')}</Text>!

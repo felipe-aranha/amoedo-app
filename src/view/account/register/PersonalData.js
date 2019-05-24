@@ -267,9 +267,11 @@ export class PersonalData extends MainView {
                                 label='cpf'
                                 value={this.state.cpf}
                                 onChangeText={this.handleCpfChange.bind(this)}
+                                keyboardType={'number-pad'}
                             />
                             <Input 
                                 label='rg'
+                                keyboardType={'number-pad'}
                                 value={this.state.rg}
                                 onChangeText={this.handleRgChange.bind(this)}
                             />
@@ -277,6 +279,7 @@ export class PersonalData extends MainView {
                         <View style={formRow}>
                             <Input 
                                 label='nome'
+                                autoCapitalize={'words'}
                                 value={this.state.name}
                                 onChangeText={this.handleNameChange.bind(this)}
                             />
