@@ -5,7 +5,7 @@ export class CustomerService extends HttpClient {
     basePath = 'rest/V1/customers';
 
     async isEmailAvailable(customerEmail){
-        return this.postAsync(`${basePath}/isEmailAvailable`, customerEmail)
+        return this.postAsync(`${this.basePath}/isEmailAvailable`, {customerEmail})
     }
 
     async register(customer, password){

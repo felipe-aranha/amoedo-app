@@ -38,6 +38,12 @@ export default {
         register: {
             personalDataTitle: 'DADOS ',
             personalDataHighlight: 'PESSOAIS'
+        },
+        errorMessage: {
+            password: 'min de 6 caracteres',
+            confirmPassword: 'senhas diferentes',
+            emailRegistered: 'e-mail já cadastrado',
+            invalidEmail: 'e-mail inválido'
         }
     }
 }

@@ -7,12 +7,14 @@ import I18n from '../../../i18n';
 import { Input as InputElement } from 'react-native-elements';
 import { secondaryColor } from '../../../style';
 import { AntDesign } from '@expo/vector-icons';
+import { CustomerService } from '../../../service';
 
 export class PersonalData extends MainView {
     static contextType = RegisterContext;
 
     constructor(props,context){
         super(props,context);
+        this.customerService = new CustomerService();
         this.state = {
             showPassword: false,
             showPasswordConfirmation: false,
@@ -32,7 +34,8 @@ export class PersonalData extends MainView {
             number: '',
             complement: '',
             city:'',
-            state: ''
+            state: '',
+            emailErrorMessage: ''
         }
     }
 
@@ -134,6 +137,30 @@ export class PersonalData extends MainView {
         })
     }
 
+    validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
+    checkEmail(){
+        if(!this.validateEmail(this.state.email)){
+            this.setState({
+                emailErrorMessage: I18n.t('account.errorMessage.invalidEmail')
+            });
+            return;
+        }
+        this.setState({
+            emailErrorMessage: ''
+        });
+        this.customerService.isEmailAvailable(this.state.email).then( result => {
+            if(!result)
+                this.setState({
+                    emailErrorMessage: I18n.t('account.errorMessage.emailRegistered')
+                })
+        }).catch( e => { console.log(e) })
+        
+    }
+
     render(){
         return (
             <View style={{flex:1}}>
@@ -192,6 +219,7 @@ export class PersonalData extends MainView {
                                     size: 18,
                                     onPress: this.togglePasswordField.bind(this)
                                 }}
+                                errorMessage={this.state.password.length < 6 ? I18n.t('account.errorMessage.password') : ''}
                             />
                             <Input 
                                 onChangeText={this.handlePasswordConfirmationChange.bind(this)}
@@ -205,6 +233,10 @@ export class PersonalData extends MainView {
                                     size: 18,
                                     onPress: this.toggleConfirmPasswordField.bind(this)
                                 }}
+                                errorMessage={
+                                    this.state.password != this.state.confirmPassword && this.state.confirmPassword.length > 0 ? 
+                                        I18n.t('account.errorMessage.confirmPassword') : ''
+                                }
                             />
                         </View>
                         <View style={formRow}>
@@ -220,6 +252,10 @@ export class PersonalData extends MainView {
                                 label='e-mail'
                                 value={this.state.email}
                                 onChangeText={this.handleEmailChange.bind(this)}
+                                onBlur={this.checkEmail.bind(this)}
+                                errorMessage={this.state.emailErrorMessage}
+                                autoCapitalize={'none'}
+                                keyboardType={'email-address'}
                             />
                         </View>
                         <View style={formRow}>
@@ -342,7 +378,8 @@ class Input extends React.PureComponent{
             }}
             inputStyle={{
                 fontFamily: 'system-medium',
-                color: secondaryColor
+                color: secondaryColor,
+                fontSize: 14
             }}
             errorStyle={{
                 position: 'absolute',
@@ -351,13 +388,16 @@ class Input extends React.PureComponent{
                 fontFamily: 'system-medium',
                 fontSize: 10
             }}
+            errorProps={{
+                numberOfLines: 1
+            }}
         />
     }
 }
 
 const formRow = {
     flexDirection: 'row',
-    marginVertical: 5,
+    marginVertical: 10,
     justifyContent: 'center',
     alignItems: 'center'
 }
