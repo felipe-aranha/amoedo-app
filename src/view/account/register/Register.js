@@ -18,9 +18,10 @@ export const RegisterContext = React.createContext(initialState);
 
 export default class Register extends MainView{
 
+    barStyle = 'light-content';
+
     constructor(props,context){
         super(props,context);
-        StatusBar.setBarStyle("light-content",true);
         this.profile = this.props.profile;
         this.sections = [
             {

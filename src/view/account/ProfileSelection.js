@@ -12,9 +12,10 @@ export default class ProfileSelection extends MainView {
 
     customerService = null;
 
+    barStyle = 'dark-content';
+
     constructor(props,context){
         super(props,context);
-        StatusBar.setBarStyle("dark-content",true);
         this.customerService = new CustomerService();
         this.state = {
             profiles: [],

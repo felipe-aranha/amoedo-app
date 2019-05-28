@@ -2,15 +2,15 @@ import React from 'react';
 import { MainView } from '../MainView';
 import {
     ImageBackground,
-    StatusBar
 } from 'react-native';
 import { accountStyle } from '../../style';
 
 export class AccountBase extends MainView{
 
+    barStyle = 'light-content';
+
     constructor(props,context){
         super(props,context);
-        StatusBar.setBarStyle("light-content",true);
     }
 
     renderContent(){}
