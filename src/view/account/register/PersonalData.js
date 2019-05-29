@@ -8,6 +8,7 @@ import { Input as InputElement } from 'react-native-elements';
 import { secondaryColor } from '../../../style';
 import { AntDesign } from '@expo/vector-icons';
 import { CustomerService } from '../../../service';
+import * as Utils from '../../../utils';
 
 export class PersonalData extends MainView {
     static contextType = RegisterContext;
@@ -35,7 +36,9 @@ export class PersonalData extends MainView {
             complement: '',
             city:'',
             state: '',
-            emailErrorMessage: ''
+            emailErrorMessage: '',
+            cpfValid: null,
+            emailValid: null
         }
     }
 
@@ -58,10 +61,10 @@ export class PersonalData extends MainView {
         this.setState({
             email: text
         })
-    }
+    } 
     handleCpfChange(text){
         this.setState({
-            cpf: text
+            cpf: newText
         })
     }
     handleRgChange(text){
@@ -137,25 +140,33 @@ export class PersonalData extends MainView {
         })
     }
 
-    validateEmail(email) {
-        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(String(email).toLowerCase());
+    validateCpf(cpf){
+        isValid = Utils.isCpfValid(cpf);
+        this.setState({
+            cpfValid: isValid
+        })
     }
 
     checkEmail(){
-        if(!this.validateEmail(this.state.email)){
+        if(!Utils.isEmailValid(this.state.email)){
             this.setState({
-                emailErrorMessage: I18n.t('account.errorMessage.invalidEmail')
+                emailErrorMessage: I18n.t('account.errorMessage.invalidEmail'),
+                emailValid: false,
             });
             return;
         }
         this.setState({
-            emailErrorMessage: ''
+            emailErrorMessage: '',
         });
         this.customerService.isEmailAvailable(this.state.email).then( result => {
             if(!result)
                 this.setState({
-                    emailErrorMessage: I18n.t('account.errorMessage.emailRegistered')
+                    emailErrorMessage: I18n.t('account.errorMessage.emailRegistered'),
+                    emailValid: false
+                })
+            else
+                this.setState({
+                    emailValid: true
                 })
         }).catch( e => { console.log(e) })
         
@@ -267,7 +278,9 @@ export class PersonalData extends MainView {
                                 label='cpf'
                                 value={this.state.cpf}
                                 onChangeText={this.handleCpfChange.bind(this)}
+                                onBlur={this.validateCpf.bind(this)}
                                 keyboardType={'number-pad'}
+                                errorMessage={this.state.cpfValid == false ? I18n.t('account.errorMessage.invalidCpf') : ''}
                             />
                             <Input 
                                 label='rg'

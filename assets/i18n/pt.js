@@ -43,7 +43,8 @@ export default {
             password: 'min de 6 caracteres',
             confirmPassword: 'senhas diferentes',
             emailRegistered: 'e-mail já cadastrado',
-            invalidEmail: 'e-mail inválido'
+            invalidEmail: 'e-mail inválido',
+            invalidCpf: 'cpf inválido'
         }
     }
 }

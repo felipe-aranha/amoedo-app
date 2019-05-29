@@ -22,7 +22,14 @@ export default class Register extends MainView{
 
     constructor(props,context){
         super(props,context);
-        this.profile = this.props.profile;
+        console.log(this.props.profile);
+        this.profile = this.props.profile || {
+            code: "Arquiteto Profissional",
+            id: 9,
+            name: "Arquiteto",
+            tax_class_id: 3,
+            tax_class_name: "Retail Customer",
+          };
         this.sections = [
             {
                 name: 'personal-data',
