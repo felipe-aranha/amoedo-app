@@ -42,9 +42,9 @@ export class Routes extends React.Component{
                     <Modal key='main'>
                         <Stack hideNavBar key='account'>
                             <Scene hideNavBar key='accountType' component={AccountType} />
-                            <Scene hideNavBar key='login' component={Login} />
+                            <Scene initial hideNavBar key='login' component={Login} />
                             <Scene hideNavBar key='profileSelection' component={ProfileSelection} />
-                            <Scene initial key='register' component={Register} />
+                            <Scene key='register' component={Register} />
                         </Stack>
                     </Modal>
                 </Router>   

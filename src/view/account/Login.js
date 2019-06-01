@@ -18,11 +18,20 @@ export default class Login extends AccountBase{
         super(props,context);
         this.email = React.createRef();
         this.password = React.createRef();
+        this.state = {
+            showPassword: false
+        }
     }
 
     goToPassword(){
         if(this.password.current)
             this.password.current.focus()
+    }
+
+    togglePasswordField(){
+        this.setState({
+            showPassword: !this.state.showPassword
+        })
     }
 
     renderContent(){
@@ -89,7 +98,17 @@ export default class Login extends AccountBase{
                             returnKeyType={'go'}
                             ref={this.password}
                             containerStyle={accountStyle.inputWrapperStyle}
-                            secureTextEntry
+                            secureTextEntry={!this.state.showPassword}
+                            rightIcon={{
+                                name: this.state.showPassword ? 'eye' : 'eye-slash',
+                                type:'font-awesome',
+                                color: '#fff',
+                                size: 16,
+                                onPress: this.togglePasswordField.bind(this),
+                                iconStyle: {
+                                    marginRight: 15
+                                }
+                            }}
                         />
                         <View style={accountStyle.loginButtonContainter}>
                             <Button 
