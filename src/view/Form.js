@@ -37,7 +37,9 @@ export default class Form extends React.PureComponent{
             complement: '',
             city:'',
             state: '',
+            neighborhood: '',
             emailErrorMessage: '',
+            instagram: '',
             cpfValid: null,
             emailValid: null
         }
@@ -86,6 +88,16 @@ export default class Form extends React.PureComponent{
     handleLinkedinChange(text){
         this.setState({
             linkedin: text
+        })
+    }
+    handleInstagramChange(text){
+        this.setState({
+            instagram: text
+        })
+    }
+    handleNeighborhoodChange(text){
+        this.setState({
+            neighborhood: text
         })
     }
     handlePhoneChange(text){
@@ -173,6 +185,27 @@ export default class Form extends React.PureComponent{
 
         }).catch( e => { return false })
         
+    }
+
+    fillAddress(){
+        if(this.state.zipCode.length < 8){
+            return;
+        }
+        fetch(`https://viacep.com.br/ws/${this.state.zipCode}/json/`).then( result => {
+            return result.json();
+        }).then(result => {
+            if(result.error){
+                return;
+            }
+            this.setState({
+                address: result.logradouro || this.state.address,
+                neighborhood: result.bairro || this.state.neighborhood,
+                city: result.localidade || this.state.city,
+                state: result.uf || this.state.state
+            })
+        }).catch(e => {
+            console.log(e);
+        })
     }
 
     // inputs
@@ -312,6 +345,7 @@ export default class Form extends React.PureComponent{
                 label='nascimento'
                 value={this.state.dob}
                 onChangeText={this.handleDobChange.bind(this)}
+                keyboardType={'number-pad'}
             />
         )
     }
@@ -326,12 +360,33 @@ export default class Form extends React.PureComponent{
         )
     }
 
+    renderInstagram(){
+        return(
+            <Input 
+                label='instagram'
+                value={this.state.instagram}
+                onChangeText={this.handleInstagramChange.bind(this)}
+            />
+        )
+    }
+
     renderPhone(){
         return(
             <Input 
                 label='telefone'
                 value={this.state.phone}
                 onChangeText={this.handlePhoneChange.bind(this)}
+                keyboardType={'number-pad'}
+            />
+        )
+    }
+
+    renderNeighborhood(){
+        return(
+            <Input  
+                label='bairro'
+                value={this.state.neighborhood}
+                onChangeText={this.handleNeighborhoodChange.bind(this)}
             />
         )
     }
@@ -342,6 +397,7 @@ export default class Form extends React.PureComponent{
                 label='celular'
                 value={this.state.cell}
                 onChangeText={this.handleCellChange.bind(this)}
+                keyboardType={'number-pad'}
             />
         )
     }
@@ -352,6 +408,8 @@ export default class Form extends React.PureComponent{
                 label='cep'
                 value={this.state.zipCode}
                 onChangeText={this.handleZipCodeChange.bind(this)}
+                onBlur={this.fillAddress.bind(this)}
+                keyboardType={'number-pad'}
             />
         )
     }
@@ -372,6 +430,7 @@ export default class Form extends React.PureComponent{
                 label='número'
                 value={this.state.number}
                 onChangeText={this.handleNumberChange.bind(this)}
+                keyboardType={'number-pad'}
             />
         )
     }

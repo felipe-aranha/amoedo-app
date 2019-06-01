@@ -40,12 +40,8 @@ export class PersonalData extends Form {
                     }}>
                         <View style={[formRow,{marginBottom: 20}]}>
                             {this.renderAvatar()}
-                            {this.renderPassword()}
-                            {this.renderPasswordConfirmation()}
-                        </View>
-                        <View style={formRow}>
-                            {this.renderCau()}
-                            <View style={{flex:1}} />
+                            {this.renderName()}
+                            
                         </View>
                         <View style={formRow}>
                             {this.renderEmail()}
@@ -55,11 +51,8 @@ export class PersonalData extends Form {
                             {this.renderRg()}
                         </View>
                         <View style={formRow}>
-                            {this.renderName()}
-                        </View>
-                        <View style={formRow}>
+                            {this.renderCau()}
                             {this.renderDOB()}
-                            {this.renderLinkedin()}
                         </View>
                         <View style={formRow}>
                             {this.renderPhone()}
@@ -77,8 +70,16 @@ export class PersonalData extends Form {
                             {this.renderAddressComplement()}
                         </View>
                         <View style={formRow}>
+                            {this.renderNeighborhood()}
                             {this.renderCity()}
+                        </View>
+                        <View style={formRow}>
                             {this.renderState()}
+                            {this.renderInstagram()}
+                        </View>
+                        <View style={formRow}>
+                            {this.renderPassword()}
+                            {this.renderPasswordConfirmation()}
                         </View>
                     </View>
                 </View>
