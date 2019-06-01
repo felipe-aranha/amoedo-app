@@ -153,23 +153,31 @@ export default class Register extends MainView{
                     style={{
                         backgroundColor: secondaryColor,
                         width: '100%',
-                        paddingBottom: 15,
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexDirection: 'row'
                     }}
                 >
                     {this.sections.map((section,key) =>{
+                        const isActive = this.state.activeSection == section.name;
                         return(
                             <TouchableOpacity 
                                 key={key}
-                                // onPress={this.changeSection.bind(this,section)}
+                                onPress={this.changeSection.bind(this,section)}
+                                style={{
+                                    backgroundColor: isActive ? 'rgb(242,242,242)' : 'rgb(50,0,14)',
+                                    marginHorizontal: 2,
+                                    paddingTop: 10,
+                                    paddingBottom: 10,
+                                    borderTopLeftRadius: 4,
+                                    borderTopRightRadius: 4
+                                }}
                             >
                                 <AppIcon 
                                     key={key}
                                     name={section.name}
                                     style={{
-                                        tintColor: this.state.activeSection == section.name ? '#fff' : undefined,
+                                        tintColor: isActive ? undefined : '#fff',
                                         marginHorizontal: 20,
                                         width: 30,
                                         height: 30

@@ -116,5 +116,11 @@ export default StyleSheet.create({
     },
     loginSignInButtonTextHighlight: {
         color: 'rgb(241,207,0)'
+    },
+    formRow: {
+        flexDirection: 'row',
+        marginVertical: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })

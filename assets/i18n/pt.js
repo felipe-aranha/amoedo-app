@@ -39,7 +39,9 @@ export default {
         },
         register: {
             personalDataTitle: 'DADOS ',
-            personalDataHighlight: 'PESSOAIS'
+            personalDataHighlight: 'PESSOAIS',
+            professionalDataTitle: 'DADOS ',
+            professionalDataHighlight: 'PROFISSIONAIS'
         },
         errorMessage: {
             password: 'min de 6 caracteres',

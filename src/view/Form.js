@@ -40,6 +40,9 @@ export default class Form extends React.PureComponent{
             neighborhood: '',
             emailErrorMessage: '',
             instagram: '',
+            cnpj: '',
+            companyName: '',
+            monthlyProjects: '',
             cpfValid: null,
             emailValid: null
         }
@@ -50,6 +53,25 @@ export default class Form extends React.PureComponent{
             password: text
         })
     }
+
+    handleCnpjChange(text){
+        this.setState({
+            cnpj: text
+        })
+    }
+
+    handleCompanyNameChange(text){
+        this.setState({
+            companyName: text
+        })
+    }
+
+    handleMonthlyProjectsChange(text){
+        this.setState({
+            monthlyProjects: text
+        })
+    }
+
     handlePasswordConfirmationChange(text){
         this.setState({
             confirmPassword: text
@@ -290,6 +312,36 @@ export default class Form extends React.PureComponent{
                 label='registro do cau'
                 value={this.state.cau}
                 onChangeText={this.handleCauChange.bind(this)}
+            />
+        )
+    }
+
+    renderCnpj(){
+        return(
+            <Input 
+                label='cnpj'
+                value={this.state.cnpj}
+                onChangeText={this.handleCnpjChange.bind(this)}
+            />
+        )
+    }
+
+    renderMonthlyProjects(){
+        return(
+            <Input 
+                label='projetos por mês'
+                value={this.state.monthlyProjects}
+                onChangeText={this.handleMonthlyProjectsChange.bind(this)}
+            />
+        )
+    }
+
+    renderCompanyName(){
+        return(
+            <Input 
+                label='nome da empresa'
+                value={this.state.companyName}
+                onChangeText={this.handleCompanyNameChange.bind(this)}
             />
         )
     }

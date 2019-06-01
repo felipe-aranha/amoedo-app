@@ -4,24 +4,33 @@ import { RegisterContext } from './Register';
 import { View } from 'react-native';
 import { Text } from '../../../components';
 import I18n from '../../../i18n';
+import { PersonalData } from './PersonalData';
+import { accountStyle } from '../../../style';
 
-export class ProfessionalData extends MainView {
+export class ProfessionalData extends PersonalData {
     static contextType = RegisterContext;
 
     constructor(props,context){
         super(props,context);
     }
 
-    renderCenter(){
-        return (
-            <View>
-                <View>
-                    <Text>
+    title = I18n.t('account.register.professionalDataTitle');
+    titleHighlight = I18n.t('account.register.professionalDataHighlight');
 
-                        <Text></Text>
-                    </Text>
+    renderForm(){
+        return (
+            <>
+                <View style={accountStyle.formRow}>
+                    {this.renderCnpj()}
+                    <View style={{flex:1}} />
                 </View>
-            </View>
+                <View style={accountStyle.formRow}>
+                    {this.renderCompanyName()}
+                </View>
+                <View style={accountStyle.formRow}>
+                    {this.renderMonthlyProjects()}
+                </View>
+            </>
         )
     }
 }
