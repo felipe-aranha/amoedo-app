@@ -24,10 +24,10 @@ export default class AccountType extends AccountBase{
     renderContent(){
         return(
             <>
-                <View style={{flex:1}}>
+                <View style={{flex:2}}>
                 </View>
-                <View style={{flex:1}}>
-                    <View style={accountStyle.innerContentView}>
+                <View style={{flex:3}}>
+                    <View style={[accountStyle.innerContentView, {flex: 0.75}]}>
                         <Text>
                             <Text style={accountStyle.accountText}>{I18n.t('account.accountType.mainText')}</Text>
                             <Text style={[accountStyle.accountText,accountStyle.accountTypeTextHighlight]}>{I18n.t('account.accountType.highlight')}</Text>
@@ -36,7 +36,7 @@ export default class AccountType extends AccountBase{
                     </View>
                     <View style={[accountStyle.innerContentView,accountStyle.accountTypeButtonsArea]}>
                         <Button
-                            title={I18n.t('entity.architect')}
+                            title={I18n.t('account.accountType.professional')}
                             containerStyle={accountStyle.accountTypeButtonContainer}
                             buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountButtonArchitectButton]}
                             titleStyle={accountStyle.accountTypeButtonTitle}
@@ -47,6 +47,13 @@ export default class AccountType extends AccountBase{
                             type={'outline'}
                             containerStyle={accountStyle.accountTypeButtonContainer}
                             buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountCustomerButton]}
+                            titleStyle={accountStyle.accountTypeButtonTitle}
+                            onPress={this.handleButtonPress}
+                        />
+                        <Button 
+                            title={I18n.t('account.accountType.technicalAssistance')}
+                            containerStyle={accountStyle.accountTypeButtonContainer}
+                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountTechnicalAssistance]}
                             titleStyle={accountStyle.accountTypeButtonTitle}
                             onPress={this.handleButtonPress}
                         />

@@ -46,6 +46,9 @@ export default StyleSheet.create({
     accountCustomerButton: {
         borderColor: '#fff'
     },
+    accountTechnicalAssistance: {
+        backgroundColor: 'rgb(243,164,51)'
+    },
     loginNavBarBackground: {
         width: '100%',
         height: 180

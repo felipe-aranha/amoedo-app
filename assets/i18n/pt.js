@@ -6,7 +6,7 @@ export default {
     common: {
         select: 'Selecione',
         cancel: 'Cancelar',
-        continue: 'Continuar'
+        continue: 'Continuar',
     },
     profile: {
         student: 'Estudante',
@@ -16,7 +16,9 @@ export default {
     account: {
         accountType: {
             mainText: "A forma mais\nsimples de lidar\ncom seus ",
-            highlight: "projetos"
+            highlight: "projetos",
+            professional: "Profissional da área",
+            technicalAssistance: 'Assistência Técnica'
         },
         login: {
             email: "E-mail",
