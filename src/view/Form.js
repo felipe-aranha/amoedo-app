@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, Platform } from 'react-native';
 import { CustomerService } from '../service';
 import { Input as InputElement } from 'react-native-elements';
 import * as Utils from '../utils';
@@ -160,6 +160,10 @@ export default class Form extends React.PureComponent{
         })
     }
 
+    keyboardNumber(){
+        return Platform.OS == 'ios' ? 'number-pad' : 'numeric'
+    }
+
     async checkEmail(isNew=true){
         if(!Utils.isEmailValid(this.state.email)){
             this.setState({
@@ -311,7 +315,7 @@ export default class Form extends React.PureComponent{
                 value={this.state.cpf}
                 onChangeText={this.handleCpfChange.bind(this)}
                 onBlur={this.validateCpf.bind(this)}
-                keyboardType={'number-pad'}
+                keyboardType={this.keyboardNumber()}
                 errorMessage={this.state.cpfValid == false ? I18n.t('account.errorMessage.invalidCpf') : ''}
             />
         )
@@ -321,7 +325,7 @@ export default class Form extends React.PureComponent{
         return(
             <Input 
                 label='rg'
-                keyboardType={'number-pad'}
+                keyboardType={this.keyboardNumber()}
                 value={this.state.rg}
                 onChangeText={this.handleRgChange.bind(this)}
             />
@@ -345,7 +349,7 @@ export default class Form extends React.PureComponent{
                 label='nascimento'
                 value={this.state.dob}
                 onChangeText={this.handleDobChange.bind(this)}
-                keyboardType={'number-pad'}
+                keyboardType={this.keyboardNumber()}
             />
         )
     }
@@ -376,7 +380,7 @@ export default class Form extends React.PureComponent{
                 label='telefone'
                 value={this.state.phone}
                 onChangeText={this.handlePhoneChange.bind(this)}
-                keyboardType={'number-pad'}
+                keyboardType={this.keyboardNumber()}
             />
         )
     }
@@ -397,7 +401,7 @@ export default class Form extends React.PureComponent{
                 label='celular'
                 value={this.state.cell}
                 onChangeText={this.handleCellChange.bind(this)}
-                keyboardType={'number-pad'}
+                keyboardType={this.keyboardNumber()}
             />
         )
     }
@@ -409,7 +413,7 @@ export default class Form extends React.PureComponent{
                 value={this.state.zipCode}
                 onChangeText={this.handleZipCodeChange.bind(this)}
                 onBlur={this.fillAddress.bind(this)}
-                keyboardType={'number-pad'}
+                keyboardType={this.keyboardNumber()}
             />
         )
     }
@@ -430,7 +434,7 @@ export default class Form extends React.PureComponent{
                 label='número'
                 value={this.state.number}
                 onChangeText={this.handleNumberChange.bind(this)}
-                keyboardType={'number-pad'}
+                keyboardType={this.keyboardNumber()}
             />
         )
     }
