@@ -4,7 +4,7 @@ import { View, TouchableOpacity } from 'react-native';
 import { Text } from '../../../components';
 import I18n from '../../../i18n';
 import Form from '../../Form';
-import { accountStyle } from '../../../style';
+import { accountStyle, relativeHeight } from '../../../style';
 
 export class PersonalData extends Form {
     static contextType = RegisterContext;
@@ -64,6 +64,8 @@ export class PersonalData extends Form {
                 {this.renderPassword()}
                 {this.renderPasswordConfirmation()}
             </View>
+            <View style={{height: 50}}>
+            </View>
             </>
         )
     }
@@ -72,7 +74,7 @@ export class PersonalData extends Form {
     titleHighlight = I18n.t('account.register.personalDataHighlight');
     render(){
         return (
-            <View style={{flex:1}}>
+            <View style={{flex:1, minHeight: relativeHeight(100) -  130}}>
                 <View >
                     <View style={{
                     marginHorizontal:30,

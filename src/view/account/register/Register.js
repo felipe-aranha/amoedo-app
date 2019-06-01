@@ -22,7 +22,7 @@ export default class Register extends MainView{
 
     constructor(props,context){
         super(props,context);
-        console.log(this.props.profile);
+        this.scrollRef = React.createRef();
         this.profile = this.props.profile || {
             code: "Arquiteto Profissional",
             id: 9,
@@ -46,30 +46,35 @@ export default class Register extends MainView{
         this.customerService = new CustomerService();
     }
 
-    changeSection(section){
+    async changeSection(section){
         if(this.state.activeSection != section.name){
-            this.setState({
+             await this.setState({
                 activeSection: section.name
-            })
-        }
+            },() => {
+                this.scrollToTop(false);
+            });
+        } else this.scrollToTop();
+        
+    }
+
+    scrollToTop(animated=false){
+        this.scrollRef.current.scrollTo({
+            x: 0,
+            y: 0,
+            animated
+        });
     }
 
     goToProfessionalData(){
-        this.setState({
-            activeSection: 'professional-data'
-        })
+        changeSection({name: 'professional-data'});
     }
 
     goToPersonalData(){
-        this.setState({
-            activeSection: 'personal-data'
-        })
+        changeSection({name: 'personal-data'});
     }
 
     goToDocuments(){
-        this.setState({
-            activeSection: 'upload-files'
-        })
+        changeSection({name: 'upload-files'});
     }
 
     handlePersonalDataContinue(state){
@@ -188,7 +193,7 @@ export default class Register extends MainView{
                     })}
                 </View>
                 <View style={{flex:1}}>
-                    <ScrollView>
+                    <ScrollView ref={this.scrollRef}>
                         <RegisterContext.Provider value={this.state}>
                             {this.renderSteps()}
                         </RegisterContext.Provider>

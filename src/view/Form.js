@@ -532,7 +532,9 @@ export default class Form extends React.PureComponent{
                         width: '100%',
                         paddingVertical: 20,
                         justifyContent:'center',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        position: 'absolute',
+                        bottom: 0
                     }}
                 >
                 <Text weight={'medium'} style={{
