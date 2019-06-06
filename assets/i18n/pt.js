@@ -41,7 +41,8 @@ export default {
             personalDataTitle: 'DADOS ',
             personalDataHighlight: 'PESSOAIS',
             professionalDataTitle: 'DADOS ',
-            professionalDataHighlight: 'PROFISSIONAIS'
+            professionalDataHighlight: 'PROFISSIONAIS',
+            documentsTitle: 'DOCUMENTOS'
         },
         errorMessage: {
             password: 'min de 6 caracteres',
@@ -50,5 +51,29 @@ export default {
             invalidEmail: 'e-mail inválido',
             invalidCpf: 'cpf inválido'
         }
+    },
+    form: {
+        email: 'e-mail',
+        password: 'senha',
+        confirmPassword: 'repetir senha',
+        cau: 'registro do cau',
+        cnpj: 'cnpj',
+        projects: 'projetos por mês',
+        companyName: 'nome da empresa',
+        cpf: 'cpf',
+        rg: 'rg',
+        name: 'nome',
+        birthDate: 'nascimento',
+        linkedin: 'linkedin',
+        instagram: 'instagram',
+        phone: 'telefone',
+        cellphone: 'celular',
+        neighborhood: 'bairro',
+        zipCode: 'cep',
+        address: 'endereço',
+        number: 'número',
+        complement: 'complemento',
+        city: 'cidade',
+        state: 'uf'
     }
 }

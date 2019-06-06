@@ -183,7 +183,7 @@ export default class Form extends React.PureComponent{
     }
 
     keyboardNumber(){
-        return Platform.OS == 'ios' ? 'number-pad' : 'numeric'
+        return 'number-pad';
     }
 
     async checkEmail(isNew=true){
@@ -270,7 +270,7 @@ export default class Form extends React.PureComponent{
             <Input 
                 onChangeText={this.handlePasswordChange.bind(this)}
                 value={this.state.password}
-                label='senha'
+                label={I18n.t('form.password')}
                 secureTextEntry={!this.state.showPassword}
                 rightIcon={{
                     name: this.state.showPassword ? 'eye' : 'eye-slash',
@@ -289,7 +289,7 @@ export default class Form extends React.PureComponent{
             <Input 
                 onChangeText={this.handlePasswordConfirmationChange.bind(this)}
                 value={this.state.confirmPassword}
-                label='repetir senha'
+                label={I18n.t('form.confirmPassword')}
                 secureTextEntry={!this.state.showPasswordConfirmation}
                 rightIcon={{
                     name: this.state.showPasswordConfirmation ? 'eye' : 'eye-slash',
@@ -309,7 +309,7 @@ export default class Form extends React.PureComponent{
     renderCau(){
         return(
             <Input 
-                label='registro do cau'
+                label={I18n.t('form.cau')}
                 value={this.state.cau}
                 onChangeText={this.handleCauChange.bind(this)}
             />
@@ -319,7 +319,7 @@ export default class Form extends React.PureComponent{
     renderCnpj(){
         return(
             <Input 
-                label='cnpj'
+                label={I18n.t('form.cnpj')}
                 value={this.state.cnpj}
                 onChangeText={this.handleCnpjChange.bind(this)}
             />
@@ -329,7 +329,7 @@ export default class Form extends React.PureComponent{
     renderMonthlyProjects(){
         return(
             <Input 
-                label='projetos por mês'
+                label={I18n.t('form.projects')}
                 value={this.state.monthlyProjects}
                 onChangeText={this.handleMonthlyProjectsChange.bind(this)}
             />
@@ -339,7 +339,7 @@ export default class Form extends React.PureComponent{
     renderCompanyName(){
         return(
             <Input 
-                label='nome da empresa'
+                label={I18n.t('form.companyName')}
                 value={this.state.companyName}
                 onChangeText={this.handleCompanyNameChange.bind(this)}
             />
@@ -349,7 +349,7 @@ export default class Form extends React.PureComponent{
     renderEmail(){
         return(
             <Input 
-                label='e-mail'
+                label={I18n.t('form.email')}
                 value={this.state.email}
                 onChangeText={this.handleEmailChange.bind(this)}
                 onBlur={this.checkEmail.bind(this)}
@@ -363,7 +363,7 @@ export default class Form extends React.PureComponent{
     renderCpf(){
         return(
             <Input 
-                label='cpf'
+                label={I18n.t('form.cpf')}
                 value={this.state.cpf}
                 onChangeText={this.handleCpfChange.bind(this)}
                 onBlur={this.validateCpf.bind(this)}
@@ -376,7 +376,7 @@ export default class Form extends React.PureComponent{
     renderRg(){
         return(
             <Input 
-                label='rg'
+                label={I18n.t('form.rg')}
                 keyboardType={this.keyboardNumber()}
                 value={this.state.rg}
                 onChangeText={this.handleRgChange.bind(this)}
@@ -387,7 +387,7 @@ export default class Form extends React.PureComponent{
     renderName(){
         return(
             <Input 
-                label='nome'
+                label={I18n.t('form.name')}
                 autoCapitalize={'words'}
                 value={this.state.name}
                 onChangeText={this.handleNameChange.bind(this)}
@@ -398,7 +398,7 @@ export default class Form extends React.PureComponent{
     renderDOB(){
         return(
             <Input 
-                label='nascimento'
+                label={I18n.t('form.birthDate')}
                 value={this.state.dob}
                 onChangeText={this.handleDobChange.bind(this)}
                 keyboardType={this.keyboardNumber()}
@@ -409,7 +409,7 @@ export default class Form extends React.PureComponent{
     renderLinkedin(){
         return(
             <Input 
-                label='linkedin'
+                label={I18n.t('form.linkedin')}
                 value={this.state.linkedin}
                 onChangeText={this.handleLinkedinChange.bind(this)}
             />
@@ -419,7 +419,7 @@ export default class Form extends React.PureComponent{
     renderInstagram(){
         return(
             <Input 
-                label='instagram'
+                label={I18n.t('form.instagram')}
                 value={this.state.instagram}
                 onChangeText={this.handleInstagramChange.bind(this)}
             />
@@ -429,7 +429,7 @@ export default class Form extends React.PureComponent{
     renderPhone(){
         return(
             <Input 
-                label='telefone'
+                label={I18n.t('form.phone')}
                 value={this.state.phone}
                 onChangeText={this.handlePhoneChange.bind(this)}
                 keyboardType={this.keyboardNumber()}
@@ -440,7 +440,7 @@ export default class Form extends React.PureComponent{
     renderNeighborhood(){
         return(
             <Input  
-                label='bairro'
+                label={I18n.t('form.neighborhood')}
                 value={this.state.neighborhood}
                 onChangeText={this.handleNeighborhoodChange.bind(this)}
             />
@@ -450,7 +450,7 @@ export default class Form extends React.PureComponent{
     renderCellPhone(){
         return(
             <Input 
-                label='celular'
+                label={I18n.t('form.cellphone')}
                 value={this.state.cell}
                 onChangeText={this.handleCellChange.bind(this)}
                 keyboardType={this.keyboardNumber()}
@@ -461,7 +461,7 @@ export default class Form extends React.PureComponent{
     renderCep(){
         return(
             <Input 
-                label='cep'
+                label={I18n.t('form.zipCode')}
                 value={this.state.zipCode}
                 onChangeText={this.handleZipCodeChange.bind(this)}
                 onBlur={this.fillAddress.bind(this)}
@@ -473,7 +473,7 @@ export default class Form extends React.PureComponent{
     renderAddress(){
         return(
             <Input 
-                label='endereço'
+                label={I18n.t('form.address')}
                 value={this.state.address}
                 onChangeText={this.handleAddressChange.bind(this)}
             />
@@ -483,7 +483,7 @@ export default class Form extends React.PureComponent{
     renderAddressNumber(){
         return(
             <Input 
-                label='número'
+                label={I18n.t('form.number')}
                 value={this.state.number}
                 onChangeText={this.handleNumberChange.bind(this)}
                 keyboardType={this.keyboardNumber()}
@@ -494,7 +494,7 @@ export default class Form extends React.PureComponent{
     renderAddressComplement(){
         return(
             <Input 
-                label='complemento'
+                label={I18n.t('form.complement')}
                 value={this.state.complement}
                 onChangeText={this.handleComplementChange.bind(this)}
             />
@@ -504,7 +504,7 @@ export default class Form extends React.PureComponent{
     renderCity(){
         return(
             <Input 
-                label='cidade'
+                label={I18n.t('form.city')}
                 value={this.state.city}
                 onChangeText={this.handleCityChange.bind(this)}
             />
@@ -514,7 +514,7 @@ export default class Form extends React.PureComponent{
     renderState(){
         return(
             <Input 
-                label='uf'
+                label={I18n.t('form.state')}
                 value={this.state.state}
                 onChangeText={this.handleStateChange.bind(this)}
             />
