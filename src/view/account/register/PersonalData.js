@@ -76,27 +76,16 @@ export class PersonalData extends Form {
         return (
             <View style={{flex:1, minHeight: relativeHeight(100) -  130}}>
                 <View >
-                    <View style={{
-                    marginHorizontal:30,
-                    marginVertical: 30,
-                    flex: 1
-                }}>
-                        <Text weight='bold' style={{
-                            color: 'rgb(125,125,125)',
-                        }}>
+                    <View style={accountStyle.sectionTitleArea}>
+                        <Text weight='bold' style={accountStyle.sectionTitleText}>
                             {this.title}
                             {this.titleHighlight != null &&
-                                <Text weight='bold' style={{
-                                    color: 'rgb(88,12,33)',
-                                }}>{this.titleHighlight}</Text>
+                                <Text weight='bold' style={accountStyle.sectionTitleTextHighlight}>{this.titleHighlight}</Text>
                             }
                             
                         </Text>
                     </View>
-                    <View style={{
-                        marginHorizontal: 20,
-                        marginBottom: 30
-                    }}>
+                    <View style={accountStyle.formContent}>
                         {this.renderForm()}
                     </View>
                 </View>

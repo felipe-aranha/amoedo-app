@@ -175,5 +175,52 @@ export default StyleSheet.create({
         position: 'absolute',
         top: 0,
         right: -5
+    },
+    sectionTitleArea: {
+        marginHorizontal:30,
+        marginVertical: 30,
+        flex: 1
+    },
+    sectionTitleText: {
+        color: 'rgb(125,125,125)'
+    },
+    sectionTitleTextHighlight: {
+        color: 'rgb(88,12,33)',
+    },
+    formContent: {
+        marginHorizontal: 20,
+        marginBottom: 30
+    },
+    registerHeaderText: {
+        fontFamily: 'system-medium',
+        color: 'rgb(242,242,242)',
+        fontSize: 15,
+        textTransform: 'uppercase'
+    },
+    registerContentArea: {
+        backgroundColor: secondaryColor,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row'
+    },
+    sectionHeaderArea: {
+        backgroundColor: 'rgb(50,0,14)',
+        marginHorizontal: 2,
+        paddingTop: 10,
+        paddingBottom: 10,
+        borderTopLeftRadius: 4,
+        borderTopRightRadius: 4
+    },
+    sectionHeaderAreaActive: {
+        backgroundColor: 'rgb(242,242,242)'
+    },
+    sectionHeaderIcon: {
+        marginHorizontal: 20,
+        width: 30,
+        height: 30
+    },
+    sectionHeaderIconInactive: {
+        tintColor: '#fff'
     }
 })

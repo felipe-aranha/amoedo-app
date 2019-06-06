@@ -2,7 +2,7 @@ import React from 'react';
 import { MainView } from '../../MainView';
 import { Header, Text, Select, AppIcon, KeyboardSpacer } from '../../../components';
 import { View, StatusBar, TouchableOpacity, ScrollView } from 'react-native';
-import { secondaryColor } from '../../../style';
+import { secondaryColor, accountStyle } from '../../../style';
 import { PersonalData } from './PersonalData';
 import { Documents } from './Documents';
 import { ProfessionalData } from './ProfessionalData';
@@ -146,22 +146,11 @@ export default class Register extends MainView{
                     title={this.profile.name}
                     handleBack={this.handleBack.bind(this)}
                     leftIconColor={'rgb(242,242,242)'}
-                    titleStyle={{
-                        fontFamily: 'system-medium',
-                        color: 'rgb(242,242,242)',
-                        fontSize: 15,
-                        textTransform: 'uppercase'
-                    }}
+                    titleStyle={accountStyle.registerHeaderText}
                     backgroundColor={secondaryColor}
                 />
                 <View
-                    style={{
-                        backgroundColor: secondaryColor,
-                        width: '100%',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexDirection: 'row'
-                    }}
+                    style={accountStyle.registerContentArea}
                 >
                     {this.sections.map((section,key) =>{
                         const isActive = this.state.activeSection == section.name;
@@ -169,24 +158,12 @@ export default class Register extends MainView{
                             <TouchableOpacity 
                                 key={key}
                                 onPress={this.changeSection.bind(this,section)}
-                                style={{
-                                    backgroundColor: isActive ? 'rgb(242,242,242)' : 'rgb(50,0,14)',
-                                    marginHorizontal: 2,
-                                    paddingTop: 10,
-                                    paddingBottom: 10,
-                                    borderTopLeftRadius: 4,
-                                    borderTopRightRadius: 4
-                                }}
+                                style={[accountStyle.sectionHeaderArea, isActive ? accountStyle.sectionHeaderAreaActive : {}]}
                             >
                                 <AppIcon 
                                     key={key}
                                     name={section.name}
-                                    style={{
-                                        tintColor: isActive ? undefined : '#fff',
-                                        marginHorizontal: 20,
-                                        width: 30,
-                                        height: 30
-                                    }}
+                                    style={[accountStyle.sectionHeaderIcon, isActive ? {} : accountStyle.sectionHeaderIconInactive]}
                                 />
                             </TouchableOpacity>
                         )
