@@ -122,5 +122,58 @@ export default StyleSheet.create({
         marginVertical: 10,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    inputLabel: {
+        fontFamily: 'system-medium',
+        color: 'rgb(163,163,163)',
+        textTransform: 'uppercase',
+        fontSize: 12
+    },
+    input: { 
+        fontFamily: 'system-medium',
+        color: secondaryColor,
+        fontSize: 14
+    },
+    inputError: {
+        position: 'absolute',
+        bottom: -20,
+        color: 'rgb(177,3,3)',
+        fontFamily: 'system-medium',
+        fontSize: 10
+    },
+    inputContainter: {
+        borderBottomColor: 'rgba(77,77,77,0.3)'
+    },
+    formSubmit: {
+        backgroundColor: 'rgb(50,0,14)',
+        width: '100%',
+        paddingVertical: 20,
+        justifyContent:'center',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 0
+    },
+    formSubmitText: {
+        color: '#fff',
+        fontSize: 14
+    },
+    formAvatarArea: {
+        width: 60,
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 30,
+        marginHorizontal: 10,
+    },
+    formAvatarIcon: {
+        width: 24,
+        height: 24
+    },
+    formAvatarBadge: {
+        color: secondaryColor,
+        position: 'absolute',
+        top: 0,
+        right: -5
     }
 })

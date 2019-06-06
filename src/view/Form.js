@@ -4,7 +4,7 @@ import { CustomerService } from '../service';
 import { Input as InputElement } from 'react-native-elements';
 import * as Utils from '../utils';
 import { AntDesign } from '@expo/vector-icons';
-import { secondaryColor } from '../style';
+import { secondaryColor, accountStyle } from '../style';
 import I18n from '../i18n';
 import { Text, AppIcon } from '../components';
 
@@ -238,28 +238,12 @@ export default class Form extends React.PureComponent{
 
     renderAvatar(){
         return(
-            <TouchableOpacity style={{
-                width: 60,
-                height: 60,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#fff',
-                borderRadius: 30,
-                marginHorizontal: 10,
-            }}>
-                <AppIcon style={{
-                    width: 24,
-                    height: 24
-                }} name='camera' />
+            <TouchableOpacity style={accountStyle.formAvatarArea}>
+                <AppIcon style={accountStyle.formAvatarIcon} name='camera' />
                 <AntDesign 
                     name={'pluscircle'}
                     size={25}
-                    style={{
-                        color: secondaryColor,
-                        position: 'absolute',
-                        top: 0,
-                        right: -5
-                    }}
+                    style={accountStyle.formAvatarBadge}
                 />
             </TouchableOpacity>
         )
@@ -527,20 +511,9 @@ export default class Form extends React.PureComponent{
         return(
             <TouchableOpacity
                     onPress={this.handleFormSubmit.bind(this)}
-                    style={{
-                        backgroundColor: 'rgb(50,0,14)',
-                        width: '100%',
-                        paddingVertical: 20,
-                        justifyContent:'center',
-                        alignItems: 'center',
-                        position: 'absolute',
-                        bottom: 0
-                    }}
+                    style={accountStyle.formSubmit}
                 >
-                <Text weight={'medium'} style={{
-                    color: '#fff',
-                    fontSize: 14
-                }}>{this.submitText}</Text>
+                <Text weight={'medium'} style={accountStyle.formSubmitText}>{this.submitText}</Text>
             </TouchableOpacity>
         )
     }
@@ -558,27 +531,10 @@ class Input extends React.PureComponent{
         return <InputElement 
             {...this.props}
             containerStyle={{flex:1}}
-            labelStyle={{
-                fontFamily: 'system-medium',
-                color: 'rgb(163,163,163)',
-                textTransform: 'uppercase',
-                fontSize: 12
-            }}
-            inputContainerStyle={{
-                borderBottomColor: 'rgba(77,77,77,0.3)'
-            }}
-            inputStyle={{
-                fontFamily: 'system-medium',
-                color: secondaryColor,
-                fontSize: 14
-            }}
-            errorStyle={{
-                position: 'absolute',
-                bottom: -20,
-                color: 'rgb(177,3,3)',
-                fontFamily: 'system-medium',
-                fontSize: 10
-            }}
+            labelStyle={accountStyle.inputLabel}
+            inputContainerStyle={accountStyle.inputContainter}
+            inputStyle={accountStyle.input}
+            errorStyle={accountStyle.inputError}
             errorProps={{
                 numberOfLines: 1
             }}
