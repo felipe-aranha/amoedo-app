@@ -14,6 +14,11 @@ export class Documents extends PersonalData {
     title = I18n.t('account.register.documentsTitle');
     titleHighlight = null;
 
+    submitText = I18n.t('account.register.register');
+    submitStyle = {
+        backgroundColor: 'rgb(243,164,51)'
+    }
+
     renderForm(){
         return(
             <>

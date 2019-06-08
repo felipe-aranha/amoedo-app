@@ -42,7 +42,8 @@ export default {
             personalDataHighlight: 'PESSOAIS',
             professionalDataTitle: 'DADOS ',
             professionalDataHighlight: 'PROFISSIONAIS',
-            documentsTitle: 'DOCUMENTOS'
+            documentsTitle: 'DOCUMENTOS',
+            register: 'CRIAR CONTA'
         },
         errorMessage: {
             password: 'min de 6 caracteres',

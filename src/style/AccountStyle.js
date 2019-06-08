@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { default as style } from './variables';
+import { default as style, secondaryColor } from './variables';
 
 export default StyleSheet.create({
     mainBackground: {

@@ -506,12 +506,13 @@ export default class Form extends React.PureComponent{
     }
 
     submitText = I18n.t('common.continue').toUpperCase();
+    submitStyle = {}
 
     renderFormSubmit(){
         return(
             <TouchableOpacity
                     onPress={this.handleFormSubmit.bind(this)}
-                    style={accountStyle.formSubmit}
+                    style={[accountStyle.formSubmit, this.submitStyle]}
                 >
                 <Text weight={'medium'} style={accountStyle.formSubmitText}>{this.submitText}</Text>
             </TouchableOpacity>
