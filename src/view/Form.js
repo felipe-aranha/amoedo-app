@@ -25,6 +25,8 @@ export default class Form extends React.PureComponent{
             cau: '',
             email: '',
             cpf: '',
+            cpfDocument: '',
+            rgDocument: '',
             rg: '',
             name: '',
             dob: '',
