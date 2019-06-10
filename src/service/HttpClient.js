@@ -1,5 +1,5 @@
 import { Constants } from 'expo';
-import { variables } from '../utils';
+import variables from '../utils';
 
 export class HttpClient {
 
@@ -10,8 +10,7 @@ export class HttpClient {
     constructor(token=null){
         this.token = token != null ? token : variables.magento.auth.accessToken;
         this.variables = variables.magento;
-        this.baseUrl = this.variables.baseURL;
-        
+        this.baseUrl = this.variables.baseURL;        
     }
 
     sendAsync(url, type, data, options){

@@ -1,6 +1,6 @@
 import { Dimensions, PixelRatio } from 'react-native';
 
-const variables = require('../../assets/variables');
+import variables from '../utils';
 const style = variables.style;
 export default style;
 export const primaryColor = style.primaryColor;
