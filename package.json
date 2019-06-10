@@ -7,10 +7,13 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "expo": "32.0.6",
+    "expo": "^33.0.0",
+    "firebase": "^6.1.1",
+    "i18n-js": "^3.3.0",
+    "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "react": "16.8.2",
-    "react-native": "git+https://github.com/the-atelier/react-native.git#sdk-32",
+    "react": "16.8.3",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
     "react-native-easy-toast": "^1.2.0",
     "react-native-elements": "^1.1.0",
     "react-native-i18n": "^2.0.15",

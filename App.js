@@ -10,6 +10,7 @@ export default class App extends React.Component {
 		this.state = {
 			isReady: false
 		}
+		console.disableYellowBox = true;
 	}
 
 	cacheImages(images) {
