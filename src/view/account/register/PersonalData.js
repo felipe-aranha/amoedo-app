@@ -5,6 +5,7 @@ import { Text } from '../../../components';
 import I18n from '../../../i18n';
 import Form from '../../Form';
 import { accountStyle, relativeHeight } from '../../../style';
+import _ from 'lodash';
 
 export class PersonalData extends Form {
     static contextType = RegisterContext;
@@ -16,6 +17,12 @@ export class PersonalData extends Form {
 
     handleFormSubmit(){
         this.props.onContinue(this.state)
+    }
+
+    componentDidUpdate(prevProps,prevState){
+        if(!_.isEqual(prevState, this.state)){
+            this.props.onStateChange(this.state);
+        }
     }
 
     renderForm(){

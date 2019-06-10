@@ -17,7 +17,8 @@ export default class Form extends React.PureComponent{
     }
 
     getInitialState(){
-        return this.props.initialState || {
+        const initialState = Object.keys(this.props.initialState).length > 0 ? this.props.initialState : false;
+        return initialState || {
             showPassword: false,
             showPasswordConfirmation: false,
             password: '',
