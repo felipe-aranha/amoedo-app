@@ -9,8 +9,11 @@ import { ProfessionalData } from './ProfessionalData';
 import { CustomerService } from '../../../service';
 
 const initialState = {
-    activeSection: 'personal-data',
-    personalData: undefined,
+    // activeSection: 'personal-data',
+    activeSection: 'upload-files',
+    professionalData: {},
+    documents: {},
+    personalData: {},
     userRegistered: false
 }
 
@@ -109,14 +112,48 @@ export default class Register extends MainView{
         this.goToProfessionalData();
     }
 
+    updatePersonalDataState(personalData){
+        this.setState({
+            personalData
+        })
+    }
+
+    updateProfessionalDataState(professionalData){
+        this.setState({
+            professionalData
+        })
+    }
+
+    updateDocumentsState(documents){
+        this.setState({
+            documents
+        })
+    }
+
+    handleProfessionalDataContinue(){}
+
+    handleDocumentsContinue(){}
+
     renderSteps(){
         switch(this.state.activeSection){
             case 'professional-data':
-                return <ProfessionalData />
+                return <ProfessionalData 
+                            onStateChange={this.updateProfessionalDataState.bind(this)} 
+                            initialState={this.state.professionalData} 
+                            onContinue={this.handleProfessionalDataContinue.bind(this)}  
+                        />
             case 'upload-files':
-                return <Documents />
+                return <Documents 
+                            onStateChange={this.updateDocumentsState.bind(this)} 
+                            initialState={this.state.documents} 
+                            onContinue={this.handleDocumentsContinue.bind(this)} 
+                        />
             default: 
-                return <PersonalData initialState={this.state.personalData} onContinue={this.handlePersonalDataContinue.bind(this)} />
+                return <PersonalData 
+                            onStateChange={this.updatePersonalDataState.bind(this)} 
+                            initialState={this.state.personalData} 
+                            onContinue={this.handlePersonalDataContinue.bind(this)} 
+                        />
         }
     }
 
