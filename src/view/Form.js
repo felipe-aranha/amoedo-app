@@ -6,7 +6,7 @@ import * as Utils from '../utils';
 import { AntDesign } from '@expo/vector-icons';
 import { secondaryColor, accountStyle } from '../style';
 import I18n from '../i18n';
-import { Text, AppIcon } from '../components';
+import { Text, AppIcon, ImageBase64 } from '../components';
 
 export default class Form extends React.PureComponent{
 
@@ -48,7 +48,8 @@ export default class Form extends React.PureComponent{
             monthlyProjects: '',
             cpfValid: null,
             emailValid: null,
-            hideSubmit: false
+            hideSubmit: false,
+            avatar: null
         }
     }
 
@@ -106,6 +107,7 @@ export default class Form extends React.PureComponent{
             name: text
         })
     }
+    
     handleDobChange(text){
         this.setState({
             dob: text
@@ -238,12 +240,22 @@ export default class Form extends React.PureComponent{
         })
     }
 
+    handleAvatarPress(){
+        const result = Utils.UploadMedia.getFileAsync();
+        this.setState({
+            avatar: result ? result : null
+        })
+    }
+
     // inputs
 
     renderAvatar(){
         return(
-            <TouchableOpacity style={accountStyle.formAvatarArea}>
-                <AppIcon style={accountStyle.formAvatarIcon} name='camera' />
+            <TouchableOpacity onPress={this.handleAvatarPress.bind(this)} style={accountStyle.formAvatarArea}>
+                {this.state.avatar != null ?
+                    <ImageBase64 data={this.state.avatar} style={{width:60,height:60}} resizeMode={'contain'} /> :
+                    <AppIcon style={accountStyle.formAvatarIcon} name='camera' />
+                }
                 <AntDesign 
                     name={'pluscircle'}
                     size={25}
@@ -511,6 +523,8 @@ export default class Form extends React.PureComponent{
 
     submitText = I18n.t('common.continue').toUpperCase();
     submitStyle = {}
+
+    handleFormSubmit(){}
 
     renderFormSubmit(){
         return(

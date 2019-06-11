@@ -7,4 +7,12 @@ export const firestore = firebase.firestore();
 
 export class FirebaseDB{
     
+    static getUserCollection(){
+        return firestore.collection('user');
+    }
+
+    static getFirestore(){
+        return firestore;
+    }
+
 }

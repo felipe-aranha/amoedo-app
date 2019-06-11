@@ -9,8 +9,7 @@ import { ProfessionalData } from './ProfessionalData';
 import { CustomerService } from '../../../service';
 
 const initialState = {
-    // activeSection: 'personal-data',
-    activeSection: 'upload-files',
+    activeSection: 'personal-data',
     professionalData: {},
     documents: {},
     personalData: {},
