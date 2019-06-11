@@ -1,10 +1,11 @@
 import React from 'react';
-import { MainView } from '../../MainView';
+import { View, Image } from 'react-native';
 import { RegisterContext } from './Register';
 import { PersonalData } from './PersonalData';
 import I18n from '../../../i18n';
-import { ListItem } from 'react-native-elements';
-import { secondaryColor } from '../../../style';
+import { ListItem, Button } from 'react-native-elements';
+import { secondaryColor, accountStyle } from '../../../style';
+import { Text } from '../../../components';
 
 export class Documents extends PersonalData {
     static contextType = RegisterContext;
@@ -31,6 +32,50 @@ export class Documents extends PersonalData {
         backgroundColor: 'rgb(243,164,51)'
     }
 
+    handleItemPress(document){
+        this.setState({
+            documentSelected: document,
+            hideSubmit: true
+        })
+    }
+
+    renderDocumentUpload(){
+        const { documentSelected } = this.state;
+        const title = I18n.t(`account.document.${documentSelected.name}.title`);
+        return(
+            <View style={{marginHorizontal: 10}}>
+                <Text weight={'bold'}>{title}</Text>
+                <Text style={{marginVertical: 15, fontSize:13}}>{I18n.t('account.document.tutorial', {document: title})}</Text>
+                <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 20}}>
+                    <Image 
+                        source={require('../../../../assets/images/account/document-icon.png')}
+                        style={{
+                            width: 120,
+                            height: 120
+                        }}
+                    />
+                </View>
+                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                    <Button
+                        title={I18n.t('common.takePhoto')}
+                        containerStyle={accountStyle.accountTypeButtonContainer}
+                        buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountTakePhotoButton]}
+                        titleStyle={accountStyle.accountTypeButtonTitle}
+                        onPress={this.handleButtonPress}
+                    />
+                    <Button 
+                        title={I18n.t('common.loadFromPhone')}
+                        type={'outline'}
+                        containerStyle={accountStyle.accountTypeButtonContainer}
+                        buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountLoadMediafromPhoneButton]}
+                        titleStyle={[accountStyle.accountTypeButtonTitle,accountStyle.accountLoadMediafromPhoneButtonText]}
+                        onPress={this.handleButtonPress}
+                    />
+                </View>
+            </View>
+        )
+    }
+
     renderDocumentsForm(){
         return this.state.documents.map( document => {
             return (
@@ -46,6 +91,7 @@ export class Documents extends PersonalData {
                     chevron={{
                         color: secondaryColor
                     }}
+                    onPress={this.handleItemPress.bind(this, document)}
                     chevronColor={secondaryColor}
                     containerStyle={{
                         backgroundColor: 'transparent',
@@ -66,7 +112,7 @@ export class Documents extends PersonalData {
     renderForm(){
         return(
             <>
-                {this.renderDocumentsForm()}
+                {this.state.documentSelected != null ? this.renderDocumentUpload() : this.renderDocumentsForm()}
             </>
         )
     }

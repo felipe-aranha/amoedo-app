@@ -47,7 +47,8 @@ export default class Form extends React.PureComponent{
             companyName: '',
             monthlyProjects: '',
             cpfValid: null,
-            emailValid: null
+            emailValid: null,
+            hideSubmit: false
         }
     }
 

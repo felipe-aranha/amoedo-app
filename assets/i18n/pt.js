@@ -7,6 +7,8 @@ export default {
         select: 'Selecione',
         cancel: 'Cancelar',
         continue: 'Continuar',
+        takePhoto: 'Tirar foto',
+        loadFromPhone: 'carregar do celular'
     },
     profile: {
         student: 'Estudante',
@@ -51,6 +53,15 @@ export default {
             emailRegistered: 'e-mail já cadastrado',
             invalidEmail: 'e-mail inválido',
             invalidCpf: 'cpf inválido'
+        },
+        document: {
+            rg: {
+                title: 'Registro Geral - RG'
+            },
+            cpf: {
+                title: 'CPF'
+            },
+            tutorial: '1. Pegue o documento: {{document}}\n\n2. Enquadre todo o documento na câmera\n\n3. Tire uma foto\n\n4. Envie a foto'
         }
     },
     form: {

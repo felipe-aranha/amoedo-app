@@ -96,7 +96,7 @@ export class PersonalData extends Form {
                         {this.renderForm()}
                     </View>
                 </View>
-                {this.renderFormSubmit()}
+                {!this.state.hideSubmit && this.renderFormSubmit()}
             </View>
         )
     }

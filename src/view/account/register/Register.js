@@ -69,15 +69,15 @@ export default class Register extends MainView{
     }
 
     goToProfessionalData(){
-        changeSection({name: 'professional-data'});
+        this.changeSection({name: 'professional-data'});
     }
 
     goToPersonalData(){
-        changeSection({name: 'personal-data'});
+        this.changeSection({name: 'personal-data'});
     }
 
     goToDocuments(){
-        changeSection({name: 'upload-files'});
+        this.changeSection({name: 'upload-files'});
     }
 
     handlePersonalDataContinue(state){

@@ -43,6 +43,15 @@ export default StyleSheet.create({
     accountButtonArchitectButton: {
         backgroundColor: 'rgb(141,2,40)'
     },
+    accountTakePhotoButton: {
+        backgroundColor: secondaryColor
+    },
+    accountLoadMediafromPhoneButton: {
+        borderColor: 'rgb(77,77,77)'
+    },
+    accountLoadMediafromPhoneButtonText: {
+        color: 'rgb(77,77,77)'
+    }, 
     accountCustomerButton: {
         borderColor: '#fff'
     },
