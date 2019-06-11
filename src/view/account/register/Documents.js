@@ -6,6 +6,7 @@ import I18n from '../../../i18n';
 import { ListItem, Button } from 'react-native-elements';
 import { secondaryColor, accountStyle } from '../../../style';
 import { Text } from '../../../components';
+import { UploadMedia } from '../../../utils';
 
 export class Documents extends PersonalData {
     static contextType = RegisterContext;
@@ -39,6 +40,28 @@ export class Documents extends PersonalData {
         })
     }
 
+    processMedia(media){
+        this.state[this.state.documentSelected.state] = media
+        this.setState({
+            documentSelected: null,
+            hideSubmit: false
+        })
+    }
+
+    async handleTakePhoto(){
+        const result = await UploadMedia.takePhotoAsync();
+        if(result){
+            this.processMedia(result);
+        }
+    }
+
+    async handleGetImage(){
+        const result = await UploadMedia.getFileAsync();
+        if(result){
+            this.processMedia(result);
+        }
+    }
+
     renderDocumentUpload(){
         const { documentSelected } = this.state;
         const title = I18n.t(`account.document.${documentSelected.name}.title`);
@@ -61,7 +84,7 @@ export class Documents extends PersonalData {
                         containerStyle={accountStyle.accountTypeButtonContainer}
                         buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountTakePhotoButton]}
                         titleStyle={accountStyle.accountTypeButtonTitle}
-                        onPress={this.handleButtonPress}
+                        onPress={this.handleTakePhoto.bind(this)}
                     />
                     <Button 
                         title={I18n.t('common.loadFromPhone')}
@@ -69,7 +92,7 @@ export class Documents extends PersonalData {
                         containerStyle={accountStyle.accountTypeButtonContainer}
                         buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountLoadMediafromPhoneButton]}
                         titleStyle={[accountStyle.accountTypeButtonTitle,accountStyle.accountLoadMediafromPhoneButtonText]}
-                        onPress={this.handleButtonPress}
+                        onPress={this.handleGetImage.bind(this)}
                     />
                 </View>
             </View>
