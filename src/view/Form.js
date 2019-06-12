@@ -333,10 +333,11 @@ export default class Form extends React.PureComponent{
 
     renderCnpj(){
         return(
-            <Input 
+            <MaskedInput 
                 label={I18n.t('form.cnpj')}
                 value={this.state.cnpj}
                 onChangeText={this.handleCnpjChange.bind(this)}
+                type={'cnpj'}
             />
         )
     }

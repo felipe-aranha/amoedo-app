@@ -53,7 +53,8 @@ export default {
             emailRegistered: 'e-mail já cadastrado',
             invalidEmail: 'e-mail inválido',
             invalidCpf: 'cpf inválido',
-            dob: 'data inválida'
+            dob: 'data inválida',
+            verifyFields: 'Verifique todos os campos antes de continuar'
         },
         document: {
             rg: {

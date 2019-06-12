@@ -9,7 +9,8 @@ import { ProfessionalData } from './ProfessionalData';
 import { CustomerService } from '../../../service';
 
 const initialState = {
-    activeSection: 'personal-data',
+    // activeSection: 'personal-data',
+    activeSection: 'professional-data',
     professionalData: {},
     documents: {},
     personalData: {},
@@ -79,7 +80,12 @@ export default class Register extends MainView{
         this.changeSection({name: 'upload-files'});
     }
 
-    handlePersonalDataContinue(state){
+
+    handlePersonalDataContinue(){
+        this.goToProfessionalData();
+    }
+
+    _handlePersonalDataContinue(state){
         this.setState({
             personalData: state
         });
@@ -129,9 +135,13 @@ export default class Register extends MainView{
         })
     }
 
-    handleProfessionalDataContinue(){}
+    handleProfessionalDataContinue(){
+        this.goToDocuments()
+    }
 
-    handleDocumentsContinue(){}
+    handleDocumentsContinue(){
+        
+    }
 
     renderSteps(){
         switch(this.state.activeSection){
