@@ -33,6 +33,16 @@ export class Documents extends PersonalData {
         backgroundColor: 'rgb(243,164,51)'
     }
 
+    isFormValid(){
+        valid = true;
+        this.state.documents.forEach(document => {
+            if (!this.notEmpty(document.state)){
+                valid = false;
+            }
+        })
+        return valid;
+    }
+
     handleItemPress(document){
         this.setState({
             documentSelected: document,
