@@ -563,31 +563,13 @@ class MaskedInput extends React.PureComponent{
     render(){
         const props = this.props;
         return(
-            <View style={{
-                flex:1, 
-                marginHorizontal: 10,
-                borderBottomWidth: 1,
-                borderBottomColor: 'rgb(163,163,163)'
-            }}>
-                <Text style={{
-                    fontSize: 12,
-                    color: 'rgb(163,163,163)',
-                    fontFamily: 'system-medium',
-                    textTransform:'uppercase'
-                }}>{props.label}</Text>
+            <View style={accountStyle.maskedInputArea}>
+                <Text style={accountStyle.maskedInputLabel}>{props.label}</Text>
                 <TextInputMask 
-                    style={{
-                        color: 'rgb(88,12,33)',
-                        fontSize: 14,
-                        minHeight:40,
-                        fontFamily: 'system-medium'
-                    }}
+                    style={accountStyle.maskedInputText}
                     {...props}
                 />
-                <Text style={[accountStyle.inputError,{
-                    bottom: -15,
-                    left: -5
-                }]}>{props.errorMessage}</Text>
+                <Text style={[accountStyle.inputError,accountStyle.maskedInputError]}>{props.errorMessage}</Text>
 
             </View>
         )

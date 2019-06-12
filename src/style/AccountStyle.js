@@ -231,5 +231,27 @@ export default StyleSheet.create({
     },
     sectionHeaderIconInactive: {
         tintColor: '#fff'
+    },
+    maskedInputArea: {
+        flex:1, 
+        marginHorizontal: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(163,163,163,0.8)'
+    },
+    maskedInputLabel: {
+        fontSize: 12,
+        color: 'rgb(163,163,163)',
+        fontFamily: 'system-medium',
+        textTransform:'uppercase'
+    },
+    maskedInputText: {
+        color: 'rgb(88,12,33)',
+        fontSize: 14,
+        minHeight:40,
+        fontFamily: 'system-medium'
+    },
+    maskedInputError: {
+        bottom: -15,
+        left: -5
     }
 })
