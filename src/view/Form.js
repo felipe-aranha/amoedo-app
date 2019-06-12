@@ -7,6 +7,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { secondaryColor, accountStyle } from '../style';
 import I18n from '../i18n';
 import { Text, AppIcon, ImageBase64 } from '../components';
+import { TextInputMask } from 'react-native-masked-text';
 
 export default class Form extends React.PureComponent{
 
@@ -94,7 +95,7 @@ export default class Form extends React.PureComponent{
     } 
     handleCpfChange(text){
         this.setState({
-            cpf: newText
+            cpf: text
         })
     }
     handleRgChange(text){
@@ -181,7 +182,8 @@ export default class Form extends React.PureComponent{
         })
     }
 
-    validateCpf(cpf){
+    validateCpf(e){
+        const cpf = e.nativeEvent.text;
         isValid = Utils.isCpfValid(cpf);
         this.setState({
             cpfValid: isValid
@@ -362,6 +364,16 @@ export default class Form extends React.PureComponent{
 
     renderCpf(){
         return(
+            <MaskedInput 
+                value={this.state.cpf}
+                onChangeText={this.handleCpfChange.bind(this)}
+                type={'cpf'}
+                label={I18n.t('form.cpf')}
+                onBlur={this.validateCpf.bind(this)}
+                errorMessage={this.state.cpfValid == false ? I18n.t('account.errorMessage.invalidCpf') : ''}
+            />
+        )
+        return(
             <Input 
                 label={I18n.t('form.cpf')}
                 value={this.state.cpf}
@@ -402,6 +414,7 @@ export default class Form extends React.PureComponent{
                 value={this.state.dob}
                 onChangeText={this.handleDobChange.bind(this)}
                 keyboardType={this.keyboardNumber()}
+                maxLength={10}
             />
         )
     }
@@ -545,6 +558,42 @@ export default class Form extends React.PureComponent{
 
 }
 
+
+class MaskedInput extends React.PureComponent{
+    render(){
+        const props = this.props;
+        return(
+            <View style={{
+                flex:1, 
+                marginHorizontal: 10,
+                borderBottomWidth: 1,
+                borderBottomColor: 'rgb(163,163,163)'
+            }}>
+                <Text style={{
+                    fontSize: 12,
+                    color: 'rgb(163,163,163)',
+                    fontFamily: 'system-medium',
+                    textTransform:'uppercase'
+                }}>{props.label}</Text>
+                <TextInputMask 
+                    style={{
+                        color: 'rgb(88,12,33)',
+                        fontSize: 14,
+                        minHeight:40,
+                        fontFamily: 'system-medium'
+                    }}
+                    {...props}
+                />
+                <Text style={[accountStyle.inputError,{
+                    bottom: -15,
+                    left: -5
+                }]}>{props.errorMessage}</Text>
+
+            </View>
+        )
+    }
+}
+
 class Input extends React.PureComponent{
     render(){
         return <InputElement 
@@ -560,4 +609,3 @@ class Input extends React.PureComponent{
         />
     }
 }
-
