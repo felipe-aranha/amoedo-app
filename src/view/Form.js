@@ -258,6 +258,10 @@ export default class Form extends React.PureComponent{
         })
     }
 
+    notEmpty(state,length=1){
+        return this.state[state].trim().length >= length;
+    }
+
     // inputs
 
     renderAvatar(){

@@ -1,6 +1,6 @@
 import React from 'react';
 import { RegisterContext } from './Register';
-import { View, TouchableOpacity } from 'react-native';
+import { View, Alert } from 'react-native';
 import { Text } from '../../../components';
 import I18n from '../../../i18n';
 import Form from '../../Form';
@@ -16,7 +16,26 @@ export class PersonalData extends Form {
     }
 
     handleFormSubmit(){
-        this.props.onContinue(this.state)
+        if(this.isFormValid())
+            this.props.onContinue(this.state)
+        else 
+            Alert.alert('',I18n.t('account.errorMessage.verifyFields'))
+    }
+
+    
+
+    isFormValid(){
+        isNameValid = this.state.name.trim().split(' ').length > 1;
+        isPhonevalid = this.notEmpty('phone') || this.notEmpty('cell');
+        return isNameValid && this.state.emailValid && 
+                    this.state.cpfValid && this.notEmpty('rg') &&
+                    this.notEmpty('cau') && this.state.dobValid && 
+                    isPhonevalid && this.notEmpty('zipCode',8) &&
+                    this.notEmpty('address') && this.notEmpty('city') &&
+                    this.notEmpty('state') && this.notEmpty('password',6) &&
+                    this.notEmpty('confirmPassword',6) && this.state.password == this.state.confirmPassword
+
+
     }
 
     componentDidUpdate(prevProps,prevState){
