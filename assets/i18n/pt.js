@@ -52,7 +52,8 @@ export default {
             confirmPassword: 'senhas diferentes',
             emailRegistered: 'e-mail já cadastrado',
             invalidEmail: 'e-mail inválido',
-            invalidCpf: 'cpf inválido'
+            invalidCpf: 'cpf inválido',
+            dob: 'data inválida'
         },
         document: {
             rg: {

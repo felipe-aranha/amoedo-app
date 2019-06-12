@@ -193,7 +193,7 @@ export default class Register extends MainView{
                         return(
                             <TouchableOpacity 
                                 key={key}
-                                onPress={this.changeSection.bind(this,section)}
+                                // onPress={this.changeSection.bind(this,section)}
                                 style={[accountStyle.sectionHeaderArea, isActive ? accountStyle.sectionHeaderAreaActive : {}]}
                             >
                                 <AppIcon 

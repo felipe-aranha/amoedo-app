@@ -15,6 +15,7 @@ export default class Form extends React.PureComponent{
         super(props,context);
         this.state = this.getInitialState();
         this.customerService = new CustomerService();
+        this.dobRef = React.createRef();
     }
 
     getInitialState(){
@@ -49,6 +50,7 @@ export default class Form extends React.PureComponent{
             monthlyProjects: '',
             cpfValid: null,
             emailValid: null,
+            dobValid: null,
             hideSubmit: false,
             avatar: null
         }
@@ -184,9 +186,16 @@ export default class Form extends React.PureComponent{
 
     validateCpf(e){
         const cpf = e.nativeEvent.text;
-        isValid = Utils.isCpfValid(cpf);
+        cpfValid = Utils.isCpfValid(cpf);
         this.setState({
-            cpfValid: isValid
+            cpfValid
+        })
+    }
+
+    validateDOB(e){
+        const dobValid = this.dobRef.current.isValid();
+        this.setState({
+            dobValid
         })
     }
 
@@ -370,16 +379,7 @@ export default class Form extends React.PureComponent{
                 type={'cpf'}
                 label={I18n.t('form.cpf')}
                 onBlur={this.validateCpf.bind(this)}
-                errorMessage={this.state.cpfValid == false ? I18n.t('account.errorMessage.invalidCpf') : ''}
-            />
-        )
-        return(
-            <Input 
-                label={I18n.t('form.cpf')}
-                value={this.state.cpf}
-                onChangeText={this.handleCpfChange.bind(this)}
-                onBlur={this.validateCpf.bind(this)}
-                keyboardType={this.keyboardNumber()}
+                maxLength={19}
                 errorMessage={this.state.cpfValid == false ? I18n.t('account.errorMessage.invalidCpf') : ''}
             />
         )
@@ -409,12 +409,19 @@ export default class Form extends React.PureComponent{
 
     renderDOB(){
         return(
-            <Input 
+            <MaskedInput 
                 label={I18n.t('form.birthDate')}
                 value={this.state.dob}
                 onChangeText={this.handleDobChange.bind(this)}
                 keyboardType={this.keyboardNumber()}
+                onBlur={this.validateDOB.bind(this)}
                 maxLength={10}
+                type={'datetime'}
+                options={{
+                    format: 'DD/MM/YYYY'
+                }}
+                inputRef={this.dobRef}
+                errorMessage={this.state.dobValid === false ? I18n.t('account.errorMessage.dob') : ''}
             />
         )
     }
@@ -568,6 +575,7 @@ class MaskedInput extends React.PureComponent{
                 <TextInputMask 
                     style={accountStyle.maskedInputText}
                     {...props}
+                    ref={props.inputRef}
                 />
                 <Text style={[accountStyle.inputError,accountStyle.maskedInputError]}>{props.errorMessage}</Text>
 
