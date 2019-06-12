@@ -448,11 +448,17 @@ export default class Form extends React.PureComponent{
 
     renderPhone(){
         return(
-            <Input 
+            <MaskedInput 
                 label={I18n.t('form.phone')}
                 value={this.state.phone}
                 onChangeText={this.handlePhoneChange.bind(this)}
                 keyboardType={this.keyboardNumber()}
+                type={'cel-phone'}
+                options={{
+                    maskType: 'BRL',
+                    withDDD: true,
+                    dddMask: '(99) '
+                }}
             />
         )
     }
@@ -469,11 +475,17 @@ export default class Form extends React.PureComponent{
 
     renderCellPhone(){
         return(
-            <Input 
+            <MaskedInput 
                 label={I18n.t('form.cellphone')}
                 value={this.state.cell}
                 onChangeText={this.handleCellChange.bind(this)}
                 keyboardType={this.keyboardNumber()}
+                type={'cel-phone'}
+                options={{
+                    maskType: 'BRL',
+                    withDDD: true,
+                    dddMask: '(99) '
+                }}
             />
         )
     }
