@@ -7,10 +7,11 @@ import { PersonalData } from './PersonalData';
 import { Documents } from './Documents';
 import { ProfessionalData } from './ProfessionalData';
 import { CustomerService } from '../../../service';
+import { Address, Customer, CustomerRegister } from '../../../model/magento/';
+import * as Utils from '../../../utils';
 
 const initialState = {
-    // activeSection: 'personal-data',
-    activeSection: 'professional-data',
+    activeSection: 'personal-data',
     professionalData: {},
     documents: {},
     personalData: {},
@@ -90,10 +91,7 @@ export default class Register extends MainView{
             personalData: state
         });
         if(!this.state.userRegistered){
-            fullName = state.name.split(" ");
-            firstname = fullName[0];
-            fullName.shift();
-            lastname = fullName.length > 0 ? fullName.join(" ") : "";
+            
             data = {
                 customer: {
                     email: state.email,
@@ -140,7 +138,35 @@ export default class Register extends MainView{
     }
 
     handleDocumentsContinue(){
-        
+        const { personalData, professionalData, documents } = this.state;
+        const { firstname, lastname } = Utils.parseName(personalData.name);
+        let address = new Address(personalData.address, personalData.number, personalData.complement, personalData.neighborhood);
+        address = {
+            ...address,
+            city: personalData.city,
+            company: professionalData.companyName,
+            fax: personalData.phone,
+            firstname,
+            lastname,
+            postcode: personalData.zipCode,
+            telephone: personalData.cell || personalData.phone,
+        }
+        let customer = new Customer(address, personalData.cell || personalData.phone);
+        customer = {
+            ...customer,
+            dob: Utils.parseDate(personalData.dob),
+            taxvat: personalData.cpf,
+            firstname,
+            lastname,
+            group_id: this.profile.id,
+            email: personalData.email
+        }
+        let customerRegister = new CustomerRegister(customer, personalData.password);
+        this.customerService.register(customerRegister.customer,customerRegister.password).then(response => {
+            console.log(response);
+        }).catch(e => {
+            console.log(e);
+        })
     }
 
     renderSteps(){
