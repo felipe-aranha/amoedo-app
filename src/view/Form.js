@@ -251,8 +251,8 @@ export default class Form extends React.PureComponent{
         })
     }
 
-    handleAvatarPress(){
-        const result = Utils.UploadMedia.getFileAsync();
+    async handleAvatarPress(){
+        const result = await Utils.UploadMedia.getFileAsync();
         this.setState({
             avatar: result ? result : null
         })
@@ -268,7 +268,7 @@ export default class Form extends React.PureComponent{
         return(
             <TouchableOpacity onPress={this.handleAvatarPress.bind(this)} style={accountStyle.formAvatarArea}>
                 {this.state.avatar != null ?
-                    <ImageBase64 data={this.state.avatar} style={{width:60,height:60}} resizeMode={'contain'} /> :
+                    <ImageBase64 avatar rounded data={this.state.avatar} style={{width:60,height:60}} resizeMode={'contain'} /> :
                     <AppIcon style={accountStyle.formAvatarIcon} name='camera' />
                 }
                 <AntDesign 

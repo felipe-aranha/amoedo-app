@@ -1,7 +1,7 @@
 import React from 'react';
 import { MainView } from '../../MainView';
 import { Header, Text, Select, AppIcon, KeyboardSpacer } from '../../../components';
-import { View, StatusBar, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StatusBar, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { secondaryColor, accountStyle } from '../../../style';
 import { PersonalData } from './PersonalData';
 import { Documents } from './Documents';
@@ -9,6 +9,8 @@ import { ProfessionalData } from './ProfessionalData';
 import { CustomerService } from '../../../service';
 import { Address, Customer, CustomerRegister } from '../../../model/magento/';
 import * as Utils from '../../../utils';
+import { DocumentModel, User } from '../../../model/firebase';
+import { UserService } from '../../../service/firebase/UserService';
 
 const initialState = {
     activeSection: 'personal-data',
@@ -163,7 +165,35 @@ export default class Register extends MainView{
         }
         let customerRegister = new CustomerRegister(customer, personalData.password);
         this.customerService.register(customerRegister.customer,customerRegister.password).then(response => {
-            console.log(response);
+            if(response.message){
+                Alert.alert('Erro',response.message);
+            } else {
+                let docs = documents.documents.map(document => {
+                    let d = new DocumentModel(document.name, documents[document.state]);
+                    return Object.assign({},d);
+                });
+                let user = new User(docs);
+                user = {
+                    ...user,
+                    avatar: personalData.avatar,
+                    cau: personalData.cau,
+                    cellphone: personalData.cell,
+                    cnpj: professionalData.cnpj,
+                    email: personalData.email,
+                    id: response.id,
+                    instagram: personalData.instagram,
+                    monthlyProjects: professionalData.monthlyProjects,
+                    rg: personalData.rg,
+                    telephone: personalData.phone,
+                    type: response.group_id
+                }
+                console.log(user);
+                UserService.insertOrUpdateProfessionalAsync(user).then(result => {
+                    console.log(result);
+                }).catch(e => {
+                    console.log(e);
+                })
+            }
         }).catch(e => {
             console.log(e);
         })
