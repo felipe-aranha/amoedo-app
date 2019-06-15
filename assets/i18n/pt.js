@@ -8,7 +8,8 @@ export default {
         cancel: 'Cancelar',
         continue: 'Continuar',
         takePhoto: 'Tirar foto',
-        loadFromPhone: 'carregar do celular'
+        loadFromPhone: 'carregar do celular',
+        error: 'Erro!'
     },
     profile: {
         student: 'Estudante',
@@ -54,7 +55,8 @@ export default {
             invalidEmail: 'e-mail inválido',
             invalidCpf: 'cpf inválido',
             dob: 'data inválida',
-            verifyFields: 'Verifique todos os campos antes de continuar'
+            verifyFields: 'Verifique todos os campos antes de continuar',
+            registerError: 'Ocorreu um erro ao efetuar o cadastro. Tente novamente!'
         },
         document: {
             rg: {

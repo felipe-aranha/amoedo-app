@@ -13,7 +13,8 @@ import {
     AccountType,
     Login,
     ProfileSelection,
-    Register
+    Register,
+    Pending
 } from '../view';
 import Toast from 'react-native-easy-toast';
 
@@ -45,6 +46,9 @@ export class Routes extends React.Component{
                             <Scene hideNavBar key='login' component={Login} />
                             <Scene hideNavBar key='profileSelection' component={ProfileSelection} />
                             <Scene initial key='register' component={Register} />
+                        </Stack>
+                        <Stack hideNavBar initial key='purgatory'>
+                            <Scene hideNavBar key='pendingAccount' component={Pending} />
                         </Stack>
                     </Modal>
                 </Router>   

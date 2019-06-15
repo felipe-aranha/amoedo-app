@@ -11,13 +11,15 @@ import { Address, Customer, CustomerRegister } from '../../../model/magento/';
 import * as Utils from '../../../utils';
 import { DocumentModel, User } from '../../../model/firebase';
 import { UserService } from '../../../service/firebase/UserService';
+import { Actions } from 'react-native-router-flux';
 
 const initialState = {
     activeSection: 'personal-data',
     professionalData: {},
     documents: {},
     personalData: {},
-    userRegistered: false
+    userRegistered: false,
+    loading: false
 }
 
 export const RegisterContext = React.createContext(initialState);
@@ -139,8 +141,13 @@ export default class Register extends MainView{
         this.goToDocuments()
     }
 
+    user = null;
+    customer = null;
+    isRegistered = false;
+
     handleDocumentsContinue(){
-        const { personalData, professionalData, documents } = this.state;
+        const { personalData, professionalData, documents, loading } = this.state;
+        if(loading) return;
         const { firstname, lastname } = Utils.parseName(personalData.name);
         let address = new Address(personalData.address, personalData.number, personalData.complement, personalData.neighborhood);
         address = {
@@ -164,9 +171,14 @@ export default class Register extends MainView{
             email: personalData.email
         }
         let customerRegister = new CustomerRegister(customer, personalData.password);
+        this.customer = customerRegister;
+        if(this.isRegistered && this.user != null){
+            this.firebaseRegister(this.user);
+            return;
+        }
         this.customerService.register(customerRegister.customer,customerRegister.password).then(response => {
             if(response.message){
-                Alert.alert('Erro',response.message);
+                Alert.alert(I18n.t('common.error'),response.message);
             } else {
                 let docs = documents.documents.map(document => {
                     let d = new DocumentModel(document.name, documents[document.state]);
@@ -187,15 +199,25 @@ export default class Register extends MainView{
                     telephone: personalData.phone,
                     type: response.group_id
                 }
-                console.log(user);
-                UserService.insertOrUpdateProfessionalAsync(user).then(result => {
-                    console.log(result);
-                }).catch(e => {
-                    console.log(e);
-                })
+                this.firebaseRegister(user);
             }
         }).catch(e => {
-            console.log(e);
+            Alert.alert(I18n.t('common.error'),I18n.t('account.errorMessage.registerError'));
+            this.setState({
+                loading: false
+            })
+        })
+    }
+
+    firebaseRegister(user){
+        this.user = user;
+        this.isRegistered = true;
+        UserService.insertOrUpdateProfessionalAsync(user).then(result => {
+            Actions.reset('purgatory');
+        }).catch(e => {
+            this.setState({
+                loading: false
+            })
         })
     }
 
