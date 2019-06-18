@@ -253,5 +253,38 @@ export default StyleSheet.create({
     maskedInputError: {
         bottom: -15,
         left: -5
+    },
+    pendingArea: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    pendingBg: {
+        backgroundColor: 'rgba(254,254,254,0.8)',
+    },
+    pendingTitleArea: {
+        backgroundColor: 'rgba(172,195,19,0.8)',
+        height: 150,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 30
+    },
+    pendingTitleText: {
+        fontSize: 20,
+        fontFamily: 'system-bold',
+        color: 'rgb(45,45,45)',
+        textAlign: 'center'
+    },
+    pendingDescriptionArea: {
+        height: 225,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 30
+    },
+    pendingDescriptionText: {
+        fontFamily: 'system-medium',
+        fontSize: 15,
+        color: 'rgb(45,45,45)',
+        textAlign: 'center'
     }
 })

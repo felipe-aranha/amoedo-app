@@ -43,17 +43,17 @@ export default class AccountType extends AccountBase{
                             onPress={this.handleButtonPress}
                         />
                         <Button 
-                            title={I18n.t('entity.customer')}
-                            type={'outline'}
+                            title={I18n.t('account.accountType.technicalAssistance')}
                             containerStyle={accountStyle.accountTypeButtonContainer}
-                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountCustomerButton]}
+                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountTechnicalAssistance]}
                             titleStyle={accountStyle.accountTypeButtonTitle}
                             onPress={this.handleButtonPress}
                         />
                         <Button 
-                            title={I18n.t('account.accountType.technicalAssistance')}
+                            title={I18n.t('entity.customer')}
+                            type={'outline'}
                             containerStyle={accountStyle.accountTypeButtonContainer}
-                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountTechnicalAssistance]}
+                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountCustomerButton]}
                             titleStyle={accountStyle.accountTypeButtonTitle}
                             onPress={this.handleButtonPress}
                         />
