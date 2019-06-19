@@ -11,6 +11,6 @@ export class UserService extends FirebaseDB{
         return db.doc(user.id.toString()).set({
             user
         })
-    }    
+    }  
 
 }

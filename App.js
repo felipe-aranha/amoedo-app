@@ -1,7 +1,9 @@
 import React from 'react';
 
 import { Routes } from './src/routes';
-import { AppLoading, Font , Asset } from 'expo';
+import { AppLoading } from 'expo';
+import { Asset } from 'expo-asset';
+import { Font } from 'expo-font';
 
 export default class App extends React.Component {
 

@@ -12,7 +12,10 @@ export class HttpClient {
         this.variables = variables.magento;
         this.baseUrl = this.variables.baseURL;        
     }
-
+    setToken(token){
+        this.token = token;
+    }
+    
     sendAsync(url, type, data, options){
         url = url.startsWith("http") ? url : this.baseUrl + url;
         let request = {

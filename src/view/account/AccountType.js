@@ -18,7 +18,7 @@ export default class AccountType extends AccountBase{
     }
 
     handleButtonPress(){
-        Actions.push('login');
+        Actions.push('account');
     }
 
     renderContent(){

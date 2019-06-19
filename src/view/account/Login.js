@@ -7,6 +7,8 @@ import { Input, Button } from 'react-native-elements';
 import { AppIcon, Text, KeyboardSpacer } from '../../components';
 import I18n from '../../i18n';
 import { accountStyle } from '../../style';
+import { CustomerService } from '../../service';
+import * as Utils from '../../utils';
 
 export default class Login extends AccountBase{
     imageBackground = require('../../../assets/images/account/login-bg-x2.png');
@@ -19,8 +21,48 @@ export default class Login extends AccountBase{
         this.email = React.createRef();
         this.password = React.createRef();
         this.state = {
-            showPassword: false
+            showPassword: false,
+            email: '',
+            emailError: '',
+            password: '',
+            loading: false
         }
+        this.customerService = new CustomerService();
+    }
+
+    handleEmailChange(email){
+        this.setState({email, emailError: ''})
+    }
+
+    handlePasswordChange(password){
+        this.setState({password})
+    }
+
+    handleSubmit(){
+        const { loading, email, password } = this.state;
+        if(loading) return;
+        if(!Utils.isEmailValid(email)){
+            this.setState({
+                emailError: I18n.t('account.errorMessage.invalidEmail')
+            })
+            return;
+        }
+        this.setState({
+            loading:true
+        }, () => {
+            this.customerService.getCustomerToken(email,password).then( token => {
+                if(typeof(token) === 'string'){
+                    this.customerService.setToken(token);
+                    this.customerService.getMe().then(result => {
+                        console.log(result);
+                    })
+                }
+                else 
+                    this.setState({
+                        loading: false
+                    })
+            })
+        })
     }
 
     goToPassword(){
@@ -76,6 +118,7 @@ export default class Login extends AccountBase{
                 <ScrollView style={accountStyle.loginFormArea}>
                     <View style={accountStyle.loginMainView}>
                         <Input 
+                            onChangeText={this.handleEmailChange.bind(this)}
                             keyboardType={'email-address'}
                             autoCapitalize={'none'}
                             leftIcon={<AppIcon name={'email'} />}
@@ -86,8 +129,11 @@ export default class Login extends AccountBase{
                             onSubmitEditing={this.goToPassword.bind(this)}
                             ref={this.email}
                             containerStyle={accountStyle.inputWrapperStyle}
+                            errorMessage={this.state.emailError}
                         />
                         <Input 
+                            onChangeText={this.handlePasswordChange.bind(this)}
+                            onSubmitEditing={this.handleSubmit.bind(this)}
                             keyboardType={'default'}
                             autoCapitalize={'none'}
                             leftIcon={<AppIcon name={'password'} />}
@@ -116,7 +162,11 @@ export default class Login extends AccountBase{
                                 containerStyle={[accountStyle.accountTypeButtonContainer]}
                                 buttonStyle={[accountStyle.accountTypeButton,accountStyle.loginButton]}
                                 titleStyle={[accountStyle.accountTypeButtonTitle, accountStyle.loginButtonTitle]}
-                                onPress={this.handleButtonPress}
+                                onPress={this.handleSubmit.bind(this)}
+                                loading={this.state.loading}
+                                loadingProps={{
+                                    color: '#000'
+                                }}
                             />
                             <TouchableOpacity>
                                 <Text style={accountStyle.forgotPasswordText}>{I18n.t('account.login.forgot')}</Text>
