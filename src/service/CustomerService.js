@@ -27,6 +27,16 @@ export class CustomerService extends HttpClient {
         return this.getAsync(`${this.basePath}/me`);
     }
 
+    async login(username,password){
+        const token = await this.getCustomerToken(username, password);
+        if(typeof(token) === 'string'){
+            this.setToken(token);
+            const customerInfo = this.getMe();
+            
+        }
+        return false;
+    }
+
     async getCustomerGroups(){
         return this.getAsync('rest/V1/customerGroups/search?searchCriteria[currentPage]=0');
     }
