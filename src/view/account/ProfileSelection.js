@@ -37,27 +37,11 @@ export default class ProfileSelection extends MainView {
             loading: true
         }, () => {
             this.customerService.getCustomerGroups().then( result => {
-                if(result.items){
-                    profiles = result.items.filter(item => item.code.startsWith('Perfil'));
-                    profiles = profiles.map(profile => {
-                        name = profile.code.replace('Perfil ','');
-                        subProfiles = result.items.filter(item => item.code.endsWith(name) && item.id != profile.id);
-                        subProfiles = subProfiles.map(sub => {
-                            return {
-                                ...sub,
-                                name: sub.code.replace(` ${name}`,'')
-                            }
-                        })
-                        return {
-                            ...profile,
-                            name,
-                            children: subProfiles
-                        }
-                    });
+                if(result){
                     this.setState({
                         loading: false,
                         error: false,
-                        profiles
+                        profiles: result
                     })
                 }
                 this.setState({error: false, loading: false})

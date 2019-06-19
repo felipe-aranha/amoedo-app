@@ -38,7 +38,28 @@ export class CustomerService extends HttpClient {
     }
 
     async getCustomerGroups(){
-        return this.getAsync('rest/V1/customerGroups/search?searchCriteria[currentPage]=0');
+        return this.getAsync('rest/V1/customerGroups/search?searchCriteria[currentPage]=0').then(result => {
+            if(!result.items) return [];
+            profiles = result.items.filter(item => item.code.startsWith('Perfil'));
+            return profiles.map(profile => {
+                name = profile.code.replace('Perfil ','');
+                subProfiles = result.items.filter(item => item.code.endsWith(name) && item.id != profile.id);
+                subProfiles = subProfiles.map(sub => {
+                    return {
+                        ...sub,
+                        name: sub.code.replace(` ${name}`,'')
+                    }
+                })
+                return {
+                    ...profile,
+                    name,
+                    children: subProfiles
+                }
+            });
+        }).catch(e => {
+            console.log(e);
+            return []
+        })
     }
 
 }
