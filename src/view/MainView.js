@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, StatusBar } from 'react-native';
 import { mainStyle } from '../style';
 import { Actions } from 'react-native-router-flux';
+import { AppContext } from '../reducer';
+import { AppStorage } from '../storage';
 
 export class MainView extends React.Component{
 
@@ -14,6 +16,12 @@ export class MainView extends React.Component{
     componentDidMount(){}
 
     renderCenter(){}
+
+    async logout(){
+        await AppStorage.setUser('','');
+        this.context.user = AppContext.user;
+        Actions.reset('account');
+    }
 
     render(){
         return(

@@ -59,7 +59,7 @@ export default class App extends React.Component {
 
 		p4 = new Promise((resolve, reject) => {
 			AppStorage.getUser().then(user => {
-				if(user != null){
+				if(user != null && user.email != ''){
 					return this.customerService.login(user.email,user.password).then(result => {
 						if(!result) resolve();
 						this.setState({
@@ -72,6 +72,9 @@ export default class App extends React.Component {
 							resolve();
 						})
 					}).catch(() => resolve())
+				}
+				else {
+					resolve()
 				}
 			});
 		})

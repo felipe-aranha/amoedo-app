@@ -27,7 +27,7 @@ export class Pending extends AccountBase{
                                 top: 0,
                                 padding: 10
                             }}
-                            onPress={() => { Actions.reset('account')}}
+                            onPress={() => { this.logout() }}
                         />
                        <Text style={accountStyle.pendingTitleText}>{'Cadastro realizado\ncom sucesso'}</Text>
                     </View> 
