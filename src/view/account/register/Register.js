@@ -213,7 +213,7 @@ export default class Register extends MainView{
         this.user = user;
         this.isRegistered = true;
         UserService.insertOrUpdateProfessionalAsync(user).then(result => {
-            Actions.reset('purgatory');
+            this.login(this.customer.customer.email,this.customer.password);
         }).catch(e => {
             this.setState({
                 loading: false

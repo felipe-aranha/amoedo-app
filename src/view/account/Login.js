@@ -54,26 +54,7 @@ export default class Login extends AccountBase{
         this.setState({
             loading:true
         }, () => {
-            this.customerService.login(email,password).then(result => {
-                if(!result){
-                    this.context.message(I18n.t('account.errorMessage.auth'));
-                    this.setState({
-                        loading: false
-                    })
-                    return;
-                }
-                this.context.user = {
-                    ...this.context.user,
-                    token: this.customerService.getToken(),
-                    magento: result
-                }
-                Actions.reset('purgatory');
-            }).catch(e => {
-                this.context.message(I18n.t('account.errorMessage.login'));
-                this.setState({
-                    loading: false
-                })
-            })
+            this.login(email,password);
         })
     }
 
