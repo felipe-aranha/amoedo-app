@@ -7,8 +7,10 @@ import { Header, Text, Select } from '../../components';
 import I18n from '../../i18n';
 import { CustomerService } from '../../service';
 import { Actions } from 'react-native-router-flux';
-
+import { MainContext } from '../../reducer';
 export default class ProfileSelection extends MainView {
+
+    static contextType = MainContext;
 
     customerService = null;
 
@@ -18,7 +20,7 @@ export default class ProfileSelection extends MainView {
         super(props,context);
         this.customerService = new CustomerService();
         this.state = {
-            profiles: [],
+            profiles: context.app.groups,
             loading: false,
             error: false,
             mainProfile: null,
@@ -28,28 +30,6 @@ export default class ProfileSelection extends MainView {
 
     componentDidMount(){
         super.componentDidMount();
-        this.getGroups();
-    }
-
-    getGroups(){
-        if(this.state.loading) return;
-        this.setState({
-            loading: true
-        }, () => {
-            this.customerService.getCustomerGroups().then( result => {
-                if(result){
-                    this.setState({
-                        loading: false,
-                        error: false,
-                        profiles: result
-                    })
-                }
-                this.setState({error: false, loading: false})
-            }).catch(() => {
-                this.setState({error: true, loading: false})
-            })
-        })
-        
     }
 
     selectMainProfile(option){

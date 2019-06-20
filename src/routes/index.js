@@ -25,6 +25,10 @@ export class Routes extends React.Component{
         this._toast = React.createRef();
     }
 
+    shouldComponentUpdate(){
+        return false;
+    }
+
     message(message, time = DURATION, callback){
 		if(this._toast != null)
 			this._toast.show(message,time, () => {

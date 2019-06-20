@@ -4,15 +4,16 @@ import { Routes } from './src/routes';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import { Font } from 'expo-font';
+import { CustomerService } from './src/service';
+import { AppContext, MainContext } from './src/reducer';
 
 export default class App extends React.Component {
 
 	constructor(props,state){
 		super(props,state);
-		this.state = {
-			isReady: false
-		}
+		this.state = AppContext;
 		console.disableYellowBox = true;
+		this.customerService = new CustomerService();
 	}
 
 	cacheImages(images) {
@@ -44,14 +45,26 @@ export default class App extends React.Component {
 			require('./assets/images/icons/personal-data-x2.png'),
 			require('./assets/images/icons/professional-data-x2.png'),
 			require('./assets/images/icons/upload-files-x2.png'),
-		])
-		return Promise.all([p1,p2]);
+		]);
+
+		p3 = this.customerService.getCustomerGroups().then(groups => {
+			this.setState({
+				app: {
+					...this.state.app,
+					groups
+				}
+			})
+		})
+
+		return Promise.all([p1,p2, p3]);
 	}
 
 	_finish(){
-		this.setState({
-			isReady: true
-		})
+		setTimeout(() => {
+			this.setState({
+				isReady: true
+			})
+		},200)
 	}
 
 	_error(){
@@ -60,7 +73,9 @@ export default class App extends React.Component {
 
 	render() {
 		return this.state.isReady ? 
+			<MainContext.Provider value={this.state}>
 				<Routes />
+			</MainContext.Provider>
 			:
 				<AppLoading 
 					startAsync={this._init.bind(this)}
