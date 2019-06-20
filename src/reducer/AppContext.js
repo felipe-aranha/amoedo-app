@@ -7,6 +7,8 @@ export const AppContext = {
     },
     user: {
         token: null,
+        group: null,
+        isProfessional: null,
         magento: {},
         firebase: {}
     },

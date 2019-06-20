@@ -4,6 +4,7 @@ import { mainStyle } from '../style';
 import { Actions } from 'react-native-router-flux';
 import { AppContext } from '../reducer';
 import { AppStorage } from '../storage';
+import I18n from '../i18n';
 
 export class MainView extends React.Component{
 
