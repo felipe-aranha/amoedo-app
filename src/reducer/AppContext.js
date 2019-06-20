@@ -5,7 +5,8 @@ export const AppContext = {
     app: {
         groups: []
     },
-    message: () => {}
+    message: () => {},
+    removeMessage: () => {}
 }
 
 export const MainContext = React.createContext(AppContext);

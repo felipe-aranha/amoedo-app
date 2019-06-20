@@ -17,27 +17,31 @@ import {
     Pending
 } from '../view';
 import Toast from 'react-native-easy-toast';
+import { MainContext } from '../reducer';
 
 export class Routes extends React.Component{
 
-    constructor(props,state){
-        super(props,state);
-        this._toast = React.createRef();
+    static contextType = MainContext;
+
+    constructor(props,context){
+        super(props,context);
+        this.toast = React.createRef();
+        context.message = this.message.bind(this);
     }
 
     shouldComponentUpdate(){
         return false;
     }
 
-    message(message, time = DURATION, callback){
-		if(this._toast != null)
-			this._toast.show(message,time, () => {
+    message(message, time = 2000, callback){
+		if(this.toast.current != null)
+			this.toast.current.show(message,time, () => {
 				if(callback) callback
 			});
 	}
 
     removeMessage(){
-		this._toast.close(1);
+		this.toast.close(1);
 	}
 
     render(){
