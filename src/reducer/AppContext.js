@@ -5,6 +5,11 @@ export const AppContext = {
     app: {
         groups: []
     },
+    user: {
+        token: null,
+        magento: {},
+        firebase: {}
+    },
     message: () => {},
     removeMessage: () => {}
 }

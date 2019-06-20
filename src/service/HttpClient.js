@@ -15,6 +15,10 @@ export class HttpClient {
     setToken(token){
         this.token = token;
     }
+
+    getToken(){
+        return this.token;
+    }
     
     sendAsync(url, type, data, options){
         url = url.startsWith("http") ? url : this.baseUrl + url;

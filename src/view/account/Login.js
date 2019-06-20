@@ -9,8 +9,12 @@ import I18n from '../../i18n';
 import { accountStyle } from '../../style';
 import { CustomerService } from '../../service';
 import * as Utils from '../../utils';
+import { MainContext } from '../../reducer';
 
 export default class Login extends AccountBase{
+
+    static contextType = MainContext;
+
     imageBackground = require('../../../assets/images/account/login-bg-x2.png');
 
     email = null;
@@ -50,17 +54,25 @@ export default class Login extends AccountBase{
         this.setState({
             loading:true
         }, () => {
-            this.customerService.getCustomerToken(email,password).then( token => {
-                if(typeof(token) === 'string'){
-                    this.customerService.setToken(token);
-                    this.customerService.getMe().then(result => {
-                        console.log(result);
-                    })
-                }
-                else 
+            this.customerService.login(email,password).then(result => {
+                if(!result){
+                    this.context.message(I18n.t('account.errorMessage.auth'));
                     this.setState({
                         loading: false
                     })
+                    return;
+                }
+                this.context.user = {
+                    ...this.context.user,
+                    token: this.customerService.getToken(),
+                    magento: result
+                }
+                Actions.reset('purgatory');
+            }).catch(e => {
+                this.context.message(I18n.t('account.errorMessage.login'));
+                this.setState({
+                    loading: false
+                })
             })
         })
     }

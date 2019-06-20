@@ -22,7 +22,6 @@ export class Documents extends PersonalData {
             modalOpened: false,
             documentSelected: null
         }
-        console.log(this.context);
     }
     
     title = I18n.t('account.register.documentsTitle');

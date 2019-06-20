@@ -12,8 +12,8 @@ const valueToString = (data) =>{
 storage = '@AvanterMe:'
 
 export class AppStorage {    
-    EMAIL = `${storage}email`;
-    PASSWORD = `${storage}password`;
+    static EMAIL = `${storage}email`;
+    static PASSWORD = `${storage}password`;
 
 
     static async getUser(){
@@ -27,9 +27,9 @@ export class AppStorage {
     }
 
     static async setUser(email,password){
-        AsyncStorage.multiSet([
-            [AppStorage.EMAIL, email],
-            [AppStorage.PASSWORD, password]
+        return AsyncStorage.multiSet([
+            [AppStorage.EMAIL, `${email}`],
+            [AppStorage.PASSWORD, `${password}`]
         ])
     }
 

@@ -1,4 +1,5 @@
 import { HttpClient } from './HttpClient';
+import { AppStorage } from '../storage';
 
 export class CustomerService extends HttpClient {
 
@@ -20,7 +21,9 @@ export class CustomerService extends HttpClient {
         const data = {
             username, password
         }
-        return this.postAsync('rest/V1/integration/customer/token', data)
+        return this.postAsync('rest/V1/integration/customer/token', data).then( async token => {
+            return token;
+        })
     }
 
     getMe(){
@@ -31,8 +34,8 @@ export class CustomerService extends HttpClient {
         const token = await this.getCustomerToken(username, password);
         if(typeof(token) === 'string'){
             this.setToken(token);
-            const customerInfo = this.getMe();
-            
+            await AppStorage.setUser(username,password);
+            return this.getMe();
         }
         return false;
     }
@@ -57,7 +60,7 @@ export class CustomerService extends HttpClient {
                 }
             });
         }).catch(e => {
-            console.log(e);
+            // console.log(e);
             return []
         })
     }

@@ -56,7 +56,9 @@ export default {
             invalidCpf: 'cpf inválido',
             dob: 'data inválida',
             verifyFields: 'Verifique todos os campos antes de continuar',
-            registerError: 'Ocorreu um erro ao efetuar o cadastro. Tente novamente!'
+            registerError: 'Ocorreu um erro ao efetuar o cadastro. Tente novamente!',
+            login: 'Ocorreu um erro ao efetuar o login. Tente novamente!',
+            auth: 'E-mail e/ou senha incorretos'
         },
         document: {
             rg: {
