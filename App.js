@@ -6,6 +6,7 @@ import { Asset } from 'expo-asset';
 import { Font } from 'expo-font';
 import { CustomerService } from './src/service';
 import { AppContext, MainContext } from './src/reducer';
+import { AppStorage } from './src/storage';
 
 export default class App extends React.Component {
 
@@ -27,7 +28,7 @@ export default class App extends React.Component {
     }
 
 
-	_init(){
+	async _init(){
 		p1 = Font.loadAsync({
 			'system-semibold': require('./assets/fonts/system-semibold.ttf'),
 			'system': require('./assets/fonts/system-regular.ttf'),
@@ -54,17 +55,34 @@ export default class App extends React.Component {
 					groups
 				}
 			})
+		});
+
+		p4 = new Promise((resolve, reject) => {
+			AppStorage.getUser().then(user => {
+				if(user != null){
+					return this.customerService.login(user.email,user.password).then(result => {
+						if(!result) resolve();
+						this.setState({
+							user: {
+								...this.state.user,
+								token: this.customerService.getToken(),
+								magento: result
+							}
+						}, () => {
+							resolve();
+						})
+					}).catch(() => resolve())
+				}
+			});
 		})
 
-		return Promise.all([p1,p2, p3]);
+		return Promise.all([p1,p2, p3, p4]);
 	}
 
 	_finish(){
-		setTimeout(() => {
-			this.setState({
-				isReady: true
-			})
-		},200)
+		this.setState({
+			isReady: true
+		})
 	}
 
 	_error(){

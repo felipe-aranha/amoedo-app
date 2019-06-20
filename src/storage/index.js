@@ -18,11 +18,24 @@ export class AppStorage {
 
     static async getUser(){
         return await AsyncStorage.multiGet([AppStorage.EMAIL,AppStorage.PASSWORD]).then( result => {
-            console.log(result);
-            return {
-                // email: result[AppStorage.EMAIL],
-                // password: result[AppStorage.PASSWORD]
+            if(result){
+                user = {
+                    email: null,
+                    password: null
+                }
+                result.forEach(item => {
+                    switch(item[0]){
+                        case AppStorage.EMAIL:
+                            user.email = item[1];
+                            return;
+                        case AppStorage.PASSWORD:
+                            user.password = item[1];
+                            return;
+                    }
+                })
+                return user;
             }
+            null;
         })
     }
 
