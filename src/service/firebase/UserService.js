@@ -14,9 +14,7 @@ export class UserService extends FirebaseDB{
     }  
 
     static async userExists(id,db){
-        console.log("user exists?");
         const response = await db.doc(id.toString()).get();
-        console.log(response.exists);
         if(response.exists){
             return true;
         } else {

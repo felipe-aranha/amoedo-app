@@ -22,6 +22,7 @@ export class Pending extends AccountBase{
     static contextType = MainContext;
 
     async componentDidMount(){
+        
         if(!this.isProfessional()){
             this.db = UserService.getCustomerDB()
         }
@@ -43,6 +44,8 @@ export class Pending extends AccountBase{
                             });
                             break;
                     }
+                } else {
+                    this.logout();
                 }
             })
         } else {
