@@ -30,6 +30,10 @@ export default class Professional extends MainView{
         )
     }
 
+    componentDidMount(){
+        this.toggleDrawer();
+    }
+
     toggleDrawer(){
         Keyboard.dismiss();
         this.props.navigation.toggleDrawer();

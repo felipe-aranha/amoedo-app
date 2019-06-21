@@ -52,16 +52,16 @@ export class Routes extends React.Component{
             <View style={StyleSheet.absoluteFill}>
                 <Router>
                     <Modal key='main'>
-                        <Scene initial={this.context.user.token == null} hideNavBar key='accountType' component={AccountType} />
+                        <Scene hideNavBar key='accountType' component={AccountType} />
                         <Stack hideNavBar key='account'>
                             <Scene hideNavBar key='login' component={Login} />
                             <Scene hideNavBar key='profileSelection' component={ProfileSelection} />
                             <Scene key='register' component={Register} />
                         </Stack>
-                        <Stack initial={this.context.user.token != null} hideNavBar key='purgatory'>
+                        <Stack hideNavBar key='purgatory'>
                             <Scene hideNavBar key='pendingAccount' component={Pending} />
                         </Stack>
-                        <Stack hideNavBar key='professional'>
+                        <Stack initial hideNavBar key='professional'>
                             <Drawer drawerWidth={drawerWidth} contentComponent={ProfessionalDrawer} hideNavBar key='professionalDrawer'>
                                 <Scene hideNavBar key='professionalMain' component={Professional} />
                             </Drawer>   
