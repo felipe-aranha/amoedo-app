@@ -34,6 +34,7 @@ export default class App extends React.Component {
 			'system': require('./assets/fonts/system-regular.ttf'),
 			'system-medium': require('./assets/fonts/system-medium.ttf'),
 			'system-bold': require('./assets/fonts/system-bold.ttf'),
+			'system-extrabold': require('./assets/fonts/system-extra-bold.ttf')
 		});
 		p2 = this.cacheImages([
 			require('./assets/images/account/account-bg-x2.jpg'),

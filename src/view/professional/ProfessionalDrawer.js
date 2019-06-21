@@ -1,7 +1,7 @@
 import React from 'react';
-import { View } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import { MainContext } from '../../reducer';
-import { Text, GradientButton } from '../../components';
+import { Text, GradientButton, AppIcon } from '../../components';
 import { drawerStyle } from '../../style';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -47,7 +47,11 @@ export default class ProfessionalDrawer extends React.PureComponent{
                         titleStyle={drawerStyle.editText}
                     />
                 </View>
-                <View style={{flex:2}}>
+                <View style={drawerStyle.menuArea}>
+                    <TouchableOpacity style={drawerStyle.menuItemArea}>
+                        <AppIcon large name={'clients'} style={drawerStyle.menuItemIcon} />
+                        <Text style={drawerStyle.menuItemText}>Clientes</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={{flex:1}}>
 
