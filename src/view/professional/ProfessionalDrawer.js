@@ -83,7 +83,8 @@ export default class ProfessionalDrawer extends MainView{
                                 height: 1,
                                 width: 150,
                                 marginHorizontal: 20,
-                                marginVertical: 20
+                                marginVertical: 20,
+                                alignSelf: 'center'
                             }}  
                         />
                         <TouchableOpacity style={drawerStyle.menuItemArea}>

@@ -106,7 +106,8 @@ export default StyleSheet.create({
         top: -40
     },
     loginLogoImage: {
-        width: 120        
+        width: 120,
+        top: -30        
     },
     loginFormArea: {
         paddingHorizontal: 30
