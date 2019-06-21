@@ -41,8 +41,8 @@ export default class ProfessionalDrawer extends React.PureComponent{
                     <GradientButton 
                         vertical
                         colors={['rgb(170,4,8)','rgb(226,0,6)']}
-                        width={100}
-                        height={40}
+                        width={80}
+                        height={36}
                         title={'Editar'}
                         titleStyle={drawerStyle.editText}
                     />

@@ -3,7 +3,7 @@ import React from 'react';
 import { Routes } from './src/routes';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
-import { Font } from 'expo-font';
+import * as Font from 'expo-font';
 import { CustomerService } from './src/service';
 import { AppContext, MainContext } from './src/reducer';
 import { AppStorage } from './src/storage';

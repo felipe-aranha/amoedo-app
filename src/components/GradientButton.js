@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Text } from 'react-native-elements';
-import { LinearGradient } from 'expo';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export class GradientButton extends React.PureComponent{
     render(){
