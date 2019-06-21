@@ -37,12 +37,10 @@ export class Pending extends AccountBase{
                         case "approved":
                             Actions.reset('professional');
                             break;
-                        case "pending":
+                        default:
                             this.setState({
                                 loading: false
                             });
-                            break;
-                        default:
                             break;
                     }
                 }

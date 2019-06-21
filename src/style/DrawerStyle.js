@@ -38,7 +38,6 @@ export default StyleSheet.create({
         right: -16
     },
     menuArea: {
-        flex:2, 
         padding: 20
     },
     menuItemArea: {

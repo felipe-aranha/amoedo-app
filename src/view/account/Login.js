@@ -42,6 +42,10 @@ export default class Login extends AccountBase{
         this.setState({password})
     }
 
+    handleBack(){
+        Actions.reset('accountType');
+    }
+
     handleSubmit(){
         const { loading, email, password } = this.state;
         if(loading) return;
@@ -80,15 +84,12 @@ export default class Login extends AccountBase{
                     <View style={{flex:1}}>
                         <View style={accountStyle.loginHeaderBackArea}>
                             <TouchableOpacity
-                                hitSlop={{
-                                    top:20,
-                                    bottom: 20,
-                                    left:20,
-                                    right:20
-                                }}
                                 style={{
-                                    width: 30,
-                                    height: 30
+                                    width: 60,
+                                    height: 60,
+                                    zIndex: 999,
+                                    justifyContent: 'center',
+                                    alignItems: 'flex-start'
                                 }}
                                 onPress={this.handleBack}
                             >
