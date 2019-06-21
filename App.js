@@ -46,6 +46,7 @@ export default class App extends React.Component {
 			require('./assets/images/icons/personal-data-x2.png'),
 			require('./assets/images/icons/professional-data-x2.png'),
 			require('./assets/images/icons/upload-files-x2.png'),
+			require('./assets/images/icons/drawer-icon-x2.png')
 		]);
 
 		p3 = this.customerService.getCustomerGroups().then(groups => {

@@ -35,6 +35,7 @@ export class Pending extends AccountBase{
                 if(this.context.user.isProfessional){
                     switch(user.status){
                         case "approved":
+                            Actions.reset('professional');
                             break;
                         case "pending":
                             this.setState({

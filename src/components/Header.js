@@ -22,7 +22,8 @@ export default class AppHeader extends React.PureComponent{
                 },this.props.containerStyle]}
                 backgroundColor={this.props.backgroundColor || 'transparent'}
                 centerComponent={<Text style={this.props.titleStyle}>{this.props.title}</Text>}
-                leftComponent={
+                rightComponent={this.props.drawerOpened && this.props.leftIcon}
+                leftComponent={this.props.leftIcon ||
                     <TouchableOpacity
                         hitSlop={{
                             top:10,

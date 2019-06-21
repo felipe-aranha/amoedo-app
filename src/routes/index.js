@@ -7,17 +7,19 @@ import {
     Tabs,
     Stack
 } from 'react-native-router-flux';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { 
     Wizard,
     AccountType,
     Login,
     ProfileSelection,
     Register,
-    Pending
+    Pending,
+    Professional
 } from '../view';
 import Toast from 'react-native-easy-toast';
 import { MainContext } from '../reducer';
+import { ProfessionalDrawer } from '../view/professional';
 
 export class Routes extends React.Component{
 
@@ -45,6 +47,7 @@ export class Routes extends React.Component{
 	}
 
     render(){
+        const drawerWidth = Dimensions.get('window').width * 85 / 100;
         return(
             <View style={StyleSheet.absoluteFill}>
                 <Router>
@@ -57,6 +60,11 @@ export class Routes extends React.Component{
                         </Stack>
                         <Stack initial={this.context.user.token != null} hideNavBar key='purgatory'>
                             <Scene hideNavBar key='pendingAccount' component={Pending} />
+                        </Stack>
+                        <Stack hideNavBar key='professional'>
+                            <Drawer drawerWidth={drawerWidth} contentComponent={ProfessionalDrawer} hideNavBar key='professionalDrawer'>
+                                <Scene hideNavBar key='professionalMain' component={Professional} />
+                            </Drawer>   
                         </Stack>
                     </Modal>
                 </Router>   
