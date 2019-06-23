@@ -61,7 +61,7 @@ export default class App extends React.Component {
 
 		p4 = new Promise((resolve, reject) => {
 			AppStorage.getUser().then(user => {
-				if(user != null && user.email != ''){
+				if(user != null && user.email != '' && user.email != null){
 					return this.customerService.login(user.email,user.password).then(result => {
 						if(!result) resolve();
 						this.setState({
