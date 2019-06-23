@@ -1,6 +1,6 @@
 export default {
     magento: {
-        baseURL: "https://homologa.amoedo.com.br/",
+        baseURL: "http://homologa.amoedo.com.br/",
         auth: {
             "username": "oliadm",
             "password": "0qwe1478!!!",

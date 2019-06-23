@@ -368,7 +368,7 @@ export default class Form extends React.PureComponent{
                 label={I18n.t('form.email')}
                 value={this.state.email}
                 onChangeText={this.handleEmailChange.bind(this)}
-                onBlur={this.checkEmail.bind(this)}
+                onEndEditing={this.checkEmail.bind(this)}
                 errorMessage={this.state.emailErrorMessage}
                 autoCapitalize={'none'}
                 keyboardType={'email-address'}
@@ -383,7 +383,7 @@ export default class Form extends React.PureComponent{
                 onChangeText={this.handleCpfChange.bind(this)}
                 type={'cpf'}
                 label={I18n.t('form.cpf')}
-                onBlur={this.validateCpf.bind(this)}
+                onEndEditing={this.validateCpf.bind(this)}
                 maxLength={19}
                 errorMessage={this.state.cpfValid == false ? I18n.t('account.errorMessage.invalidCpf') : ''}
             />
@@ -419,7 +419,7 @@ export default class Form extends React.PureComponent{
                 value={this.state.dob}
                 onChangeText={this.handleDobChange.bind(this)}
                 keyboardType={this.keyboardNumber()}
-                onBlur={this.validateDOB.bind(this)}
+                onEndEditing={this.validateDOB.bind(this)}
                 maxLength={10}
                 type={'datetime'}
                 options={{
@@ -501,7 +501,7 @@ export default class Form extends React.PureComponent{
                 label={I18n.t('form.zipCode')}
                 value={this.state.zipCode}
                 onChangeText={this.handleZipCodeChange.bind(this)}
-                onBlur={this.fillAddress.bind(this)}
+                onEndEditing={this.fillAddress.bind(this)}
                 keyboardType={this.keyboardNumber()}
             />
         )
