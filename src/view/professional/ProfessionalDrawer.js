@@ -5,6 +5,7 @@ import { Text, GradientButton, AppIcon, ImageBase64 } from '../../components';
 import { drawerStyle } from '../../style';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MainView } from '../MainView';
+import { Actions } from 'react-native-router-flux';
 
 export default class ProfessionalDrawer extends MainView{
 
@@ -60,7 +61,7 @@ export default class ProfessionalDrawer extends MainView{
                     />
                 </View>
                 <View style={drawerStyle.menuArea}>
-                    <TouchableOpacity style={drawerStyle.menuItemArea}>
+                    <TouchableOpacity onPress={() => {Actions.push('clients')}} style={drawerStyle.menuItemArea}>
                         <AppIcon large name={'clients'} style={drawerStyle.menuItemIcon} />
                         <Text style={drawerStyle.menuItemText}>Clientes</Text>
                     </TouchableOpacity>

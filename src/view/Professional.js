@@ -9,6 +9,12 @@ export default class Professional extends MainView{
 
     title='';
     barStyle = 'light-content';
+    barColor = secondaryColor;
+    titleStyle = {}
+
+    renderLeftIcon(){
+        return this.renderDrawerIcon();
+    }
 
     renderDrawerIcon(){
         return(
@@ -21,9 +27,11 @@ export default class Professional extends MainView{
                 <Image 
                     source={require('../../assets/images/icons/drawer-icon-x2.png')}
                     resizeMode={'contain'}
+                    tintColor={'rgb(226,0,6)'}
                     style={{
                         width: 20,
-                        height: 20
+                        height: 20,
+                        tintColor: 'rgb(226,0,6)'
                     }}
                 />
             </TouchableOpacity>
@@ -51,10 +59,10 @@ export default class Professional extends MainView{
                     title={this.title}
                     handleBack={this.handleBack.bind(this)}
                     leftIconColor={'rgb(242,242,242)'}
-                    titleStyle={accountStyle.registerHeaderText}
-                    backgroundColor={secondaryColor}
+                    titleStyle={[accountStyle.registerHeaderText,this.titleStyle]}
+                    backgroundColor={this.barColor}
                     leftIcon={
-                        this.renderDrawerIcon()
+                        this.renderLeftIcon()
                     }
                 />
             </View>

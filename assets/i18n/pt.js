@@ -93,5 +93,13 @@ export default {
         complement: 'complemento',
         city: 'cidade',
         state: 'uf'
+    },
+    section: {
+        client: 'CLIENTE',
+        addClient: 'CADASTRAR CLIENTE',
+        projects: 'PROJETOS',
+        addProject: 'CADASTRAR PROJETO',
+        room: 'AMBIENTE',
+        products: 'PRODUTOS'
     }
 }

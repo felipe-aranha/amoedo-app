@@ -19,7 +19,7 @@ import {
 } from '../view';
 import Toast from 'react-native-easy-toast';
 import { MainContext } from '../reducer';
-import { ProfessionalDrawer } from '../view/professional';
+import { ProfessionalDrawer, Clients } from '../view/professional';
 
 export class Routes extends React.Component{
 
@@ -64,6 +64,7 @@ export class Routes extends React.Component{
                         <Stack hideNavBar key='professional'>
                             <Drawer drawerWidth={drawerWidth} contentComponent={ProfessionalDrawer} hideNavBar key='professionalDrawer'>
                                 <Scene hideNavBar key='professionalMain' component={Professional} />
+                                <Scene initial hideNavBar key='clients' component={Clients} /> 
                             </Drawer>   
                         </Stack>
                     </Modal>
