@@ -9,16 +9,27 @@ import { accountStyle } from '../../style';
 import { Text } from '../../components';
 import { Button } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
+import { MainContext } from '../../reducer';
 
 export default class AccountType extends AccountBase{
+
+    static contextType = MainContext;
 
     constructor(props,context){
         super(props,context);
 
     }
 
-    handleButtonPress(){
+    handleProfessionalButtonPress(){
         Actions.push('account');
+    }
+
+    handleCustomerButtonPress(){
+        this.context.message('Não implementado ainda');
+    }
+
+    handleAssistanceButtonPress(){
+        this.context.message('Não implementado ainda');
     }
 
     renderContent(){
@@ -40,14 +51,14 @@ export default class AccountType extends AccountBase{
                             containerStyle={accountStyle.accountTypeButtonContainer}
                             buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountButtonArchitectButton]}
                             titleStyle={accountStyle.accountTypeButtonTitle}
-                            onPress={this.handleButtonPress}
+                            onPress={this.handleProfessionalButtonPress}
                         />
                         <Button 
                             title={I18n.t('account.accountType.technicalAssistance')}
                             containerStyle={accountStyle.accountTypeButtonContainer}
                             buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountTechnicalAssistance]}
                             titleStyle={accountStyle.accountTypeButtonTitle}
-                            onPress={this.handleButtonPress}
+                            onPress={this.handleAssistanceButtonPress.bind(this)}
                         />
                         <Button 
                             title={I18n.t('entity.customer')}
@@ -55,7 +66,7 @@ export default class AccountType extends AccountBase{
                             containerStyle={accountStyle.accountTypeButtonContainer}
                             buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountCustomerButton]}
                             titleStyle={accountStyle.accountTypeButtonTitle}
-                            onPress={this.handleButtonPress}
+                            onPress={this.handleCustomerButtonPress.bind(this)}
                         />
                     </View>
                 </View>

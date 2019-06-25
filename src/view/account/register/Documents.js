@@ -13,12 +13,32 @@ export class Documents extends PersonalData {
 
     constructor(props,context){
         super(props,context);
+
+        const documents = [
+            { state: 'rgDocument', name: 'rg' },
+            { state: 'cpfDocument', name: 'cpf' }
+        ]
+
+        if(!~this.props.profile.code.toLowerCase().indexOf('estudante')){
+            switch(this.props.profile.name.toLowerCase()){
+                case 'arquiteto':
+                    documents.push({state: 'cauDocument', name: 'cau'});
+                    break;
+                case 'designer':
+                    documents.push({state: 'abdDocument', name: 'abd'});
+                    break;
+                case 'engenheiro':
+                    documents.push({state: 'creaDocument', name: 'crea'});
+                    break;
+                case 'paisagista':
+                    documents.push({state: 'cnpjDocument', name: 'cnpj'});
+                    break;
+            }
+        }
+
         this.state = { 
             ...super.getInitialState(),
-            documents: [
-                { state: 'rgDocument', name: 'rg' },
-                { state: 'cpfDocument', name: 'cpf' }
-            ],
+            documents,
             modalOpened: false,
             documentSelected: null
         }

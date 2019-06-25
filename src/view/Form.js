@@ -52,7 +52,11 @@ export default class Form extends React.PureComponent{
             emailValid: null,
             dobValid: null,
             hideSubmit: false,
-            avatar: null
+            avatar: null,
+            cauDocument: '',
+            adbDocument: '',
+            creaDocument: '',
+            cnpjDocument: '',
         }
     }
 

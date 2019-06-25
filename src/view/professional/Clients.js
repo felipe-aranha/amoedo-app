@@ -33,8 +33,11 @@ export default class Clients extends Professional{
         />
     )
 
-    componentDidMount(){
+    onFloatButtonPress(){
         console.log(Actions.currentScene);
+    }
+
+    componentDidMount(){
     }
 
     renderEmptyList(){

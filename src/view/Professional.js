@@ -70,6 +70,8 @@ export default class Professional extends MainView{
 
     renderContent(){}
 
+    onFloatButtonPress(){}
+
     renderCenter(){
         return(
             <View style={{
@@ -98,6 +100,7 @@ export default class Professional extends MainView{
                                 title={this.floatingButtonTitle}
                                 titleStyle={this.floatButtonTextStyle}
                                 icon={this.icon}
+                                onPress={this.onFloatButtonPress.bind(this)}
                             />
                         </View>
                     }

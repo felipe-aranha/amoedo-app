@@ -226,6 +226,7 @@ export default class Register extends MainView{
             case 'professional-data':
                 return <ProfessionalData 
                             onStateChange={this.updateProfessionalDataState.bind(this)} 
+                            profile={this.profile}
                             initialState={this.state.professionalData} 
                             onContinue={this.handleProfessionalDataContinue.bind(this)}  
                         />
@@ -233,12 +234,14 @@ export default class Register extends MainView{
                 return <Documents 
                             onStateChange={this.updateDocumentsState.bind(this)} 
                             initialState={this.state.documents} 
+                            profile={this.profile}
                             onContinue={this.handleDocumentsContinue.bind(this)} 
                         />
             default: 
                 return <PersonalData 
                             onStateChange={this.updatePersonalDataState.bind(this)} 
                             initialState={this.state.personalData} 
+                            profile={this.profile}
                             onContinue={this.handlePersonalDataContinue.bind(this)} 
                         />
         }

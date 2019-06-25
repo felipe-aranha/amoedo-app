@@ -67,6 +67,18 @@ export default {
             cpf: {
                 title: 'CPF'
             },
+            cau: {
+                title: 'CAU'
+            },
+            cnpj: {
+                title: 'CNPJ'
+            },
+            abd: {
+                title: 'ABD'
+            },
+            crea: {
+                title: 'CREA'
+            },
             tutorial: '1. Pegue o documento: {{document}}\n\n2. Enquadre todo o documento na câmera\n\n3. Tire uma foto\n\n4. Envie a foto'
         }
     },
@@ -92,7 +104,9 @@ export default {
         number: 'número',
         complement: 'complemento',
         city: 'cidade',
-        state: 'uf'
+        state: 'uf',
+        abd: 'abd',
+        crea: 'crea'
     },
     section: {
         client: 'CLIENTE',
