@@ -6,6 +6,7 @@ import { drawerStyle } from '../../style';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MainView } from '../MainView';
 import { Actions } from 'react-native-router-flux';
+import I18n from '../../i18n';
 
 export default class ProfessionalDrawer extends MainView{
 
@@ -63,38 +64,31 @@ export default class ProfessionalDrawer extends MainView{
                 <View style={drawerStyle.menuArea}>
                     <TouchableOpacity onPress={() => {Actions.push('clients')}} style={drawerStyle.menuItemArea}>
                         <AppIcon large name={'clients'} style={drawerStyle.menuItemIcon} />
-                        <Text style={drawerStyle.menuItemText}>Clientes</Text>
+                        <Text style={drawerStyle.menuItemText}>{I18n.t('menu.clients')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={drawerStyle.menuItemArea}>
                         <AppIcon large name={'list'} style={drawerStyle.menuItemIcon} />
-                        <Text style={drawerStyle.menuItemText}>Projetos</Text>
+                        <Text style={drawerStyle.menuItemText}>{I18n.t('menu.projects')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={drawerStyle.menuItemArea}>
-                        <AppIcon large name={'occurence'} style={drawerStyle.menuItemIcon} />
-                        <Text style={drawerStyle.menuItemText}>Ocorrências</Text>
+                        <AppIcon large name={'occurrence'} style={drawerStyle.menuItemIcon} />
+                        <Text style={drawerStyle.menuItemText}>{I18n.t('menu.occurrences')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={drawerStyle.menuItemArea}>
                         <AppIcon large name={'chat'} style={drawerStyle.menuItemIcon} />
-                        <Text style={drawerStyle.menuItemText}>Chat</Text>
+                        <Text style={drawerStyle.menuItemText}>{I18n.t('menu.chat')}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{flex:1, justifyContent: 'flex-end', padding: 20, marginBottom: 20}}>
-                        <View style={{
-                                backgroundColor: 'rgb(221,221,221)',
-                                height: 1,
-                                width: 150,
-                                marginHorizontal: 20,
-                                marginVertical: 20,
-                                alignSelf: 'center'
-                            }}  
+                        <View style={drawerStyle.divider}  
                         />
                         <TouchableOpacity style={drawerStyle.menuItemArea}>
                             <AppIcon large name={'settings'} style={drawerStyle.menuItemIcon} />
-                            <Text style={drawerStyle.menuItemText}>Configurações</Text>
+                            <Text style={drawerStyle.menuItemText}>{I18n.t('menu.settings')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={this.logout.bind(this)} style={drawerStyle.menuItemArea}>
                             <AppIcon large name={'logout'} style={drawerStyle.menuItemIcon} />
-                            <Text style={drawerStyle.menuItemText}>Sair</Text>
+                            <Text style={drawerStyle.menuItemText}>{I18n.t('menu.logout')}</Text>
                         </TouchableOpacity>
                 </View>
             </View>

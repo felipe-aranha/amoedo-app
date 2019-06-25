@@ -54,5 +54,13 @@ export default StyleSheet.create({
         fontSize: 14,
         marginLeft: 20,
         color: 'rgb(34,34,34)'
+    },
+    divider: {
+        backgroundColor: 'rgb(221,221,221)',
+        height: 1,
+        width: 150,
+        marginHorizontal: 20,
+        marginVertical: 20,
+        alignSelf: 'center'
     }
 })

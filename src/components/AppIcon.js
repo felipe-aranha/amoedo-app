@@ -47,7 +47,7 @@ export default class AppIcon extends React.PureComponent{
                 return large ? 
                     require('../../assets/images/icons/logout-menu.png'):
                     require('../../assets/images/icons/logout-menu.png');
-            case 'occurence':
+            case 'occurrence':
                 return large ? 
                     require('../../assets/images/icons/occurrence-menu.png'):
                     require('../../assets/images/icons/occurrence-menu.png');

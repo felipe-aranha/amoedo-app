@@ -3,7 +3,7 @@ import { MainView } from './MainView';
 import { Header, GradientButton } from '../components';
 import { Keyboard, Image, View, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { secondaryColor, accountStyle, drawerStyle, relativeWidth, deviceWidth } from '../style';
+import { secondaryColor, accountStyle, drawerStyle, relativeWidth, deviceWidth, mainStyle } from '../style';
 import { Input } from 'react-native-elements';
 
 export default class Professional extends MainView{
@@ -60,12 +60,7 @@ export default class Professional extends MainView{
                     name: 'magnify',
                     color: 'rgb(226,0,6)'
                 }}
-                inputContainerStyle={{
-                    width: deviceWidth,
-                    backgroundColor:'#fff',
-                    height:50,
-                    borderBottomWidth:0
-                }}
+                inputContainerStyle={mainStyle.searchInputContainer}
                 containerStyle={{
                     paddingHorizontal: 0
                 }}
@@ -94,12 +89,7 @@ export default class Professional extends MainView{
                         }
                     />
                     {this.showFloatingButton &&
-                        <View style={{
-                            position:'absolute',
-                            right: relativeWidth(5),
-                            top: 37.5,
-                            zIndex: 2
-                        }}>
+                        <View style={mainStyle.floatButtonArea}>
                             <GradientButton 
                                 vertical
                                 colors={['rgb(170,4,8)','rgb(226,0,6)']}

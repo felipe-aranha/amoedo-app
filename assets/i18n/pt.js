@@ -101,5 +101,19 @@ export default {
         addProject: 'CADASTRAR PROJETO',
         room: 'AMBIENTE',
         products: 'PRODUTOS'
+    },
+    menu: {
+        clients: 'Clientes',
+        projects: 'Projetos',
+        occurrences: 'Ocorrências',
+        chat: 'Chat',
+        settings: 'Configurações',
+        logout: 'Sair'
+    },
+    empty: {
+        clients: {
+            title: 'Nenhum cliente cadastrado',
+            subtitle: 'Cadastre novos clientes e tenha as informações organizadas em um só lugar.'
+        }
     }
 }
