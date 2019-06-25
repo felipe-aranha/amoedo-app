@@ -1,16 +1,21 @@
 import React from 'react';
 import { MainView } from './MainView';
-import { Header } from '../components';
+import { Header, GradientButton } from '../components';
 import { Keyboard, Image, View, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { secondaryColor, accountStyle } from '../style';
+import { secondaryColor, accountStyle, drawerStyle, relativeWidth, deviceWidth } from '../style';
+import { Input } from 'react-native-elements';
 
 export default class Professional extends MainView{
 
     title='';
     barStyle = 'light-content';
     barColor = secondaryColor;
-    titleStyle = {}
+    titleStyle = {};
+    floatButtonTextStyle={};
+    showFloatingButton = false;
+    floatingButtonTitle = '';
+    icon;
 
     renderLeftIcon(){
         return this.renderDrawerIcon();
@@ -47,24 +52,68 @@ export default class Professional extends MainView{
         this.props.navigation.toggleDrawer();
     }
 
+    renderSearch(){
+        return(
+            <Input
+                leftIcon={{
+                    type: 'material-community',
+                    name: 'magnify',
+                    color: 'rgb(226,0,6)'
+                }}
+                inputContainerStyle={{
+                    width: deviceWidth,
+                    backgroundColor:'#fff',
+                    height:50,
+                    borderBottomWidth:0
+                }}
+                containerStyle={{
+                    paddingHorizontal: 0
+                }}
+            />
+        )
+    }
+
+    renderContent(){}
+
     renderCenter(){
         return(
             <View style={{
                 flex:1
             }}>
-                <Header 
-                    containerStyle={{
-                        borderBottomWidth: 0
-                    }}
-                    title={this.title}
-                    handleBack={this.handleBack.bind(this)}
-                    leftIconColor={'rgb(242,242,242)'}
-                    titleStyle={[accountStyle.registerHeaderText,this.titleStyle]}
-                    backgroundColor={this.barColor}
-                    leftIcon={
-                        this.renderLeftIcon()
+                    <Header 
+                        containerStyle={{
+                            borderBottomWidth: 0
+                        }}
+                        title={this.title}
+                        handleBack={this.handleBack.bind(this)}
+                        leftIconColor={'rgb(242,242,242)'}
+                        titleStyle={[accountStyle.registerHeaderText,this.titleStyle]}
+                        backgroundColor={this.barColor}
+                        leftIcon={
+                            this.renderLeftIcon()
+                        }
+                    />
+                    {this.showFloatingButton &&
+                        <View style={{
+                            position:'absolute',
+                            right: relativeWidth(5),
+                            top: 37.5,
+                            zIndex: 2
+                        }}>
+                            <GradientButton 
+                                vertical
+                                colors={['rgb(170,4,8)','rgb(226,0,6)']}
+                                width={75}
+                                height={75}
+                                title={this.floatingButtonTitle}
+                                titleStyle={this.floatButtonTextStyle}
+                                icon={this.icon}
+                            />
+                        </View>
                     }
-                />
+                <View style={{flex:1}}>
+                    {this.renderContent()}
+                </View>
             </View>
         )
     }

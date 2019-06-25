@@ -27,6 +27,7 @@ export class Pending extends AccountBase{
             this.db = UserService.getCustomerDB()
         }
         docId = this.context.user.magento.id.toString();
+        console.log(docId);
         const userExists = await UserService.userExists(docId,this.db);
         if(userExists){
             this.doc = this.db.doc(docId);

@@ -1,11 +1,11 @@
 import React from 'react';
-import { TouchableOpacity, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export class GradientButton extends React.PureComponent{
     render(){
-        const { vertical, colors, title, titleStyle, onPress, loading, width, height } = this.props;
+        const { vertical, colors, title, titleStyle, onPress, loading, width, height, icon } = this.props;
         currHeight = height || 50;
         return(
             <TouchableOpacity onPress={onPress}>
@@ -23,7 +23,16 @@ export class GradientButton extends React.PureComponent{
                     >
                         {loading ? 
                             <ActivityIndicator size={'small'} color={'#fff'} /> :
-                            <Text style={titleStyle}>{title}</Text>
+                            <View style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: vertical? 'column' : 'row'
+                            }}>
+                                {typeof(icon) !== 'undefined' &&
+                                    icon
+                                }
+                                <Text style={titleStyle}>{title}</Text>
+                            </View>
                         }
                 </LinearGradient>
             </TouchableOpacity>
