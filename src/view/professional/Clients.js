@@ -19,22 +19,13 @@ export default class Clients extends Professional{
     }
     title = I18n.t('section.client');
     showFloatingButton = true;
-    floatingButtonTitle = 'Novo Cliente';
+    floatingButtonTitle = I18n.t('floatButton.newClient');
     floatButtonTextStyle = mainStyle.floatButtonTextStyle;
 
-    icon = (
-        <Image 
-            source={require('../../../assets/images/icons/user-add-x2.png')}
-            style={{
-                height:22,
-                width:22
-            }}
-            resizeMode={'contain'}
-        />
-    )
+    icon = require('../../../assets/images/icons/user-add-x2.png');
 
     onFloatButtonPress(){
-        console.log(Actions.currentScene);
+        Actions.push('_addClient');
     }
 
     componentDidMount(){

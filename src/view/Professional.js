@@ -15,7 +15,7 @@ export default class Professional extends MainView{
     floatButtonTextStyle={};
     showFloatingButton = false;
     floatingButtonTitle = '';
-    icon;
+    icon = require('../../assets/images/icons/user-add-x2.png');
 
     renderLeftIcon(){
         return this.renderDrawerIcon();
@@ -99,7 +99,14 @@ export default class Professional extends MainView{
                                 height={75}
                                 title={this.floatingButtonTitle}
                                 titleStyle={this.floatButtonTextStyle}
-                                icon={this.icon}
+                                icon={<Image 
+                                    source={this.icon}
+                                    style={{
+                                        height:22,
+                                        width:22
+                                    }}
+                                    resizeMode={'contain'}
+                                />}
                                 onPress={this.onFloatButtonPress.bind(this)}
                             />
                         </View>

@@ -15,7 +15,8 @@ import {
     ProfileSelection,
     Register,
     Pending,
-    Professional
+    Professional,
+    AddClient
 } from '../view';
 import Toast from 'react-native-easy-toast';
 import { MainContext } from '../reducer';
@@ -65,6 +66,7 @@ export class Routes extends React.Component{
                             <Drawer drawerWidth={drawerWidth} contentComponent={ProfessionalDrawer} hideNavBar key='professionalDrawer'>
                                 <Scene hideNavBar key='professionalMain' component={Professional} />
                                 <Scene initial hideNavBar key='clients' component={Clients} /> 
+                                <Scene hideNavBar key='addClient' component={AddClient} />
                             </Drawer>   
                         </Stack>
                     </Modal>

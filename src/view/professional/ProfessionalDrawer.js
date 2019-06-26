@@ -62,7 +62,7 @@ export default class ProfessionalDrawer extends MainView{
                     />
                 </View>
                 <View style={drawerStyle.menuArea}>
-                    <TouchableOpacity onPress={() => {Actions.push('clients')}} style={drawerStyle.menuItemArea}>
+                    <TouchableOpacity onPress={() => {Actions.push('_clients')}} style={drawerStyle.menuItemArea}>
                         <AppIcon large name={'clients'} style={drawerStyle.menuItemIcon} />
                         <Text style={drawerStyle.menuItemText}>{I18n.t('menu.clients')}</Text>
                     </TouchableOpacity>

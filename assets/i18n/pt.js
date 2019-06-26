@@ -124,6 +124,10 @@ export default {
         settings: 'Configurações',
         logout: 'Sair'
     },
+    floatButton: {
+        newClient: 'Novo cliente',
+        clients: 'Clientes'
+    },
     empty: {
         clients: {
             title: 'Nenhum cliente cadastrado',
