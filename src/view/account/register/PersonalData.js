@@ -25,7 +25,7 @@ export class PersonalData extends Form {
     
 
     isFormValid(){
-        isNameValid = this.state.name.trim().split(' ').length > 1;
+        isNameValid = this.notEmpty('name');
         isPhonevalid = this.notEmpty('phone') || this.notEmpty('cell');
         return isNameValid && this.state.emailValid && 
                     this.state.cpfValid && this.notEmpty('rg') &&
@@ -34,8 +34,6 @@ export class PersonalData extends Form {
                     this.notEmpty('address') && this.notEmpty('city') &&
                     this.notEmpty('state') && this.notEmpty('password',6) &&
                     this.notEmpty('confirmPassword',6) && this.state.password == this.state.confirmPassword
-
-
     }
 
     componentDidUpdate(prevProps,prevState){

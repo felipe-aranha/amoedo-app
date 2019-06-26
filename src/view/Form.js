@@ -268,7 +268,7 @@ export default class Form extends React.PureComponent{
 
     // inputs
 
-    renderAvatar(){
+    renderAvatar(s={}){
         return(
             <TouchableOpacity onPress={this.handleAvatarPress.bind(this)} style={accountStyle.formAvatarArea}>
                 {this.state.avatar != null ?
@@ -278,7 +278,7 @@ export default class Form extends React.PureComponent{
                 <AntDesign 
                     name={'pluscircle'}
                     size={25}
-                    style={accountStyle.formAvatarBadge}
+                    style={[accountStyle.formAvatarBadge,s]}
                 />
             </TouchableOpacity>
         )

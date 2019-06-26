@@ -2,10 +2,10 @@ import React from 'react';
 import Clients from './Clients'
 import I18n from '../../i18n';
 import Form from '../Form';
-import { mainStyle } from '../../style';
-import { View, ScrollView } from 'react-native';
+import { mainStyle, accountStyle } from '../../style';
+import { View, ScrollView, Alert } from 'react-native';
 import { Text, Check } from '../../components';
-import { CheckBox } from 'react-native-elements'
+import { Button } from 'react-native-elements'
 
 export default class AddClient extends Clients{
 
@@ -26,6 +26,10 @@ export default class AddClient extends Clients{
         })
     }
 
+    handleAddClient(client){
+
+    }
+
     renderContent(){
         return(
             <View style={{flex:1}}>
@@ -37,15 +41,19 @@ export default class AddClient extends Clients{
                             flexDirection: 'row',
                             marginVertical: 20
                         }}>
-                            <Check 
-                                title={'Pessoa Física'}
-                                onPress={this.changePersonType.bind(this,1)}
-                                checked={this.state.personType == 1}
-                            />
-                            <Check 
-                                title={'Pessoa Jurídica'}
-                                onPress={this.changePersonType.bind(this,2)}
-                                checked={this.state.personType == 2}
+                            {[1,2].map( key => 
+                                <Check 
+                                    key={key.toString()}
+                                    title={I18n.t(`addClient.personType.${key}`)}
+                                    onPress={this.changePersonType.bind(this,key)}
+                                    checked={this.state.personType == key}
+                                />
+                            )}
+                        </View>
+                        <View>
+                            <AddClientForm 
+                                initialState={{}}
+                                onContinue={this.handleAddClient.bind(this)}
                             />
                         </View>
                     </View>
@@ -58,4 +66,84 @@ export default class AddClient extends Clients{
 
 export class AddClientForm extends Form{
 
+    constructor(props,context){
+        super(props,context);
+        this.state = this.getInitialState();
+    }
+
+    handleFormSubmit(){
+        if(this.isFormValid())
+            this.props.onContinue(this.state)
+        else 
+            Alert.alert('',I18n.t('account.errorMessage.verifyFields'))
+    }
+
+    isFormValid(){
+        isNameValid =  this.notEmpty('name');
+        isPhonevalid = this.notEmpty('phone') || this.notEmpty('cell');
+        return isNameValid && this.state.emailValid && 
+                    this.state.cpfValid && this.notEmpty('rg') &&
+                    isPhonevalid && this.notEmpty('zipCode',8) &&
+                    this.notEmpty('address') && this.notEmpty('city') &&
+                    this.notEmpty('state')
+    }
+
+    render(){
+        return(
+            <View>
+                {this.renderForm()}
+                <View style={{marginVertical: 20}}>
+                <Button 
+                    title={I18n.t('addClient.submit')}
+                    type={'outline'}
+                    containerStyle={accountStyle.accountTypeButtonContainer}
+                    buttonStyle={[accountStyle.accountTypeButton,accountStyle.submitButton]}
+                    titleStyle={[accountStyle.accountTypeButtonTitle,accountStyle.submitButtonTitle]}
+                    onPress={this.handleFormSubmit.bind(this)}
+                />
+                </View>
+            </View>
+        )
+    }
+
+    renderForm(){
+        return(
+            <>
+            <View style={[accountStyle.formRow,{marginBottom: 20}]}>
+                {this.renderAvatar({color:'rgb(226,0,6)'})}
+                {this.renderName()}
+            </View>
+            <View style={accountStyle.formRow}>
+                {this.renderEmail()}
+            </View>
+            <View style={accountStyle.formRow}>
+                {this.renderCpf()}
+                {this.renderRg()}
+            </View>
+            <View style={accountStyle.formRow}>
+                {this.renderPhone()}
+                {this.renderCellPhone()}
+            </View>
+            <View style={accountStyle.formRow}>
+                {this.renderCep()}
+                <View style={{flex:1}} />
+            </View>
+            <View style={accountStyle.formRow}>
+                {this.renderAddress()}
+            </View>
+            <View style={accountStyle.formRow}>
+                {this.renderAddressNumber()}
+                {this.renderAddressComplement()}
+            </View>
+            <View style={accountStyle.formRow}>
+                {this.renderNeighborhood()}
+                {this.renderCity()}
+            </View>
+            <View style={accountStyle.formRow}>
+                {this.renderState()}
+                {this.renderInstagram()}
+            </View>
+            </>
+        )
+    }
 }

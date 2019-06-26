@@ -136,6 +136,11 @@ export default {
     },
     addClient: {
         title: 'QUEREMOS\nTE AJUDAR!',
-        subtitle: 'Cadastre seu cliente'
+        subtitle: 'Cadastre seu cliente',
+        personType: {
+            1: 'Pessoa Física',
+            2: 'Pessoa Jurídica'
+        },
+        submit: 'CADASTRAR'
     }
 }

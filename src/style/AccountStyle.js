@@ -40,6 +40,9 @@ export default StyleSheet.create({
         fontSize: 14,
         color: '#fff'
     },
+    submitButtonTitle: {
+        color: 'rgb(71,71,71)'
+    },
     accountButtonArchitectButton: {
         backgroundColor: 'rgb(141,2,40)'
     },
@@ -55,6 +58,9 @@ export default StyleSheet.create({
     accountCustomerButton: {
         borderColor: '#fff'
     },
+    submitButton: {
+        borderColor: 'rgb(71,71,71)'
+    },  
     accountTechnicalAssistance: {
         backgroundColor: 'rgb(243,164,51)'
     },
