@@ -133,5 +133,9 @@ export default {
             title: 'Nenhum cliente cadastrado',
             subtitle: 'Cadastre novos clientes e tenha as informações organizadas em um só lugar.'
         }
+    },
+    addClient: {
+        title: 'QUEREMOS\nTE AJUDAR!',
+        subtitle: 'Cadastre seu cliente'
     }
 }

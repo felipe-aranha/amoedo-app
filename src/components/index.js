@@ -5,3 +5,4 @@ export { default as Header } from './Header';
 export { default as Select } from './Select';
 export { ImageBase64 } from './ImageBase64';
 export { GradientButton } from './GradientButton';
+export * from './input';

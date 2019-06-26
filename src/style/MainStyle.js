@@ -70,5 +70,20 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 30
+    },
+    sectionArea: {
+        paddingHorizontal: 20,
+        paddingVertical:30,
+    },
+    sectionTitle: {
+        fontFamily: 'system-bold',
+        fontSize: 24,
+        color: 'rgb(77,77,77)'
+    },
+    sectionSubtitle: {
+        marginTop: 5,
+        fontFamily: 'system-medium',
+        fontSize: 12,
+        color: 'rgb(132,132,132)'
     }
 })
