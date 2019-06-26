@@ -5,14 +5,18 @@ import Form from '../Form';
 import { mainStyle, accountStyle } from '../../style';
 import { View, ScrollView, Alert } from 'react-native';
 import { Text, Check } from '../../components';
-import { Button } from 'react-native-elements'
+import { Button } from 'react-native-elements';
+import * as Utils from '../../utils';
+import { Address, Customer } from '../../model/firebase';
+import { UserService } from '../../service/firebase/UserService';
 
 export default class AddClient extends Clients{
 
     constructor(props,context){
         super(props,context);
         this.state = {
-            personType: 1
+            personType: 1,
+            loading: false
         }
     }
 
@@ -21,13 +25,49 @@ export default class AddClient extends Clients{
     floatingButtonTitle = I18n.t('floatButton.clients');
 
     changePersonType(personType){
+        if(this.state.loading) return;
         this.setState({
             personType
         })
     }
 
-    handleAddClient(client){
-
+    async handleAddClient(client){
+        if(this.state.loading) return;
+        this.setState({
+            loading: true
+        },async () => {
+            let address = new Address();
+            address = {
+                address: client.address,
+                city: client.city,
+                complement: client.complement,
+                neighborhood: client.neighborhood,
+                number: client.number,
+                state: client.state,
+                zipCode: client.zipCode
+            }
+            let customer = new Customer(Object.assign({},address));
+            customer = {
+                ...customer,
+                avatar: client.avatar,
+                cellphone: client.cell,
+                document: this.state.personType == 1 ? client.cpf : client.cnpj,
+                documentType: this.state.personType == 1 ? "cpf" : "cnpj",
+                email: client.email,
+                instagram: client.instagram,
+                name: client.name,
+                rg: client.rg,
+                telephone: client.phone
+            }
+            docID = this.context.user.magento.id;
+            myDoc = UserService.getProfessionalDoc(docID);
+            response = await UserService.insertAndAttachCustomer(customer,myDoc);
+            console.log(response);
+            this.setState({
+                loading: false
+            })
+        })
+        
     }
 
     renderContent(){
@@ -51,9 +91,12 @@ export default class AddClient extends Clients{
                             )}
                         </View>
                         <View>
-                            <AddClientForm 
+                            <AddClientForm
+                                key={this.state.personType.toString()} 
                                 initialState={{}}
                                 onContinue={this.handleAddClient.bind(this)}
+                                personType={this.state.personType}
+                                loading={this.state.loading}
                             />
                         </View>
                     </View>
@@ -78,14 +121,16 @@ export class AddClientForm extends Form{
             Alert.alert('',I18n.t('account.errorMessage.verifyFields'))
     }
 
+    async checkEmail(isNew=true){
+        this.setState({
+            emailValid: Utils.isEmailValid(this.state.email)
+        })
+    }
+
     isFormValid(){
         isNameValid =  this.notEmpty('name');
-        isPhonevalid = this.notEmpty('phone') || this.notEmpty('cell');
-        return isNameValid && this.state.emailValid && 
-                    this.state.cpfValid && this.notEmpty('rg') &&
-                    isPhonevalid && this.notEmpty('zipCode',8) &&
-                    this.notEmpty('address') && this.notEmpty('city') &&
-                    this.notEmpty('state')
+        console.log(isNameValid, this.state.emailValid);
+        return isNameValid && this.state.emailValid;
     }
 
     render(){
@@ -100,6 +145,7 @@ export class AddClientForm extends Form{
                     buttonStyle={[accountStyle.accountTypeButton,accountStyle.submitButton]}
                     titleStyle={[accountStyle.accountTypeButtonTitle,accountStyle.submitButtonTitle]}
                     onPress={this.handleFormSubmit.bind(this)}
+                    loading={this.props.loading}
                 />
                 </View>
             </View>
@@ -117,7 +163,10 @@ export class AddClientForm extends Form{
                 {this.renderEmail()}
             </View>
             <View style={accountStyle.formRow}>
-                {this.renderCpf()}
+                {this.props.personType == 1 ?
+                    this.renderCpf() :
+                    this.renderCnpj()
+                }
                 {this.renderRg()}
             </View>
             <View style={accountStyle.formRow}>

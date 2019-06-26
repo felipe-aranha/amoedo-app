@@ -3,7 +3,8 @@ export class Customer{
         this.avatar = "";
         this.name = "";
         this.email = "";
-        this.cpf = "";
+        this.document = "";
+        this.documentType = "cpf";
         this.rg = "";
         this.telephone = "";
         this.cellphone = "";

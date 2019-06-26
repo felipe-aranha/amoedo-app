@@ -14,8 +14,6 @@ export class User {
         this.avatar = "";
         this.documents = documents;
         this.createdAt = new Date();
-        this.projects = [];
-        this.clients = [];
         this.deviceToken = "";
     }
 }
