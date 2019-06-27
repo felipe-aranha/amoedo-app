@@ -65,8 +65,8 @@ export class Routes extends React.Component{
                         <Stack hideNavBar key='professional'>
                             <Drawer drawerWidth={drawerWidth} contentComponent={ProfessionalDrawer} hideNavBar key='professionalDrawer'>
                                 <Scene hideNavBar key='professionalMain' component={Professional} />
-                                <Scene hideNavBar key='clients' component={Clients} /> 
-                                <Scene initial hideNavBar key='addClient' component={AddClient} />
+                                <Scene initial hideNavBar key='clients' component={Clients} /> 
+                                <Scene hideNavBar key='addClient' component={AddClient} />
                             </Drawer>   
                         </Stack>
                     </Modal>

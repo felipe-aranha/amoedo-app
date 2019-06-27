@@ -9,6 +9,7 @@ import { Button } from 'react-native-elements';
 import * as Utils from '../../utils';
 import { Address, Customer } from '../../model/firebase';
 import { UserService } from '../../service/firebase/UserService';
+import { Actions } from 'react-native-router-flux';
 
 export default class AddClient extends Clients{
 
@@ -62,10 +63,14 @@ export default class AddClient extends Clients{
             docID = this.context.user.magento.id;
             myDoc = UserService.getProfessionalDoc(docID);
             response = await UserService.insertAndAttachCustomer(customer,myDoc);
-            console.log(response);
-            this.setState({
-                loading: false
-            })
+            this.context.message(I18n.t(`addClient.${response != false ? 'success' : 'fail'}`))
+            if(response != false){
+                Actions.reset('_clients');
+            }
+            else 
+                this.setState({
+                    loading: false
+                })
         })
         
     }

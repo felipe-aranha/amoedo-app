@@ -141,6 +141,8 @@ export default {
             1: 'Pessoa Física',
             2: 'Pessoa Jurídica'
         },
-        submit: 'CADASTRAR'
+        submit: 'CADASTRAR',
+        success: 'Cliente cadastrado com sucesso!',
+        fail: 'Ocorreu uma falha a cadastrar o cliente. Tente novamente!',
     }
 }
