@@ -7,6 +7,7 @@ export class ImageBase64 extends React.PureComponent{
         const props = this.props;
         const _Component = props.avatar ? Avatar : Image;
         return <_Component 
+            rounded
             source={{uri: `data:image/gif;base64,${props.data}`}}
             {...props}
         />

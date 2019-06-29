@@ -27,12 +27,12 @@ export class Pending extends AccountBase{
             this.db = UserService.getCustomerDB()
         }
         docId = this.context.user.magento.id.toString();
-        console.log(docId);
         const userExists = await UserService.userExists(docId,this.db);
         if(userExists){
             this.doc = this.db.doc(docId);
-            this.doc.onSnapshot( doc => {
-                const { user } = doc.data();
+            this.doc.onSnapshot( async doc => {
+                const { user, clients } = doc.data();
+                this.context.user.clients = await UserService.getMyClients(clients);
                 this.context.user.firebase = user;
                 if(this.context.user.isProfessional){
                     switch(user.status){

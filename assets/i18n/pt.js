@@ -144,5 +144,13 @@ export default {
         submit: 'CADASTRAR',
         success: 'Cliente cadastrado com sucesso!',
         fail: 'Ocorreu uma falha a cadastrar o cliente. Tente novamente!',
+    },
+    list: {
+        client: {
+            currentProjects: '{{qty}} projetos em andamento',
+            currentProject: '1 projeto em andamento',
+            doneProjects: '{{qty}} projetos realizados',
+            doneProject: '1 projeto realizado'
+        }
     }
 }

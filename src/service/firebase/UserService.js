@@ -28,6 +28,31 @@ export class UserService extends FirebaseDB{
         })
     }
 
+    static async getMyClients(clients){
+        c = [];
+        if(clients.length == 0) return [];
+        await new Promise((resolve,reject) => {
+            clients.forEach( async (client, i) => {
+                _c = await this.getClient(client.email);
+                if(_c != null){
+                    c.push(_c);
+                }
+                if(i == clients.length - 1)
+                    resolve()
+            })
+        })
+        return c;
+    }
+
+    static async getClient(email){
+        doc = await UserService.getCustomerDB().doc(email).get();
+        if(doc.exists){
+            return doc.data();
+        } else {
+            return null;
+        }
+    }
+
     static addCustomerToProfessional(customer,professionalDoc){
         FirebaseDB.getFirestore().runTransaction(transaction => {
             return transaction.get(professionalDoc).then(doc => {

@@ -134,7 +134,6 @@ export class AddClientForm extends Form{
 
     isFormValid(){
         isNameValid =  this.notEmpty('name');
-        console.log(isNameValid, this.state.emailValid);
         return isNameValid && this.state.emailValid;
     }
 

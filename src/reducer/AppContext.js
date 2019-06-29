@@ -10,7 +10,8 @@ export const AppContext = {
         group: null,
         isProfessional: null,
         magento: {},
-        firebase: {}
+        firebase: {},
+        clients: []
     },
     message: () => {},
     removeMessage: () => {}
