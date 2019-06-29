@@ -1,18 +1,24 @@
 import React from 'react';
 import { MainView } from './MainView';
-import { Header, GradientButton } from '../components';
-import { Keyboard, Image, View, TouchableOpacity } from 'react-native';
+import { Header, GradientButton, Text } from '../components';
+import { Keyboard, Image, View, TouchableOpacity, FlatList } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { secondaryColor, accountStyle, drawerStyle, relativeWidth, deviceWidth, mainStyle } from '../style';
+import { secondaryColor, accountStyle, mainStyle } from '../style';
 import { Input } from 'react-native-elements';
 
 export default class Professional extends MainView{
+
+    constructor(props,context){
+        super(props,context);
+        this.state = {
+            items:  []
+        }   
+    }
 
     title='';
     barStyle = 'light-content';
     barColor = secondaryColor;
     titleStyle = {};
-    floatButtonTextStyle={};
     showFloatingButton = false;
     floatingButtonTitle = '';
     icon = require('../../assets/images/icons/user-add-x2.png');
@@ -43,6 +49,28 @@ export default class Professional extends MainView{
         )
     }
 
+    renderEmptyList(image,title,subtitle){
+        return (
+            <View style={mainStyle.listArea}>
+            <View
+                style={mainStyle.emptyListArea}
+            >
+                {image != null &&
+                    <Image 
+                        source={image}
+                        style={mainStyle.emptyListImage}
+                        resizeMode={'contain'}
+                    />
+                }
+            </View>
+            <View style={mainStyle.emptyListTextArea}>
+                <Text style={mainStyle.emptyListTitle}>{title}</Text>
+                <Text style={mainStyle.emptyListSubtitle}>{subtitle}</Text>
+            </View>
+            </View>
+        )
+    }
+
     componentDidMount(){
         this.toggleDrawer();
     }
@@ -68,7 +96,31 @@ export default class Professional extends MainView{
         )
     }
 
-    renderContent(){}
+    keyStractor(item,key){
+        return key.toString();
+    }
+
+    renderItem({item}){}
+
+    renderContent(){
+        return(
+            <>
+                {this.renderSearch()}
+               
+                    {this.state.items.length > 0 ? 
+                     <View style={{flex:1}}>
+                        <FlatList 
+                            data={this.state.items}
+                            renderItem={this.renderItem.bind(this)}
+                            keyStractor={this.keyStractor}
+                        />
+                    </View> :
+                    this.renderEmptyList()
+                    }
+                
+            </>
+        )
+    }
 
     onFloatButtonPress(){}
 
@@ -98,7 +150,7 @@ export default class Professional extends MainView{
                                 width={75}
                                 height={75}
                                 title={this.floatingButtonTitle}
-                                titleStyle={this.floatButtonTextStyle}
+                                titleStyle={mainStyle.floatButtonTextStyle}
                                 icon={<Image 
                                     source={this.icon}
                                     style={{

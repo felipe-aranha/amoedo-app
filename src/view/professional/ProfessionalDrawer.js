@@ -12,6 +12,14 @@ export default class ProfessionalDrawer extends MainView{
 
     static contextType = MainContext;
 
+    goTo(scene){
+        if(Actions.currentScene != scene){
+            Actions.push(scene);
+        } else {
+            Actions.drawerClose();
+        }
+    }
+
     render(){
         const { user } = this.context;
         return(
@@ -62,11 +70,11 @@ export default class ProfessionalDrawer extends MainView{
                     />
                 </View>
                 <View style={drawerStyle.menuArea}>
-                    <TouchableOpacity onPress={() => {Actions.push('_clients')}} style={drawerStyle.menuItemArea}>
+                    <TouchableOpacity onPress={() => {this.goTo('_clients')}} style={drawerStyle.menuItemArea}>
                         <AppIcon large name={'clients'} style={drawerStyle.menuItemIcon} />
                         <Text style={drawerStyle.menuItemText}>{I18n.t('menu.clients')}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={drawerStyle.menuItemArea}>
+                    <TouchableOpacity onPress={() => {this.goTo('_projects')}} style={drawerStyle.menuItemArea}>
                         <AppIcon large name={'list'} style={drawerStyle.menuItemIcon} />
                         <Text style={drawerStyle.menuItemText}>{I18n.t('menu.projects')}</Text>
                     </TouchableOpacity>

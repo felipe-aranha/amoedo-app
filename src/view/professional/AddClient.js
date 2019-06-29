@@ -21,6 +21,10 @@ export default class AddClient extends Clients{
         }
     }
 
+    onFloatButtonPress(){
+        Actions.pop();
+    }
+
     icon = require('../../../assets/images/icons/user-search-x2.png');
     title = I18n.t('section.addClient');
     floatingButtonTitle = I18n.t('floatButton.clients');

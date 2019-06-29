@@ -126,12 +126,18 @@ export default {
     },
     floatButton: {
         newClient: 'Novo cliente',
-        clients: 'Clientes'
+        clients: 'Clientes',
+        newProject: 'Novo projeto',
+        projects: 'Projetos'
     },
     empty: {
         clients: {
             title: 'Nenhum cliente cadastrado',
             subtitle: 'Cadastre novos clientes e tenha as informações organizadas em um só lugar.'
+        },
+        projects: {
+            title: 'Nenhum projeto cadastrado',
+            subtitle: 'Cadastre novos projetos e tenha as informações organizadas em um só lugar.'
         }
     },
     addClient: {
