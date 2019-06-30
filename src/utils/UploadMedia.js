@@ -1,4 +1,5 @@
-import { ImagePicker, Permissions } from 'expo';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 
 export class UploadMedia{
 
@@ -13,10 +14,8 @@ export class UploadMedia{
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: 'Images',
             allowsEditing: true,
-            base64: true
         })
-        if(result.cancelled) return false;
-        else return result.base64 || result.uri;
+        return result.cancelled ? false : result;
     }
 
     static async takePhotoAsync(){
@@ -24,10 +23,8 @@ export class UploadMedia{
         if(!allowed) return false;
         const result = await ImagePicker.launchCameraAsync({
             allowsEditing: true,
-            base64: true
         })
-        if(result.cancelled) return false;
-        else return result.base64 || result.uri;
+        return result.cancelled ? false : result;
     }
 
 }

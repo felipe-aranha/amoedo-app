@@ -1,17 +1,73 @@
 import { FirebaseDB } from "./Firebase";
+import uuid from 'uuid';
 
-export class UserService extends FirebaseDB{
+export class UserService{
 
     static CUSTOMER = 'customer';
     static PROFESSIONAL = 'professional'
 
-    static insertOrUpdateProfessionalAsync(user){
+    static async insertOrUpdateProfessionalAsync(user,documents=[],avatar=''){
+        storage = FirebaseDB.getStorage().ref();
+        docMap = await UserService.uploadDocuments(documents);
+        console.log(avatar);
+        avatarUrl = false;
+        if(avatar!= '' && avatar != null)
+            avatarUrl = await UserService.uploadImageAsync(avatar);
+        console.log(avatarUrl);
         user = Object.assign({},user);
-        const db = UserService.getProfessionalDB();
-        return db.doc(user.id.toString()).set({
-            user
+            const db = UserService.getProfessionalDB();
+        await db.doc(user.id.toString()).set({
+            user,
+            clients: [],
+            documents: docMap,
+            avatar: avatarUrl ? avatarUrl : null
         })
+            
     }
+
+    static async uploadDocuments(documents){
+        docs = [];
+        console.log(documents);
+        await new Promise((resolve,reject) => {
+            documents.forEach(async (document,i) => {
+                if(document.uri)
+                url = await UserService.uploadImageAsync(document.uri);
+                doc = {
+                    image: url,
+                    name: document.name,
+                    status: 'pending'
+                }
+                docs.push(doc);
+                if(i == documents.length -1){
+                    resolve();
+                }
+            }) 
+        })
+        return docs;
+    }
+
+    static async uploadImageAsync(uri) {
+        const blob = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.onload = function() {
+            resolve(xhr.response);
+          };
+          xhr.onerror = function(e) {
+            console.log(e);
+            reject(new TypeError('Network request failed'));
+          };
+          xhr.responseType = 'blob';
+          xhr.open('GET', uri, true);
+          xhr.send(null);
+        });
+        storage = FirebaseDB.getStorage().ref();
+        d = new Date();
+        const ref = storage.child(`images/${uuid.v4()}`);
+        const snapshot = await ref.put(blob);
+        blob.close();
+      
+        return await snapshot.ref.getDownloadURL();
+      }
     
     static insertOrUpdateCustomerAsync(customer){
         customer = Object.assign({},customer);
@@ -30,7 +86,7 @@ export class UserService extends FirebaseDB{
 
     static async getMyClients(clients){
         c = [];
-        if(clients.length == 0) return [];
+        if(!clients || clients.length == 0) return [];
         await new Promise((resolve,reject) => {
             clients.forEach( async (client, i) => {
                 _c = await this.getClient(client.email);
@@ -84,7 +140,7 @@ export class UserService extends FirebaseDB{
         return UserService.getProfessionalDB().doc(docID.toString());
     }
 
-    static getProfessionalDB(){
+    static getProfessionalDB(){        
         return FirebaseDB.getCollection(UserService.PROFESSIONAL)
     }
 

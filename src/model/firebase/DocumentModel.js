@@ -1,6 +1,6 @@
 export class DocumentModel{
-    constructor(name,hash){
-        this.base64 = hash;
+    constructor(name,uri){
+        this.uri = uri;
         this.name = name;
         this.status = "pending";
     }

@@ -8,6 +8,7 @@ import { secondaryColor, accountStyle } from '../style';
 import I18n from '../i18n';
 import { Text, AppIcon, ImageBase64 } from '../components';
 import { TextInputMask } from 'react-native-masked-text';
+import { UserService } from '../service/firebase/UserService';
 
 export default class Form extends React.PureComponent{
 
@@ -258,7 +259,7 @@ export default class Form extends React.PureComponent{
     async handleAvatarPress(){
         const result = await Utils.UploadMedia.getFileAsync();
         this.setState({
-            avatar: result ? result : null
+            avatar: result ? result.uri : null
         })
     }
 

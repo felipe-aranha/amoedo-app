@@ -70,7 +70,8 @@ export class Documents extends PersonalData {
     }
 
     processMedia(media){
-        this.state[this.state.documentSelected.state] = media
+        if(media)
+            this.state[this.state.documentSelected.state] = media.uri
         this.setState({
             documentSelected: null,
             hideSubmit: false

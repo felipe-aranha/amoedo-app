@@ -12,6 +12,8 @@ import * as Utils from '../../../utils';
 import { DocumentModel, User } from '../../../model/firebase';
 import { UserService } from '../../../service/firebase/UserService';
 import { Actions } from 'react-native-router-flux';
+import I18n from '../../../i18n';
+import { MainContext } from '../../../reducer';
 
 const initialState = {
     activeSection: 'personal-data',
@@ -25,6 +27,8 @@ const initialState = {
 export const RegisterContext = React.createContext(initialState);
 
 export default class Register extends MainView{
+
+    static contextType = MainContext;
 
     barStyle = 'light-content';
 
@@ -142,12 +146,15 @@ export default class Register extends MainView{
     }
 
     user = null;
+    docs = [];
     customer = null;
     isRegistered = false;
+    avatar = '';
 
     handleDocumentsContinue(){
         const { personalData, professionalData, documents, loading } = this.state;
         if(loading) return;
+        this.openeModalLoading();
         const { firstname, lastname } = Utils.parseName(personalData.name);
         let address = new Address(personalData.address, personalData.number, personalData.complement, personalData.neighborhood);
         address = {
@@ -179,15 +186,19 @@ export default class Register extends MainView{
         this.customerService.register(customerRegister.customer,customerRegister.password).then(response => {
             if(response.message){
                 Alert.alert(I18n.t('common.error'),response.message);
+                this.closeModalLoading();
+                this.setState({
+                    loading: false
+                })
             } else {
-                let docs = documents.documents.map(document => {
+                this.avatar = personalData.avatar;
+                this.docs = documents.documents.map(document => {
                     let d = new DocumentModel(document.name, documents[document.state]);
                     return Object.assign({},d);
                 });
-                let user = new User(docs);
+                let user = new User();
                 user = {
                     ...user,
-                    avatar: personalData.avatar,
                     cau: personalData.cau,
                     cellphone: personalData.cell,
                     cnpj: professionalData.cnpj,
@@ -202,6 +213,7 @@ export default class Register extends MainView{
                 this.firebaseRegister(user);
             }
         }).catch(e => {
+            this.closeModalLoading();
             Alert.alert(I18n.t('common.error'),I18n.t('account.errorMessage.registerError'));
             this.setState({
                 loading: false
@@ -212,9 +224,14 @@ export default class Register extends MainView{
     firebaseRegister(user){
         this.user = user;
         this.isRegistered = true;
-        UserService.insertOrUpdateProfessionalAsync(user).then(result => {
+        this.context.message('Fazendo uploads dos arquivos. Aguarde!',0);
+        UserService.insertOrUpdateProfessionalAsync(user,this.docs,this.avatar).then(result => {
+            this.context.message('Entrando...',0);
             this.login(this.customer.customer.email,this.customer.password);
         }).catch(e => {
+            console.log("catch",e);
+            this.context.message(I18n.t('account.errorMessage.registerError'));
+            this.closeModalLoading();
             this.setState({
                 loading: false
             })

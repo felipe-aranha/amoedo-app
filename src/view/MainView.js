@@ -1,12 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, StatusBar } from 'react-native';
+import { View, Modal, StyleSheet, StatusBar, ActivityIndicator } from 'react-native';
 import { mainStyle } from '../style';
 import { Actions } from 'react-native-router-flux';
-import { AppContext } from '../reducer';
+import { AppContext, MainContext } from '../reducer';
 import { AppStorage } from '../storage';
 import I18n from '../i18n';
 
 export class MainView extends React.Component{
+
+    static contextType = MainContext;
 
     barStyle = 'dark-content';
 
@@ -38,8 +40,10 @@ export class MainView extends React.Component{
                 token: this.customerService.getToken(),
                 magento: result
             }
+            this.context.message('',1)
             Actions.reset('purgatory');
         }).catch(e => {
+            console.log("catch2",e);
             this.context.message(I18n.t('account.errorMessage.login'));
             this.setState({
                 loading: false
@@ -47,11 +51,51 @@ export class MainView extends React.Component{
         })
     }
 
+    toggleModalLoading(){
+        this.setState({
+            modalLoading: !this.state.modalLoading
+        })
+    }
+
+    closeModalLoading(){
+        this.setState({
+            modalLoading: false
+        })
+    }
+
+    openeModalLoading(){
+        this.setState({
+            modalLoading: true
+        })
+    }
+
+    renderLoadinModal(){
+        const { modalLoading } = this.state || {};
+        if(typeof(modalLoading) !== 'undefined' && modalLoading != null)
+            return(
+                <Modal
+                    visible={modalLoading}
+                    onRequestClose={() => {}}
+                    transparent
+                >
+                    <View style={{
+                        flex:1,
+                        backgroundColor: 'rgba(0,0,0,0.3)',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <ActivityIndicator color={'#fff'} size={'large'} />
+                    </View>
+                </Modal>
+            )
+    }
+
     render(){
         return(
             <View style={[StyleSheet.absoluteFill, mainStyle.mainView]}>
                 <StatusBar barStyle={this.barStyle} />
                 {this.renderCenter()}
+                {this.renderLoadinModal()}
             </View>
         )
     }

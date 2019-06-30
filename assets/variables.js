@@ -15,7 +15,7 @@ export default {
         authDomain: "app-amoedo-dev.firebaseapp.com",
         databaseURL: "https://app-amoedo-dev.firebaseio.com",
         projectId: "app-amoedo-dev",
-        storageBucket: "",
+        storageBucket: "gs://app-amoedo-dev.appspot.com/",
         messagingSenderId: "259660110621",
         appId: "1:259660110621:web:2fb9034f44d7cbc3"
     },
