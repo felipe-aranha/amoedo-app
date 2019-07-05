@@ -30,6 +30,8 @@ export default class Form extends React.PureComponent{
             password: '',
             confirmPassword: '',
             cau: '',
+            abd: '',
+            crea: '',
             email: '',
             cpf: '',
             cpfDocument: '',
@@ -59,7 +61,7 @@ export default class Form extends React.PureComponent{
             avatar: null,
             nameValid: null,
             cauDocument: '',
-            adbDocument: '',
+            abdDocument: '',
             creaDocument: '',
             cnpjDocument: '',
         }
@@ -94,7 +96,7 @@ export default class Form extends React.PureComponent{
             confirmPassword: text
         })
     }
-    handleCauChange(text){
+    handleDocChange(text,doc){
         this.setState({
             cau: text
         })
@@ -335,12 +337,12 @@ export default class Form extends React.PureComponent{
         )
     }
 
-    renderCau(){
+    renderDocument(doc){
         return(
             <Input 
-                label={I18n.t('form.cau')}
-                value={this.state.cau}
-                onChangeText={this.handleCauChange.bind(this)}
+                label={I18n.t(`form.${doc}`)}
+                value={this.state[doc]}
+                onChangeText={text => { this.handleDocChange(text,doc) }}
             />
         )
     }

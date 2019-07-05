@@ -26,7 +26,25 @@ export class PersonalData extends Form {
         return ~this.props.profile.code.toLowerCase().indexOf('estudante')
     }
 
-        
+    getDocumentType(){
+        switch(this.props.profile.name.toLowerCase()){
+            case 'arquiteto':
+                    return 'cau';
+                    break;
+                case 'designer':
+                    return 'abd';
+                    break;
+                case 'engenheiro':
+                    return 'crea';
+                    break;
+                case 'paisagista':
+                    return 'cnpj';
+                    break;
+                default: 
+                    return null;
+                    break;
+        }
+    }
 
     isFormValid(){
         isNameValid = this.notEmpty('name');
@@ -53,6 +71,7 @@ export class PersonalData extends Form {
         const { magento } = this.context && this.context.user ? this.context.user : {};
         const loggedIn = magento.id ? true : false;
         const address = magento.addresses && magento.addresses.length > 0;
+        const document = this.getDocumentType();
         return(
             <>
             <View style={[accountStyle.formRow,{marginBottom: 20}]}>
@@ -70,8 +89,9 @@ export class PersonalData extends Form {
                 {this.renderRg()}
             </View>
             <View style={accountStyle.formRow}>
-                {this.renderCau()}
+                {document != null && document != 'cnpj' && this.renderDocument(document)}
                 {this.renderDOB()}
+                {(document == null || document == 'cnpj') && <View style={{flex:1}} />}
             </View>
             <View style={accountStyle.formRow}>
                 {this.renderPhone()}
