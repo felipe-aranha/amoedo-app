@@ -73,7 +73,7 @@ export class Routes extends React.Component{
                             <MainContext.Consumer>
                                 <Scene initial={!this.state.isLoggedIn} hideNavBar key='login' component={Login} />
                                 <Scene initial={this.state.isLoggedIn} hideNavBar key='profileSelection' component={ProfileSelection} />
-                                <Scene key='register' component={Register} />
+                                <Scene key='register' hideNavBar component={Register} />
                             </MainContext.Consumer>
                         </Stack>
                         <Stack initial={this.context.user.token != null} hideNavBar key='purgatory'>

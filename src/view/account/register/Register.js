@@ -55,7 +55,6 @@ export default class Register extends MainView{
             }
         ],
         this.state = initialState;
-        console.log(context.user.magento);
         this.customerService = new CustomerService();
     }
 
@@ -152,13 +151,10 @@ export default class Register extends MainView{
     isRegistered = false;
     avatar = '';
 
-    handleDocumentsContinue(){
-        const { personalData, professionalData, documents, loading } = this.state;
-        if(loading) return;
-        this.openModalLoading();
-        const { firstname, lastname } = Utils.parseName(personalData.name);
+    fillAddress(){
+        const { personalData, professionalData } = this.state;
         let address = new Address(personalData.address, personalData.number, personalData.complement, personalData.neighborhood);
-        address = {
+        return {
             ...address,
             city: personalData.city,
             company: professionalData.companyName,
@@ -168,6 +164,18 @@ export default class Register extends MainView{
             postcode: personalData.zipCode,
             telephone: personalData.cell || personalData.phone,
         }
+    }
+
+    handleDocumentsContinue(){
+        const { personalData, professionalData, documents, loading } = this.state;
+        if(loading) return;
+        this.openModalLoading();
+        if(this.context.user.magento.id){
+            this.updateUser();
+            return;
+        }
+        const { firstname, lastname } = Utils.parseName(personalData.name);
+        let address = this.fillAddress();
         let customer = new Customer(address, personalData.cell || personalData.phone);
         customer = {
             ...customer,
@@ -181,7 +189,7 @@ export default class Register extends MainView{
         let customerRegister = new CustomerRegister(customer, personalData.password);
         this.customer = customerRegister;
         if(this.isRegistered && this.user != null){
-            this.firebaseRegister(this.user);
+            this.firebaseRegister();
             return;
         }
         this.customerService.register(customerRegister.customer,customerRegister.password).then(response => {
@@ -192,26 +200,7 @@ export default class Register extends MainView{
                     loading: false
                 })
             } else {
-                this.avatar = personalData.avatar;
-                this.docs = documents.documents.map(document => {
-                    let d = new DocumentModel(document.name, documents[document.state]);
-                    return Object.assign({},d);
-                });
-                let user = new User();
-                user = {
-                    ...user,
-                    cau: personalData.cau,
-                    cellphone: personalData.cell,
-                    cnpj: professionalData.cnpj,
-                    email: personalData.email,
-                    id: response.id,
-                    instagram: personalData.instagram,
-                    monthlyProjects: professionalData.monthlyProjects,
-                    rg: personalData.rg,
-                    telephone: personalData.phone,
-                    type: response.group_id
-                }
-                this.firebaseRegister(user);
+                this.firebaseRegister(response.id);
             }
         }).catch(e => {
             this.closeModalLoading();
@@ -222,11 +211,55 @@ export default class Register extends MainView{
         })
     }
 
-    firebaseRegister(user){
-        this.user = user;
+    updateUser(){
+        const { magento } = this.context.user;
+        if(this.isRegistered)
+            this.firebaseRegister(magento.id);
+        else {
+            const { personalData, professionalData, documents, loading } = this.state;
+            const customer = {
+                dob: Utils.parseDate(personalData.dob),
+                group_id: this.profile.id,
+                id: magento.id
+            }
+            if(magento.addresses.length == 0){
+                const address = this.fillAddress();
+                customer.addresses = [address];
+            }
+            this.customerService.updateCustomer(customer).then(response => {
+                console.log(response);
+            })
+        }
+    }
+
+
+
+    firebaseRegister(customerId=null){
+        const { personalData, professionalData, documents } = this.state;
+        this.avatar = personalData.avatar;
+        this.docs = documents.documents.map(document => {
+            let d = new DocumentModel(document.name, documents[document.state]);
+            return Object.assign({},d);
+        });
+        if(this.user == null){
+            this.user = new User();
+            this.user = {
+                ...user,
+                cau: personalData.cau,
+                cellphone: personalData.cell,
+                cnpj: professionalData.cnpj,
+                email: personalData.email,
+                id: customerId,
+                instagram: personalData.instagram,
+                monthlyProjects: professionalData.monthlyProjects,
+                rg: personalData.rg,
+                telephone: personalData.phone,
+                type: this.profile.id
+            }
+        }
         this.isRegistered = true;
         this.context.message('Fazendo uploads dos arquivos. Aguarde!',0);
-        UserService.insertOrUpdateProfessionalAsync(user,this.docs,this.avatar).then(result => {
+        UserService.insertOrUpdateProfessionalAsync(this.user,this.docs,this.avatar).then(result => {
             this.context.message('Entrando...',0);
             this.login(this.customer.customer.email,this.customer.password);
         }).catch(e => {

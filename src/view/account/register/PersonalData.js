@@ -1,14 +1,14 @@
 import React from 'react';
-import { RegisterContext } from './Register';
 import { View, Alert } from 'react-native';
 import { Text } from '../../../components';
 import I18n from '../../../i18n';
 import Form from '../../Form';
 import { accountStyle, relativeHeight } from '../../../style';
 import _ from 'lodash';
+import { MainContext } from '../../../reducer';
 
 export class PersonalData extends Form {
-    static contextType = RegisterContext;
+    static contextType = MainContext;
 
     constructor(props,context){
         super(props,context);
@@ -22,11 +22,18 @@ export class PersonalData extends Form {
             Alert.alert('',I18n.t('account.errorMessage.verifyFields'))
     }
 
-    
+    isStudent(){
+        return ~this.props.profile.code.toLowerCase().indexOf('estudante')
+    }
+
+        
 
     isFormValid(){
         isNameValid = this.notEmpty('name');
         isPhonevalid = this.notEmpty('phone') || this.notEmpty('cell');
+        if(this.context.user.magento.id){
+            return 
+        }
         return isNameValid && this.state.emailValid && 
                     this.state.cpfValid && this.notEmpty('rg') &&
                     this.notEmpty('cau') && this.state.dobValid && 
@@ -43,18 +50,23 @@ export class PersonalData extends Form {
     }
 
     renderForm(){
+        const { magento } = this.context && this.context.user ? this.context.user : {};
+        const loggedIn = magento.id ? true : false;
+        const address = magento.addresses && magento.addresses.length > 0;
         return(
             <>
             <View style={[accountStyle.formRow,{marginBottom: 20}]}>
                 {this.renderAvatar()}
-                {this.renderName()}
-                
+                {!loggedIn && this.renderName()}
+                {loggedIn && this.renderEmail(magento.email)}
             </View>
+            {!loggedIn &&
+                <View style={accountStyle.formRow}>
+                    {this.renderEmail()}
+                </View>
+            }
             <View style={accountStyle.formRow}>
-                {this.renderEmail()}
-            </View>
-            <View style={accountStyle.formRow}>
-                {this.renderCpf()}
+                {!loggedIn && this.renderCpf()}
                 {this.renderRg()}
             </View>
             <View style={accountStyle.formRow}>
@@ -65,29 +77,35 @@ export class PersonalData extends Form {
                 {this.renderPhone()}
                 {this.renderCellPhone()}
             </View>
+            {!address && 
+            <>
+                <View style={accountStyle.formRow}>
+                    {this.renderCep()}
+                    <View style={{flex:1}} />
+                </View>
+                <View style={accountStyle.formRow}>
+                    {this.renderAddress()}
+                </View>
+                <View style={accountStyle.formRow}>
+                    {this.renderAddressNumber()}
+                    {this.renderAddressComplement()}
+                </View>
+                <View style={accountStyle.formRow}>
+                    {this.renderNeighborhood()}
+                    {this.renderCity()}
+                </View>
+            </>
+            }
             <View style={accountStyle.formRow}>
-                {this.renderCep()}
-                <View style={{flex:1}} />
-            </View>
-            <View style={accountStyle.formRow}>
-                {this.renderAddress()}
-            </View>
-            <View style={accountStyle.formRow}>
-                {this.renderAddressNumber()}
-                {this.renderAddressComplement()}
-            </View>
-            <View style={accountStyle.formRow}>
-                {this.renderNeighborhood()}
-                {this.renderCity()}
-            </View>
-            <View style={accountStyle.formRow}>
-                {this.renderState()}
+                {!address && this.renderState()}
                 {this.renderInstagram()}
             </View>
-            <View style={accountStyle.formRow}>
-                {this.renderPassword()}
-                {this.renderPasswordConfirmation()}
-            </View>
+            {!loggedIn && 
+                <View style={accountStyle.formRow}>
+                    {this.renderPassword()}
+                    {this.renderPasswordConfirmation()}
+                </View>
+            }
             <View style={{height: 50}}>
             </View>
             </>

@@ -9,8 +9,11 @@ import I18n from '../i18n';
 import { Text, AppIcon, ImageBase64 } from '../components';
 import { TextInputMask } from 'react-native-masked-text';
 import { UserService } from '../service/firebase/UserService';
+import { MainContext } from '../reducer';
 
 export default class Form extends React.PureComponent{
+
+    static contextType = MainContext;
 
     constructor(props,context){
         super(props,context);
@@ -373,11 +376,12 @@ export default class Form extends React.PureComponent{
         )
     }
 
-    renderEmail(){
+    renderEmail(email){
         return(
             <Input 
                 label={I18n.t('form.email')}
-                value={this.state.email}
+                value={email? email : this.state.email}
+                editable={email? false : true}
                 onChangeText={this.handleEmailChange.bind(this)}
                 onEndEditing={this.checkEmail.bind(this)}
                 errorMessage={this.state.emailErrorMessage}

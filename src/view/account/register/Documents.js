@@ -19,7 +19,7 @@ export class Documents extends PersonalData {
             { state: 'cpfDocument', name: 'cpf' }
         ]
 
-        if(!~this.props.profile.code.toLowerCase().indexOf('estudante')){
+        if(!~this.isStudent()){
             switch(this.props.profile.name.toLowerCase()){
                 case 'arquiteto':
                     documents.push({state: 'cauDocument', name: 'cau'});
