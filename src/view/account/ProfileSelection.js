@@ -28,6 +28,14 @@ export default class ProfileSelection extends MainView {
         }
     }
 
+    handleBack(){
+        console.log(this.context.user);
+        if(this.context.user.magento != null)
+            this.logout();
+        else
+            super.handleBack();
+    }
+
     componentDidMount(){
         super.componentDidMount();
     }
@@ -67,7 +75,7 @@ export default class ProfileSelection extends MainView {
             <View style={{flex:1}}>
                 <Header 
                     title={I18n.t('account.profileSelection.title')}
-                    handleBack={this.handleBack}
+                    handleBack={this.handleBack.bind(this)}
                     leftIconColor={secondaryColor}
                     titleStyle={{
                         fontFamily: 'system-medium',

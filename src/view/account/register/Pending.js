@@ -50,7 +50,7 @@ export class Pending extends AccountBase{
                 }
             })
         } else {
-            this.logout();
+            Actions.reset('account');
         }
     }
 
@@ -74,7 +74,7 @@ export class Pending extends AccountBase{
             if(found) return;
         })
         this.context.user.isProfessional = found;
-        return found;
+        return found || this.context.userType == 'professional';
     }
 
     imageBackground = require('../../../../assets/images/account/login-bg-x2.png');

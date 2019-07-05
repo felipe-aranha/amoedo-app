@@ -32,10 +32,23 @@ export class Routes extends React.Component{
         super(props,context);
         this.toast = React.createRef();
         context.message = this.message.bind(this);
+        context.logout = this.logout.bind(this);
+        context.login = this.login.bind(this);
+        this.state = {
+            isLoggedIn : context.user.magento != null && Object.keys(context.user.magento).length > 0
+        }
     }
 
-    shouldComponentUpdate(){
-        return false;
+    logout(){
+        this.setState({
+            isLoggedIn: false
+        })
+    }
+
+    login(){
+        this.setState({
+            isLoggedIn: true
+        })
     }
 
     message(message, time = 2000, callback){
@@ -51,15 +64,19 @@ export class Routes extends React.Component{
 
     render(){
         const drawerWidth = Dimensions.get('window').width * 85 / 100;
+        const { magento } = this.context.user;
+        console.log(magento);
         return(
             <View style={StyleSheet.absoluteFill}>
                 <Router>
-                    <Modal key='main'>
+                    <Modal panHandlers={null} key='main'>
                         <Scene initial={this.context.user.token == null} hideNavBar key='accountType' component={AccountType} />
                         <Stack hideNavBar key='account'>
-                            <Scene hideNavBar key='login' component={Login} />
-                            <Scene hideNavBar key='profileSelection' component={ProfileSelection} />
-                            <Scene key='register' component={Register} />
+                            <MainContext.Consumer>
+                                <Scene initial={!this.state.isLoggedIn} hideNavBar key='login' component={Login} />
+                                <Scene initial={this.state.isLoggedIn} hideNavBar key='profileSelection' component={ProfileSelection} />
+                                <Scene key='register' component={Register} />
+                            </MainContext.Consumer>
                         </Stack>
                         <Stack initial={this.context.user.token != null} hideNavBar key='purgatory'>
                             <Scene hideNavBar key='pendingAccount' component={Pending} />

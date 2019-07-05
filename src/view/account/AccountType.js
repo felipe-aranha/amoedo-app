@@ -17,15 +17,16 @@ export default class AccountType extends AccountBase{
 
     constructor(props,context){
         super(props,context);
-
     }
 
     handleProfessionalButtonPress(){
+        this.context.userType = "professional";
         Actions.push('account');
     }
 
     handleCustomerButtonPress(){
-        this.context.message('Não implementado ainda');
+        this.context.userType = "customer";
+        Actions.push('account');
     }
 
     handleAssistanceButtonPress(){
@@ -51,7 +52,14 @@ export default class AccountType extends AccountBase{
                             containerStyle={accountStyle.accountTypeButtonContainer}
                             buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountButtonArchitectButton]}
                             titleStyle={accountStyle.accountTypeButtonTitle}
-                            onPress={this.handleProfessionalButtonPress}
+                            onPress={this.handleProfessionalButtonPress.bind(this)}
+                        />
+                        <Button 
+                            title={I18n.t('account.accountType.customers')}
+                            containerStyle={accountStyle.accountTypeButtonContainer}
+                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountCustomerButton]}
+                            titleStyle={accountStyle.accountTypeButtonTitle}
+                            onPress={this.handleCustomerButtonPress.bind(this)}
                         />
                         <Button 
                             title={I18n.t('account.accountType.technicalAssistance')}
@@ -60,14 +68,7 @@ export default class AccountType extends AccountBase{
                             titleStyle={accountStyle.accountTypeButtonTitle}
                             onPress={this.handleAssistanceButtonPress.bind(this)}
                         />
-                        <Button 
-                            title={I18n.t('entity.customer')}
-                            type={'outline'}
-                            containerStyle={accountStyle.accountTypeButtonContainer}
-                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountCustomerButton]}
-                            titleStyle={accountStyle.accountTypeButtonTitle}
-                            onPress={this.handleCustomerButtonPress.bind(this)}
-                        />
+                        
                     </View>
                 </View>
             </>

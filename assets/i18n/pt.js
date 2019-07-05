@@ -20,7 +20,8 @@ export default {
         accountType: {
             mainText: "A forma mais\nsimples de lidar\ncom seus ",
             highlight: "projetos",
-            professional: "Profissional da área",
+            professional: "Profissionais da área",
+            customers: "Clientes",
             technicalAssistance: 'Assistência Técnica'
         },
         login: {
@@ -50,6 +51,7 @@ export default {
         },
         errorMessage: {
             password: 'min de 6 caracteres',
+            name: 'nome e sobrenome',
             confirmPassword: 'senhas diferentes',
             emailRegistered: 'e-mail já cadastrado',
             invalidEmail: 'e-mail inválido',

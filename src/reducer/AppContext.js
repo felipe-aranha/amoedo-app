@@ -13,8 +13,11 @@ export const AppContext = {
         firebase: {},
         clients: []
     },
+    userType: null,
     message: () => {},
-    removeMessage: () => {}
+    removeMessage: () => {},
+    login: () => {},
+    logout: () => {}
 }
 
 export const MainContext = React.createContext(AppContext);

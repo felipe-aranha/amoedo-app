@@ -54,6 +54,7 @@ export default class Form extends React.PureComponent{
             dobValid: null,
             hideSubmit: false,
             avatar: null,
+            nameValid: null,
             cauDocument: '',
             adbDocument: '',
             creaDocument: '',
@@ -111,8 +112,13 @@ export default class Form extends React.PureComponent{
         })
     }
     handleNameChange(text){
+        const t = text.trim().split(' ');
+        let nameValid = true;
+        if(!t[1] || t[1].trim() == '')
+            nameValid = false
         this.setState({
-            name: text
+            name: text,
+            nameValid
         })
     }
     
@@ -413,6 +419,7 @@ export default class Form extends React.PureComponent{
                 autoCapitalize={'words'}
                 value={this.state.name}
                 onChangeText={this.handleNameChange.bind(this)}
+                errorMessage={this.state.nameValid === false ? I18n.t('account.errorMessage.name') : ''}
             />
         )
     }

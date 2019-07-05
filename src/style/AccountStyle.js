@@ -56,7 +56,7 @@ export default StyleSheet.create({
         color: 'rgb(77,77,77)'
     }, 
     accountCustomerButton: {
-        borderColor: '#fff'
+        backgroundColor: '#FF0001'
     },
     submitButton: {
         borderColor: 'rgb(71,71,71)'

@@ -91,7 +91,7 @@ export default class Login extends AccountBase{
                                     justifyContent: 'center',
                                     alignItems: 'flex-start'
                                 }}
-                                onPress={this.handleBack}
+                                onPress={this.handleBack.bind(this)}
                             >
                                 <Ionicons 
                                     name={'ios-arrow-round-back'}

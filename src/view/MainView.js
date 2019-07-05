@@ -23,6 +23,7 @@ export class MainView extends React.Component{
     async logout(){
         await AppStorage.setUser('','');
         this.context.user = AppContext.user;
+        this.context.logout();
         Actions.reset('account');
     }
 
@@ -40,7 +41,8 @@ export class MainView extends React.Component{
                 token: this.customerService.getToken(),
                 magento: result
             }
-            this.context.message('',1)
+            this.context.message(undefined,1)
+            this.context.login();
             Actions.reset('purgatory');
         }).catch(e => {
             console.log("catch2",e);
