@@ -47,17 +47,18 @@ export class PersonalData extends Form {
     }
 
     isFormValid(){
-        isNameValid = this.notEmpty('name');
-        isPhonevalid = this.notEmpty('phone') || this.notEmpty('cell');
+        const isNameValid = this.notEmpty('name');
+        const isPhonevalid = this.notEmpty('phone') || this.notEmpty('cell');
+        const isCauValid = this.notEmpty('cau') || this.isStudent();
+        const isAddressValid = this.notEmpty('zipCode',8) &&
+        this.notEmpty('address') && this.notEmpty('city') &&
+        this.notEmpty('state');
         if(this.context.user.magento.id){
-            return 
+            return isCauValid && isPhonevalid;
         }
         return isNameValid && this.state.emailValid && 
-                    this.state.cpfValid && this.notEmpty('rg') &&
-                    this.notEmpty('cau') && this.state.dobValid && 
-                    isPhonevalid && this.notEmpty('zipCode',8) &&
-                    this.notEmpty('address') && this.notEmpty('city') &&
-                    this.notEmpty('state') && this.notEmpty('password',6) &&
+                    this.state.cpfValid && isCauValid &&
+                    isPhonevalid && this.notEmpty('password',6) &&
                     this.notEmpty('confirmPassword',6) && this.state.password == this.state.confirmPassword
     }
 
