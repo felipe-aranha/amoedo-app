@@ -64,8 +64,6 @@ export class Routes extends React.Component{
 
     render(){
         const drawerWidth = Dimensions.get('window').width * 85 / 100;
-        const { magento } = this.context.user;
-        console.log(magento);
         return(
             <View style={StyleSheet.absoluteFill}>
                 <Router>

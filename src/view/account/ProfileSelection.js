@@ -29,7 +29,6 @@ export default class ProfileSelection extends MainView {
     }
 
     handleBack(){
-        console.log(this.context.user);
         if(this.context.user.magento != null)
             this.logout();
         else

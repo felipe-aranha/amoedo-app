@@ -65,7 +65,7 @@ export class MainView extends React.Component{
         })
     }
 
-    openeModalLoading(){
+    openModalLoading(){
         this.setState({
             modalLoading: true
         })

@@ -55,6 +55,7 @@ export default class Register extends MainView{
             }
         ],
         this.state = initialState;
+        console.log(context.user.magento);
         this.customerService = new CustomerService();
     }
 
@@ -154,7 +155,7 @@ export default class Register extends MainView{
     handleDocumentsContinue(){
         const { personalData, professionalData, documents, loading } = this.state;
         if(loading) return;
-        this.openeModalLoading();
+        this.openModalLoading();
         const { firstname, lastname } = Utils.parseName(personalData.name);
         let address = new Address(personalData.address, personalData.number, personalData.complement, personalData.neighborhood);
         address = {
