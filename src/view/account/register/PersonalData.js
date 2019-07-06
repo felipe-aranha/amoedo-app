@@ -49,7 +49,7 @@ export class PersonalData extends Form {
     isFormValid(){
         const isNameValid = this.notEmpty('name');
         const isPhonevalid = this.notEmpty('phone') || this.notEmpty('cell');
-        const isCauValid = this.notEmpty('cau') || this.isStudent();
+        const isCauValid = this.notEmpty('cau') || this.isStudent() || this.getDocumentType() == 'cnpj';
         const isAddressValid = this.notEmpty('zipCode',8) &&
         this.notEmpty('address') && this.notEmpty('city') &&
         this.notEmpty('state');

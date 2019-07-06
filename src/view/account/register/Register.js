@@ -149,10 +149,16 @@ export default class Register extends MainView{
     isRegistered = false;
     avatar = '';
 
-    fillAddress(){
+    isLoggedIn(){
+        return this.context.user.magento.id ? true : false;
+    }
+
+    fillAddress(fn, ln){
         const { personalData, professionalData } = this.state;
         if(personalData.zipCode == '') return undefined;
         let address = new Address(personalData.address, personalData.number, personalData.complement, personalData.neighborhood);
+        const firstname = this.isLoggedIn() ? this.context.user.magento.firstname : fn ;
+        const lastname = this.isLoggedIn() ? this.context.user.magento.lastname : ln
         return {
             ...address,
             city: personalData.city,
@@ -174,7 +180,7 @@ export default class Register extends MainView{
             return;
         }
         const { firstname, lastname } = Utils.parseName(personalData.name);
-        let address = this.fillAddress();
+        let address = this.fillAddress(firstname, lastname);
         let customer = new Customer(address, personalData.cell || personalData.phone);
         customer = {
             ...customer,
@@ -192,21 +198,9 @@ export default class Register extends MainView{
             return;
         }
         this.customerService.register(customerRegister.customer,customerRegister.password).then(response => {
-            if(response.message){
-                Alert.alert(I18n.t('common.error'),response.message);
-                this.closeModalLoading();
-                this.setState({
-                    loading: false
-                })
-            } else {
-                this.firebaseRegister(response.id);
-            }
+            this.processApiReturn(response);
         }).catch(e => {
-            this.closeModalLoading();
-            Alert.alert(I18n.t('common.error'),I18n.t('account.errorMessage.registerError'));
-            this.setState({
-                loading: false
-            })
+            this.processApiCatch(e);
         })
     }
 
@@ -216,28 +210,55 @@ export default class Register extends MainView{
             this.firebaseRegister(magento.id);
         else {
             const { personalData, professionalData, documents, loading } = this.state;
-            const customer = {
-                dob: Utils.parseDate(personalData.dob),
+            this.customer = {
+                ...magento,
                 group_id: this.profile.id,
-                id: magento.id
             }
+            const dob = Utils.parseDate(personalData.dob);
+            if(dob){
+                this.customer.dob = dob;
+            }            
             if(magento.addresses.length == 0){
                 const address = this.fillAddress();
                 if(address)
-                    customer.addresses = [address];
+                    this.customer.addresses = [address];
             }
-            this.customerService.updateCustomer(customer).then(response => {
-                console.log(response);
+            this.customerService.updateCustomer(magento.id,this.customer).then(response => {
+                this.context.user.magento = this.customer;
+                this.processApiReturn(response);
+            }).catch(e => {
+                this.processApiCatch(e);
             })
         }
     }
 
+    processApiReturn(response){
+        console.log(response);
+        if(response.message){
+            Alert.alert(I18n.t('common.error'),response.message);
+            this.closeModalLoading();
+            this.setState({
+                loading: false
+            })
+        } else {
+            this.firebaseRegister(response.id);
+        }
+    }
 
+    processApiCatch(e){
+        console.log(e);
+        this.closeModalLoading();
+        Alert.alert(I18n.t('common.error'),I18n.t('account.errorMessage.registerError'));
+        this.setState({
+            loading: false
+        })
+    }
 
     firebaseRegister(customerId=null){
         const { personalData, professionalData, documents } = this.state;
         this.avatar = personalData.avatar;
         this.docs = documents.documents.map(document => {
+            console.log(document);
             let d = new DocumentModel(document.name, documents[document.state]);
             return Object.assign({},d);
         });
@@ -247,11 +268,11 @@ export default class Register extends MainView{
                 ...user,
                 cau: personalData.cau,
                 cellphone: personalData.cell,
-                cnpj: professionalData.cnpj,
-                email: personalData.email,
+                cnpj: professionalData.cnpj || null,
+                email: this.isLoggedIn() ? this.context.user.magento.email : personalData.email,
                 id: customerId,
                 instagram: personalData.instagram,
-                monthlyProjects: professionalData.monthlyProjects,
+                monthlyProjects: professionalData.monthlyProjects || null,
                 rg: personalData.rg,
                 telephone: personalData.phone,
                 type: this.profile.id
@@ -260,8 +281,11 @@ export default class Register extends MainView{
         this.isRegistered = true;
         this.context.message('Fazendo uploads dos arquivos. Aguarde!',0);
         UserService.insertOrUpdateProfessionalAsync(this.user,this.docs,this.avatar).then(result => {
-            this.context.message('Entrando...',0);
-            this.login(this.customer.customer.email,this.customer.password);
+            this.context.message('Entrando...',2000);
+            if(!this.isLoggedIn())
+                this.login(this.customer.customer.email,this.customer.password);
+            else 
+                Actions.reset('purgatory');
         }).catch(e => {
             console.log("catch",e);
             this.context.message(I18n.t('account.errorMessage.registerError'));

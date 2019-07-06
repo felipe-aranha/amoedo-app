@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View, Platform } from 'react-native';
+import { TouchableOpacity, View, Alert } from 'react-native';
 import { CustomerService } from '../service';
 import { Input as InputElement } from 'react-native-elements';
 import * as Utils from '../utils';
@@ -10,6 +10,7 @@ import { Text, AppIcon, ImageBase64 } from '../components';
 import { TextInputMask } from 'react-native-masked-text';
 import { UserService } from '../service/firebase/UserService';
 import { MainContext } from '../reducer';
+import { Actions } from 'react-native-router-flux';
 
 export default class Form extends React.PureComponent{
 
@@ -20,6 +21,7 @@ export default class Form extends React.PureComponent{
         this.state = this.getInitialState();
         this.customerService = new CustomerService();
         this.dobRef = React.createRef();
+        this.emailField = React.createRef();
     }
 
     getInitialState(){
@@ -237,7 +239,31 @@ export default class Form extends React.PureComponent{
                 this.setState({
                     emailErrorMessage: I18n.t('account.errorMessage.emailRegistered'),
                     emailValid: false
-                }, () => { return false })
+                }, () => { 
+                    Alert.alert(
+                        I18n.t('account.errorMessage.emailRegistered'),
+                        I18n.t('account.alert.emailRegistered'),
+                        [
+                            {
+                                text: I18n.t('account.alert.button.login'),
+                                onPress: () => Actions.reset('account'),
+                                style: 'cancel',
+                            },
+                            {
+                                text: I18n.t('account.alert.button.changeEmail'),
+                                onPress: () => {
+                                    this.setState({
+                                        email: ''
+                                    });
+                                    if(this.emailField && this.emailField.current && this.emailField.current.focus)
+                                        this.emailField.current.focus()
+                                },
+                                style: 'destructive',
+                            }
+                        ]
+                    )
+                    return false;
+                })
             else
                 this.setState({
                     emailValid: true
@@ -391,6 +417,7 @@ export default class Form extends React.PureComponent{
                 errorMessage={this.state.emailErrorMessage}
                 autoCapitalize={'none'}
                 keyboardType={'email-address'}
+                ref={this.emailField}
             />
         )
     }

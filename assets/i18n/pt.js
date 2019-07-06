@@ -62,6 +62,13 @@ export default {
             login: 'Ocorreu um erro ao efetuar o login. Tente novamente!',
             auth: 'E-mail e/ou senha incorretos'
         },
+        alert: {
+            emailRegistered: 'O E-mail informado já está cadastrado na loja. Efetue o login ou altere o e-mail de cadastro.',
+            button: {
+                login: 'Login',
+                changeEmail: 'Alterar E-mail'
+            }
+        },
         document: {
             rg: {
                 title: 'Registro Geral - RG'

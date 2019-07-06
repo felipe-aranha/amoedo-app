@@ -41,7 +41,6 @@ export class MainView extends React.Component{
                 token: this.customerService.getToken(),
                 magento: result
             }
-            this.context.message(undefined,1)
             this.context.login();
             Actions.reset('purgatory');
         }).catch(e => {

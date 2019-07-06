@@ -68,7 +68,6 @@ export default class AccountType extends AccountBase{
                             titleStyle={accountStyle.accountTypeButtonTitle}
                             onPress={this.handleAssistanceButtonPress.bind(this)}
                         />
-                        
                     </View>
                 </View>
             </>
