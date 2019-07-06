@@ -63,6 +63,7 @@ export default class Form extends React.PureComponent{
             cauDocument: '',
             abdDocument: '',
             creaDocument: '',
+            proofDocument: '',
             cnpjDocument: '',
         }
     }
@@ -341,7 +342,7 @@ export default class Form extends React.PureComponent{
         return(
             <Input 
                 label={I18n.t(`form.${doc}`)}
-                value={this.state[doc]}
+                value={this.state.cau}
                 onChangeText={text => { this.handleDocChange(text,doc) }}
             />
         )
@@ -364,6 +365,7 @@ export default class Form extends React.PureComponent{
                 label={I18n.t('form.projects')}
                 value={this.state.monthlyProjects}
                 onChangeText={this.handleMonthlyProjectsChange.bind(this)}
+                keyboardType={this.keyboardNumber()}
             />
         )
     }

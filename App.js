@@ -1,4 +1,5 @@
 import React from 'react';
+import { YellowBox } from 'react-native';
 
 import { Routes } from './src/routes';
 import { AppLoading } from 'expo';
@@ -14,6 +15,7 @@ export default class App extends React.Component {
 		super(props,state);
 		this.state = AppContext;
 		console.disableYellowBox = true;
+		YellowBox.ignoreWarnings(['Setting a timer']);
 		this.customerService = new CustomerService();
 	}
 

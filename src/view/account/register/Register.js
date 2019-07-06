@@ -42,20 +42,16 @@ export default class Register extends MainView{
             tax_class_id: 3,
             tax_class_name: "Retail Customer",
           };
-        this.sections = [
-            {
-                name: 'personal-data',
-
-            },
-            {
-                name: 'professional-data',
-            },
-            {
-                name: 'upload-files'
-            }
-        ],
+        this.sections = [{name:'personal-data'}];
+        if(!this.isStudent())
+            this.sections.push({name:'professional-data'})
+        this.sections.push({name:'upload-files'})
         this.state = initialState;
         this.customerService = new CustomerService();
+    }
+
+    isStudent(){
+        return ~this.profile.code.toLowerCase().indexOf('estudante')
     }
 
     async changeSection(section){
@@ -91,7 +87,9 @@ export default class Register extends MainView{
 
 
     handlePersonalDataContinue(){
-        this.goToProfessionalData();
+        this.isStudent() ?
+            this.goToDocuments() :
+            this.goToProfessionalData();
     }
 
     _handlePersonalDataContinue(state){
@@ -303,7 +301,7 @@ export default class Register extends MainView{
     handleBack(){
         switch(this.state.activeSection){
             case 'upload-files':
-                this.goToProfessionalData();
+                !this.isStudent() ? this.goToProfessionalData() : this.goToPersonalData();
                 break;
             case 'professional-data':
                 this.goToPersonalData();

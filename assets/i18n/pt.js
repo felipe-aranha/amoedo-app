@@ -81,6 +81,9 @@ export default {
             crea: {
                 title: 'CREA'
             },
+            proofOfAddress: {
+                title: 'comprovante de residência'
+            },
             tutorial: '1. Pegue o documento: {{document}}\n\n2. Enquadre todo o documento na câmera\n\n3. Tire uma foto\n\n4. Envie a foto'
         }
     },
@@ -108,7 +111,8 @@ export default {
         city: 'cidade',
         state: 'uf',
         abd: 'abd',
-        crea: 'crea'
+        crea: 'crea',
+        proofOfAddress: 'comprovante de residência'
     },
     section: {
         client: 'CLIENTE',
