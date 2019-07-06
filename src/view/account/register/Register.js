@@ -265,7 +265,7 @@ export default class Register extends MainView{
         if(this.user == null){
             this.user = new User();
             this.user = {
-                ...user,
+                ...this.user,
                 cau: personalData.cau,
                 cellphone: personalData.cell,
                 cnpj: professionalData.cnpj || null,
