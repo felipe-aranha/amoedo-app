@@ -153,6 +153,7 @@ export default class Register extends MainView{
 
     fillAddress(){
         const { personalData, professionalData } = this.state;
+        if(personalData.zipCode == '') return undefined;
         let address = new Address(personalData.address, personalData.number, personalData.complement, personalData.neighborhood);
         return {
             ...address,
@@ -224,7 +225,8 @@ export default class Register extends MainView{
             }
             if(magento.addresses.length == 0){
                 const address = this.fillAddress();
-                customer.addresses = [address];
+                if(address)
+                    customer.addresses = [address];
             }
             this.customerService.updateCustomer(customer).then(response => {
                 console.log(response);

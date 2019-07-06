@@ -8,9 +8,10 @@ export class Customer {
         this.taxvat = "";
         this.group_id = 0;
         this.created_in = "app";
-        this.addresses = [
-            Object.assign(new Address(), address)
-        ];
+        if(address && Object.keys(address).length > 0)
+            this.addresses = [
+                Object.assign(new Address(), address)
+            ];
         this.dob = "";
         this.custom_attributes = [
             {
