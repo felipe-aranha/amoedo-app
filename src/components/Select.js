@@ -104,7 +104,7 @@ export default class Select extends React.PureComponent{
 
     render(){
         const { selected } = this.state;
-        const { options, loading } = this.props;
+        const { options, loading, arrowColor } = this.props;
         if(loading)
             return <ActivityIndicator color={secondaryColor} />
         return(
@@ -123,7 +123,7 @@ export default class Select extends React.PureComponent{
                     color: secondaryColor
                 }}>{selected == null ? I18n.t('common.select') : selected}</Text>
                 <Ionicons name='ios-arrow-down' style={{
-                    color: 'rgb(74,74,74)',
+                    color: arrowColor || 'rgb(74,74,74)',
                     fontSize: 20,
                     top: 4,
                     position: 'relative'

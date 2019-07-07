@@ -1,4 +1,5 @@
 import variables from '../../assets/variables';
+import I18n from '../i18n';
 export default variables;
 
 export { UploadMedia } from './UploadMedia';
@@ -14,6 +15,23 @@ export const parseName = (name) => {
 	fullName.shift();
 	lastname = fullName.length > 0 ? fullName.join(" ") : "";
 	return { firstname, lastname };
+}
+
+export const getProjectTypes = () => {
+	const { project } = variables.app;
+	return project.projectType.map(p => {
+		const rooms = project.rooms[p.rooms].map( room => {
+			return {
+				name: room,
+				label: I18n.t(`project.room.${room}`)
+			}
+		})
+		return {
+			name: p.name,
+			rooms: project.rooms[p.rooms],
+			label: I18n.t(`project.type.${p.name}`)
+		}
+	})
 }
 
 export const parseDate = (d) => {

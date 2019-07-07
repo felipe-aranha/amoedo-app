@@ -171,5 +171,28 @@ export default {
             doneProjects: '{{qty}} projetos realizados',
             doneProject: '1 projeto realizado'
         }
+    },
+    project: {
+        projectType: 'TIPO DE PROJETO',
+        projectName: 'NOME DO PROJETO',
+        summary: 'RESUMO',
+        client: 'CLIENTE',
+        newClient: 'NOVO CLIENTE',
+        startDate: 'DATA INÍCIO',
+        endDate: 'PREVISÃO DE TÉRMINO',
+        rooms: 'AMBIENTES',
+        room: {
+            bathroom: 'Banheiro',
+            kitchen: 'Cozinha',
+            bedroom: 'Quarto',
+            livinRoom: 'Sala',
+            balcony: 'Varanda'
+        },
+        type: {
+            all: 'Todos',
+            commercial: 'Comercial',
+            residential: 'Residencial',
+            others: 'Outros'
+        }
     }
 }

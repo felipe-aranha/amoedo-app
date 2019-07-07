@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { default as style, deviceWidth, relativeWidth } from './variables';
+import { default as style, deviceWidth, relativeWidth, secondaryColor } from './variables';
 
 export default StyleSheet.create({
     mainView: {
@@ -85,5 +85,38 @@ export default StyleSheet.create({
         fontFamily: 'system-medium',
         fontSize: 12,
         color: 'rgb(132,132,132)'
+    },
+    inputLabel: {
+        fontFamily: 'system-medium',
+        color: 'rgb(77,77,77)',
+        fontSize: 12,
+        fontWeight: 'normal'
+    },
+    input: { 
+        fontFamily: 'system-medium',
+        color: secondaryColor,
+        fontSize: 14
+    },
+    inputError: {
+        position: 'absolute',
+        bottom: -20,
+        color: 'rgb(177,3,3)',
+        fontFamily: 'system-medium',
+        fontSize: 10
+    },
+    inputContainter: {
+        borderBottomColor: 'rgba(77,77,77,0.3)'
+    },
+    textArea: {
+        backgroundColor: '#fff',
+        marginVertical: 10,
+        height: 80,
+        fontFamily: 'system-medium',
+        color: secondaryColor,
+        fontSize: 14
+    },
+    textAreaContainer: {
+        flex:1, 
+        marginHorizontal: 10
     }
 })

@@ -49,7 +49,7 @@ export class Documents extends PersonalData {
 
     submitText = I18n.t('account.register.register');
     submitStyle = {
-        backgroundColor: 'rgb(243,164,51)'
+        backgroundColor: 'rgb(103,4,28)'
     }
 
     isFormValid(){

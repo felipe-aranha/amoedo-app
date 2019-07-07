@@ -19,6 +19,25 @@ export default {
         messagingSenderId: "259660110621",
         appId: "1:259660110621:web:2fb9034f44d7cbc3"
     },
+    app: {
+        project:{
+            projectType: [
+                {name: 'all', rooms: 'default'},
+                {name: 'commercial', rooms: 'default'},
+                {name: 'residential', rooms: 'default'},
+                {name: 'others', rooms: 'default'}
+            ],
+            rooms: {
+                default: [
+                    'bathroom',
+                    'kitchen',
+                    'bedroom',
+                    'livinRoom',
+                    'balcony'
+                ]
+            }
+        } 
+    },
     style: {
         primaryColor: "rgb(241,206,0)",
         secondaryColor: "rgb(88,12,33)",

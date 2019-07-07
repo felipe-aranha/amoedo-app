@@ -84,8 +84,8 @@ export class Routes extends React.Component{
                                 <Scene hideNavBar key='professionalMain' component={Professional} />
                                 <Scene hideNavBar key='clients' component={Clients} /> 
                                 <Scene hideNavBar key='addClient' component={AddClient} />
-                                <Scene initial hideNavBar key='projects' component={Projects} />
-                                <Scene hideNavBar key='addProject' component={AddProject} />
+                                <Scene hideNavBar key='projects' component={Projects} />
+                                <Scene initial hideNavBar key='addProject' component={AddProject} />
                             </Drawer>   
                         </Stack>
                     </Modal>

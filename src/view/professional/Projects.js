@@ -13,6 +13,7 @@ export default class Projects extends Professional{
     }
 
     title = I18n.t('section.projects');
+    icon = require('../../../assets/images/icons/project-add-x2.png');
     showFloatingButton = true;
     floatingButtonTitle = I18n.t('floatButton.newProject');
 
@@ -23,7 +24,7 @@ export default class Projects extends Professional{
     }
 
     renderEmptyList(){
-        image = null;
+        image = require('../../../assets/images/icons/x-x2.png');
         title = I18n.t('empty.projects.title');
         subtitle = I18n.t('empty.projects.subtitle');
         return super.renderEmptyList(image,title,subtitle);
