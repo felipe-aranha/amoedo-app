@@ -22,18 +22,32 @@ export default class AddProject extends MainView{
     constructor(props,context){
         super(props,context);
         this.projects = getProjectTypes();
+        console.log(this.props.project);
+        const project = this.props.project ||  {};
+        const clientSelected = context.user.clients.find(client => client.email == project.customer);
+        if(clientSelected){
+            clientSelected.label = clientSelected.name
+        }
+        const projectType = project.data ? this.projects.find(p => p.name == project.data.type) : null;
+        const data = project.data || {};
         this.state = {
             loading: false,
-            projectType: null,
+            projectType,
             room: null,
-            clientSelected: null,
+            clientSelected,
             clients: context.user.clients,
             roomModal: false,
-            projectName: '',
-            summary: '',
-            startDate: '',
-            endDate: ''
+            projectName: data.name || '',
+            summary: data.summary || '',
+            startDate: data.startDate || '',
+            endDate: data.endDate || '',
+            id: project.id || null
         }
+    }
+
+    getInitialState(){
+        const project = this.props.project ||  {};
+        
     }
 
     handleTypeSelect(projectType){
@@ -102,7 +116,7 @@ export default class AddProject extends MainView{
                         startDate: startDate,
                         endDate: endDate
                     }
-                    UserService.createProject(myId,customerEmail,project).then(() => {
+                    UserService.createOrUpdateProject(myId,customerEmail,project,this.state.id).then(() => {
                         this.context.message('Projeto cadastrado com sucesso!');
                         this.setState({
                             loading: 'false'
@@ -160,6 +174,7 @@ export default class AddProject extends MainView{
                             options={this.getClients()}
                             onOptionSelected={this.handleClientSelect.bind(this)}
                             arrowColor={'rgb(226,0,6)'}
+                            initial={this.state.clientSelected}
                             fullWidth
                         />
                     </View>
@@ -247,6 +262,7 @@ export default class AddProject extends MainView{
                         options={this.projects}
                         onOptionSelected={this.handleTypeSelect.bind(this)}
                         arrowColor={'rgb(226,0,6)'}
+                        initial={this.state.projectType}
                     />
                 </View>
                 {this.state.projectType != null &&

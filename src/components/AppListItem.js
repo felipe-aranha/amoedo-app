@@ -16,7 +16,10 @@ export class AppListItem extends React.PureComponent{
                 numberOfLines: 1
             }}
             chevron={{
-                color: chevronColor
+                color: chevronColor,
+                type: 'entypo',
+                name: 'chevron-right',
+                size: 20
             }}
             containerStyle={{
                 marginTop: 5,

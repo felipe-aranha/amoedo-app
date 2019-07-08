@@ -17,7 +17,7 @@ export default class Professional extends MainView{
 
     title='';
     barStyle = 'light-content';
-    barColor = secondaryColor;
+    barColor = 'rgb(103,4,28)';
     titleStyle = {};
     showFloatingButton = false;
     floatingButtonTitle = '';
@@ -107,12 +107,13 @@ export default class Professional extends MainView{
             <>
                 {this.renderSearch()}
                
-                    {this.state.items.length > 0 ? 
+                    {this.state.items.length > 0 || this.state.loading ? 
                      <View style={{flex:1}}>
                         <FlatList 
                             data={this.state.items}
                             renderItem={this.renderItem.bind(this)}
                             keyStractor={this.keyStractor}
+                            loading={this.state.loading}
                         />
                     </View> :
                     this.renderEmptyList()

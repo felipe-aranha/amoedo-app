@@ -81,12 +81,15 @@ export class UserService{
         })
     }
 
-    static createProject(professionalId,customerEmail,project){
-        return UserService.getProjectDB().add({
+    static createOrUpdateProject(professionalId,customerEmail,project,id=null){
+        const data = {
             professional: professionalId,
             customer: customerEmail,
             data: project
-        })
+        }
+        if(id != null)
+            return UserService.getProjectDB().doc(id).set(data)
+        return UserService.getProjectDB().add(data)
     }
 
     static async getMyClients(clients){
@@ -139,6 +142,11 @@ export class UserService{
         } else {
             return false;
         }
+    }
+
+    static getProjects(professional){
+        const db = UserService.getProjectDB();
+        return db.where('professional','==',professional);
     }
 
     static getProfessionalDoc(docID){

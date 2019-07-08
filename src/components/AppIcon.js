@@ -63,7 +63,7 @@ export default class AppIcon extends React.PureComponent{
                 return large ?
                 require('../../assets/images/icons/check-x2.png'):
                 require('../../assets/images/icons/check-x2.png');
-            case 'check': 
+            case 'check-warning': 
                 return large ?
                 require('../../assets/images/icons/check-warning-x2.png'):
                 require('../../assets/images/icons/check-warning-x2.png');

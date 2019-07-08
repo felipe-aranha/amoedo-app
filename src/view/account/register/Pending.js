@@ -73,7 +73,7 @@ export class Pending extends AccountBase{
             });
             if(found) return;
         })
-        this.context.user.isProfessional = found;
+        this.context.user.isProfessional = found;        
         return found || this.context.userType == 'professional';
     }
 

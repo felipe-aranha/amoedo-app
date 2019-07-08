@@ -170,6 +170,12 @@ export default {
             currentProject: '1 projeto em andamento',
             doneProjects: '{{qty}} projetos realizados',
             doneProject: '1 projeto realizado'
+        },
+        project: {
+            startedAt: 'Iniciado em {{date}}',
+            inProgress: 'Em andamento',
+            send: 'Orçamento enviado',
+            delayed: 'Atrasado'
         }
     },
     project: {

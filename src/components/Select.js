@@ -9,8 +9,9 @@ export default class Select extends React.PureComponent{
 
     constructor(props,state){
         super(props,state);
+        console.log(props.initial);
         this.state = {
-            selected: null,
+            selected: props.initial ? props.initial.label : null,
             modalOpened: false
         }
     }
