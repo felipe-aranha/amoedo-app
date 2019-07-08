@@ -32,7 +32,7 @@ export default class Clients extends Professional{
     icon = require('../../../assets/images/icons/user-add-x2.png');
 
     onFloatButtonPress(){
-        Actions.push('_addClient');
+        Actions.reset('_addClient');
     }
 
     componentDidMount(){
