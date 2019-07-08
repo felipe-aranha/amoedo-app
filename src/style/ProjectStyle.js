@@ -5,11 +5,17 @@ export default StyleSheet.create({
     projectTypeArea: {
         backgroundColor: '#fff',
         alignSelf:'stretch',
-        paddingHorizontal: 30,
-        paddingTop: 20
+        paddingHorizontal: 20,
+        paddingTop: 15
     },
     formView: {
-        paddingHorizontal: 30,
+        paddingHorizontal: 20,
         paddingVertical:  20
+    },
+    projectSaveButton: {
+        backgroundColor: 'rgb(255,0,0)'
+    },
+    submitButtonTitle: {
+        color: '#fff'
     }
 })

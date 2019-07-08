@@ -28,7 +28,7 @@ export const getProjectTypes = () => {
 		})
 		return {
 			name: p.name,
-			rooms: project.rooms[p.rooms],
+			rooms: rooms,
 			label: I18n.t(`project.type.${p.name}`)
 		}
 	})

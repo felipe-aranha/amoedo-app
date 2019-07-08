@@ -44,7 +44,6 @@ export class MainView extends React.Component{
             this.context.login();
             Actions.reset('purgatory');
         }).catch(e => {
-            console.log("catch2",e);
             this.context.message(I18n.t('account.errorMessage.login'));
             this.setState({
                 loading: false

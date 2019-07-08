@@ -4,12 +4,11 @@ import { Text } from 'react-native-elements';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export class GradientButton extends React.PureComponent{
-    render(){
-        const { vertical, colors, title, titleStyle, onPress, loading, width, height, icon } = this.props;
-        currHeight = height || 50;
+
+    renderCenter(){
+        const { vertical, colors, title, titleStyle, loading, width, icon } = this.props;
         return(
-            <TouchableOpacity onPress={onPress}>
-                    <LinearGradient
+            <LinearGradient
                         start={vertical? undefined : { x: 0, y: 1 }}
                         end={vertical? undefined : { x: 1, y: 1 }}
                         colors={colors}
@@ -35,7 +34,18 @@ export class GradientButton extends React.PureComponent{
                             </View>
                         }
                 </LinearGradient>
-            </TouchableOpacity>
         )
+    }
+
+    render(){
+        const { onPress, height } = this.props;
+        currHeight = height || 50;
+        if(onPress)
+            return(
+                <TouchableOpacity onPress={onPress}>
+                        {this.renderCenter()}
+                </TouchableOpacity>
+            )
+        else return this.renderCenter();
     }
 }

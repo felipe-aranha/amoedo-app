@@ -104,7 +104,7 @@ export default class Select extends React.PureComponent{
 
     render(){
         const { selected } = this.state;
-        const { options, loading, arrowColor } = this.props;
+        const { options, loading, arrowColor,fullWidth } = this.props;
         if(loading)
             return <ActivityIndicator color={secondaryColor} />
         return(
@@ -117,17 +117,22 @@ export default class Select extends React.PureComponent{
                 }}
                 onPress={this.toggleModal.bind(this)}
             >
-                <Text weight='semibold'style={{
-                    minWidth: 120,
-                    fontSize: 14,
-                    color: secondaryColor
-                }}>{selected == null ? I18n.t('common.select') : selected}</Text>
-                <Ionicons name='ios-arrow-down' style={{
-                    color: arrowColor || 'rgb(74,74,74)',
-                    fontSize: 20,
-                    top: 4,
-                    position: 'relative'
-                }} />
+                {this.props.children ? 
+                    this.props.children : (
+                    <>
+                        <Text weight='semibold'style={{
+                            minWidth: fullWidth ? '95%' : 120,
+                            fontSize: 14,
+                            color: secondaryColor
+                        }}>{selected == null ? I18n.t('common.select') : selected}</Text>
+                        <Ionicons name='ios-arrow-down' style={{
+                            color: arrowColor || 'rgb(74,74,74)',
+                            fontSize: 20,
+                            top: 4,
+                            position: 'relative'
+                        }} />
+                    </>
+                )}
             </TouchableOpacity>
             {this.renderModal()}
             </>

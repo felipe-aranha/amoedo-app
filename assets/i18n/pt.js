@@ -181,6 +181,7 @@ export default {
         startDate: 'DATA INÍCIO',
         endDate: 'PREVISÃO DE TÉRMINO',
         rooms: 'AMBIENTES',
+        save: 'SALVAR PROJETO',
         room: {
             bathroom: 'Banheiro',
             kitchen: 'Cozinha',

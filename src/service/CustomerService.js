@@ -18,7 +18,6 @@ export class CustomerService extends HttpClient {
     }
 
     updateCustomer(id,customer){
-        console.log(customer);
         const data = {
             customer
         }

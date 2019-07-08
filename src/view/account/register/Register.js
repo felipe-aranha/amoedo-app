@@ -233,7 +233,6 @@ export default class Register extends MainView{
     }
 
     processApiReturn(response){
-        console.log(response);
         if(response.message){
             Alert.alert(I18n.t('common.error'),response.message);
             this.closeModalLoading();
@@ -246,7 +245,6 @@ export default class Register extends MainView{
     }
 
     processApiCatch(e){
-        console.log(e);
         this.closeModalLoading();
         Alert.alert(I18n.t('common.error'),I18n.t('account.errorMessage.registerError'));
         this.setState({
@@ -258,7 +256,6 @@ export default class Register extends MainView{
         const { personalData, professionalData, documents } = this.state;
         this.avatar = personalData.avatar;
         this.docs = documents.documents.map(document => {
-            console.log(document);
             let d = new DocumentModel(document.name, documents[document.state]);
             return Object.assign({},d);
         });
@@ -287,7 +284,6 @@ export default class Register extends MainView{
             else 
                 Actions.reset('purgatory');
         }).catch(e => {
-            console.log("catch",e);
             this.context.message(I18n.t('account.errorMessage.registerError'));
             this.closeModalLoading();
             this.setState({

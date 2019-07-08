@@ -20,7 +20,8 @@ export default class Projects extends Professional{
     componentDidMount(){}
 
     onFloatButtonPress(){
-        Actions.push('_addProject');
+        if(Actions.currentScene == '_projects')
+            Actions['_addProject']();
     }
 
     renderEmptyList(){

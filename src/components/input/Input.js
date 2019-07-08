@@ -57,3 +57,21 @@ export class TextArea extends React.PureComponent{
         )
     }
 }
+
+export class DatePicker extends React.PureComponent{
+    render(){
+        const props = this.props;
+        return(
+            <View style={accountStyle.maskedInputArea}>
+                <Text style={mainStyle.inputLabel}>{props.label}</Text>
+                <TextInputMask 
+                    style={accountStyle.maskedInputText}
+                    {...props}
+                    ref={props.inputRef}
+                />
+                <Text style={[accountStyle.inputError,accountStyle.maskedInputError]}>{props.errorMessage}</Text>
+
+            </View>
+        )
+    }
+}

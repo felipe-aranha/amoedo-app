@@ -9,11 +9,9 @@ export class UserService{
     static async insertOrUpdateProfessionalAsync(user,documents=[],avatar=''){
         storage = FirebaseDB.getStorage().ref();
         docMap = await UserService.uploadDocuments(documents);
-        console.log(avatar);
         avatarUrl = false;
         if(avatar!= '' && avatar != null)
             avatarUrl = await UserService.uploadImageAsync(avatar);
-        console.log(avatarUrl);
         user = Object.assign({},user);
             const db = UserService.getProfessionalDB();
         await db.doc(user.id.toString()).set({
@@ -27,7 +25,6 @@ export class UserService{
 
     static async uploadDocuments(documents){
         docs = [];
-        console.log(documents);
         await new Promise((resolve,reject) => {
             documents.forEach(async (document,i) => {
                 if(document.uri)
@@ -81,6 +78,14 @@ export class UserService{
         }).catch(e => {
             console.log(e);
             return false;
+        })
+    }
+
+    static createProject(professionalId,customerEmail,project){
+        return UserService.getProjectDB().add({
+            professional: professionalId,
+            customer: customerEmail,
+            data: project
         })
     }
 
@@ -146,6 +151,10 @@ export class UserService{
 
     static getCustomerDB(){
         return FirebaseDB.getCollection(UserService.CUSTOMER)
+    }
+
+    static getProjectDB(){
+        return FirebaseDB.getCollection('projects')
     }
 
 }
