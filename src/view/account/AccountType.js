@@ -47,19 +47,19 @@ export default class AccountType extends AccountBase{
                         </Text>
                     </View>
                     <View style={[accountStyle.innerContentView,accountStyle.accountTypeButtonsArea]}>
-                        <Button
-                            title={I18n.t('account.accountType.professional')}
-                            containerStyle={accountStyle.accountTypeButtonContainer}
-                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountButtonArchitectButton]}
-                            titleStyle={accountStyle.accountTypeButtonTitle}
-                            onPress={this.handleProfessionalButtonPress.bind(this)}
-                        />
                         <Button 
                             title={I18n.t('account.accountType.customers')}
                             containerStyle={accountStyle.accountTypeButtonContainer}
                             buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountCustomerButton]}
                             titleStyle={accountStyle.accountTypeButtonTitle}
                             onPress={this.handleCustomerButtonPress.bind(this)}
+                        />
+                        <Button
+                            title={I18n.t('account.accountType.professional')}
+                            containerStyle={accountStyle.accountTypeButtonContainer}
+                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.accountButtonArchitectButton]}
+                            titleStyle={accountStyle.accountTypeButtonTitle}
+                            onPress={this.handleProfessionalButtonPress.bind(this)}
                         />
                         <Button 
                             title={I18n.t('account.accountType.technicalAssistance')}

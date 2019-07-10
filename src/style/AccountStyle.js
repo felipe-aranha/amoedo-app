@@ -267,10 +267,10 @@ export default StyleSheet.create({
         justifyContent: 'center',
     },
     pendingBg: {
-        backgroundColor: 'rgba(254,254,254,0.8)',
+        backgroundColor: 'transparent'
     },
     pendingTitleArea: {
-        backgroundColor: 'rgba(172,195,19,0.8)',
+        backgroundColor: 'rgba(241,207,48,0.7)',
         height: 150,
         alignItems: 'center',
         justifyContent: 'center',
@@ -286,7 +286,8 @@ export default StyleSheet.create({
         height: 225,
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: 30
+        paddingHorizontal: 30,
+        backgroundColor: 'rgba(254,254,254,0.8)',
     },
     pendingDescriptionText: {
         fontFamily: 'system-medium',

@@ -102,8 +102,8 @@ export class Pending extends AccountBase{
                             onPress={() => { this.logout() }}
                         />
                         <Text style={accountStyle.pendingTitleText}>{'Cadastro realizado\ncom sucesso'}</Text>
-                        </View> 
-                        <View style={accountStyle.pendingDescriptionArea}>
+                    </View> 
+                    <View style={accountStyle.pendingDescriptionArea}>
                         <Text style={accountStyle.pendingDescriptionText}>{'Seu perfil está sendo analisado,\navisaremos em breve.'}</Text>
                     </View>
                 </View>

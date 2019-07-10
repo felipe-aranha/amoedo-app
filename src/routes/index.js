@@ -7,7 +7,7 @@ import {
     Tabs,
     Stack
 } from 'react-native-router-flux';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, BackHandler } from 'react-native';
 import { 
     Wizard,
     AccountType,
@@ -23,6 +23,7 @@ import { MainContext } from '../reducer';
 import { ProfessionalDrawer, Clients } from '../view/professional';
 import { Projects } from '../view/professional';
 import { AddProject } from '../view/professional';
+import I18n from '../i18n';
 
 export class Routes extends React.Component{
 
@@ -37,6 +38,27 @@ export class Routes extends React.Component{
         this.state = {
             isLoggedIn : context.user.magento != null && Object.keys(context.user.magento).length > 0
         }
+    }
+
+    componentDidMount(){
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackPress.bind(this));
+    }
+
+    componentWillUnmount(){
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress.bind(this));
+    }
+
+    exitApp = false;
+
+    handleBackPress(){
+        if(this.exitApp)
+            BackHandler.exitApp();
+        else {
+            this.exitApp = true;
+            this.context.message(I18n.t('common.exitApp'),2000);
+            setTimeout(() => {this.exitApp = false},2000)
+        }
+        return true;
     }
 
     logout(){
@@ -90,7 +112,7 @@ export class Routes extends React.Component{
                         </Stack>
                     </Modal>
                 </Router>   
-                <Toast position={'center'} ref={this.toast} />
+                <Toast position={'bottom'} ref={this.toast} />
             </View>         
         );
     }

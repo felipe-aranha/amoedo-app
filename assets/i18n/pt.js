@@ -9,7 +9,8 @@ export default {
         continue: 'Continuar',
         takePhoto: 'Tirar foto',
         loadFromPhone: 'carregar do celular',
-        error: 'Erro!'
+        error: 'Erro!',
+        exitApp: 'Pressione novamente para sair'
     },
     profile: {
         student: 'Estudante',

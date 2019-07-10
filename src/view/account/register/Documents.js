@@ -30,7 +30,7 @@ export class Documents extends PersonalData {
                 case 'engenheiro':
                     documents.push({state: 'creaDocument', name: 'crea'});
                     break;
-                case 'paisagista':
+                default:
                     documents.push({state: 'cnpjDocument', name: 'cnpj'});
                     break;
             }

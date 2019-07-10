@@ -37,11 +37,8 @@ export class PersonalData extends Form {
                 case 'engenheiro':
                     return 'crea';
                     break;
-                case 'paisagista':
+                default:
                     return 'cnpj';
-                    break;
-                default: 
-                    return null;
                     break;
         }
     }
@@ -72,7 +69,7 @@ export class PersonalData extends Form {
         const { magento } = this.context && this.context.user ? this.context.user : {};
         const loggedIn = magento.id ? true : false;
         const address = magento.addresses && magento.addresses.length > 0;
-        const document = this.getDocumentType();
+        const document = this.isStudent() ? null : this.getDocumentType();
         return(
             <>
             <View style={[accountStyle.formRow,{marginBottom: 20}]}>
