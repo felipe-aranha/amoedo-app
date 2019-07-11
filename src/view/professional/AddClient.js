@@ -71,6 +71,13 @@ export default class AddClient extends Clients{
             response = await UserService.insertAndAttachCustomer(customer,myDoc);
             this.context.message(I18n.t(`addClient.${response != false ? 'success' : 'fail'}`))
             if(response != false){
+                if(this.props.popTo){
+                    this.getProfessionalDoc().get().then(async doc => {
+                        await this.addClientToContext(customer.email);
+                        Actions.reset(this.props.popTo);
+                    })
+                    return;
+                }
                 Actions.reset('_clients');
             }
             else 

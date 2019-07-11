@@ -17,5 +17,27 @@ export default StyleSheet.create({
     },
     submitButtonTitle: {
         color: '#fff'
+    },
+    addClientArea: {
+        flex:1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        paddingRight: 20
+    },
+    addClientClickArea: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    addClientText: {
+        color: 'rgb(191,8,17)',
+        fontFamily: 'system-semibold',
+        fontSize: 12
+    },
+    clientLabelArea: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
     }
 })

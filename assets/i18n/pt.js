@@ -202,5 +202,8 @@ export default {
             residential: 'Residencial',
             others: 'Outros'
         }
+    },
+    newProject: {
+        newClient: 'NOVO CLIENTE'
     }
 }

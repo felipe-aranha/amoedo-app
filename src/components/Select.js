@@ -1,9 +1,9 @@
 import React from 'react';
-import { TouchableWithoutFeedback, TouchableOpacity, View, Modal, ActivityIndicator } from 'react-native';
+import { TouchableWithoutFeedback, TouchableOpacity, View, Modal, ActivityIndicator, ScrollView } from 'react-native';
 import { default as Text } from './Text';
 import I18n from '../i18n';
 import { Ionicons } from '@expo/vector-icons';
-import { secondaryColor, deviceWidth } from '../style';
+import { secondaryColor, deviceWidth, deviceHeight } from '../style';
 
 export default class Select extends React.PureComponent{
 
@@ -37,8 +37,10 @@ export default class Select extends React.PureComponent{
         return(
             <View style={{
                 paddingHorizontal: 30,
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
+                maxHeight: deviceHeight/1.5
             }}>
+                <ScrollView showsVerticalScrollIndicator={false}>
                 {options.map((option,i) => {
                     return (
                         <TouchableOpacity
@@ -59,6 +61,7 @@ export default class Select extends React.PureComponent{
                         </TouchableOpacity>
                     )
                 })}
+                </ScrollView>
             </View>
         )
     }

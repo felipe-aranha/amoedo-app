@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, Modal } from 'react-native';
+import { View, ScrollView, Modal, TouchableOpacity } from 'react-native';
 import Projects from './Projects';
 import I18n from '../../i18n';
 import { Actions } from 'react-native-router-flux';
@@ -169,7 +169,15 @@ export default class AddProject extends MainView{
                 </View>
                 <View style={accountStyle.formRow}>
                     <View style={accountStyle.maskedInputArea}>
-                        <Text style={mainStyle.inputLabel}>{I18n.t('project.client')}</Text>
+                        <View style={projectStyle.clientLabelArea}>
+                            <Text style={mainStyle.inputLabel}>{I18n.t('project.client')}</Text>
+                            <View style={projectStyle.addClientArea}>
+                                <TouchableOpacity onPress={() => { Actions.push('_addClient', {popTo: Actions.currentScene}) }} style={projectStyle.addClientClickArea}>
+                                    <AntDesign size={16} name={'pluscircleo'} color={'rgb(191,8,17)'} />                                  
+                                    <Text style={projectStyle.addClientText}>{' '}{I18n.t('newProject.newClient')}</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                         <Select 
                             options={this.getClients()}
                             onOptionSelected={this.handleClientSelect.bind(this)}

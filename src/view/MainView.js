@@ -10,6 +10,8 @@ export class MainView extends React.Component{
 
     static contextType = MainContext;
 
+    subscription = null;
+
     barStyle = 'dark-content';
 
     handleBack(){
@@ -17,6 +19,11 @@ export class MainView extends React.Component{
     }
 
     componentDidMount(){}
+
+    componentWillUnmount(){
+        if(this.subscription != null)
+            this.subscription()
+    }
 
     renderCenter(){}
 

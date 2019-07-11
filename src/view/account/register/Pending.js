@@ -30,7 +30,7 @@ export class Pending extends AccountBase{
         const userExists = await UserService.userExists(docId,this.db);
         if(userExists){
             this.doc = this.db.doc(docId);
-            this.doc.onSnapshot( async doc => {
+            this.subscription = this.doc.onSnapshot( async doc => {
                 const { user, clients } = doc.data();
                 this.context.user.clients = await UserService.getMyClients(clients);
                 this.context.user.firebase = user;

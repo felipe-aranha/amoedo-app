@@ -44,7 +44,7 @@ export default class Projects extends Professional{
     componentDidMount(){
         const myId = this.context.user.magento.id;
         const myProjects = UserService.getProjects(myId);
-        myProjects.onSnapshot(doc => {
+        this.subscription = myProjects.onSnapshot(doc => {
             this.setState({
                 loading: false
             })
