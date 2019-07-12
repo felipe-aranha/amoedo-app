@@ -113,10 +113,10 @@ export default StyleSheet.create({
         height: 80,
         fontFamily: 'system-medium',
         color: secondaryColor,
-        fontSize: 14
+        fontSize: 14,
+        textAlignVertical: 'top'
     },
     textAreaContainer: {
         flex:1, 
-        marginHorizontal: 10
     }
 })

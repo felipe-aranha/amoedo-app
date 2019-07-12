@@ -39,5 +39,24 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center'
+    },
+    roomInputArea: {
+        flex:1,
+        marginHorizontal: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(163,163,163,0.8)',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
+    roomInputBorder: {
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(163,163,163,0.8)',
+        marginHorizontal: 10
+    },
+    projectFilesText: {
+        color: 'rgb(88,12,33)',
+        fontFamily: 'system-bold',
+        fontSize: 12
     }
 })

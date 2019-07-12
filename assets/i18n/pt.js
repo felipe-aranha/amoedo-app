@@ -206,5 +206,13 @@ export default {
     },
     newProject: {
         newClient: 'NOVO CLIENTE'
+    },
+    room: {
+        width: 'LARGURA',
+        height: 'ALTURA',
+        depth: 'PROFUNDIDADE',
+        description: 'DESCRIÇÃO',
+        projectFiles: 'IMAGENS E ARQUIVOS DO PROJETO',
+        addFile: 'ADICIONAR'
     }
 }

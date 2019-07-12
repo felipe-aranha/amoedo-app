@@ -12,6 +12,7 @@ import { Input, TextArea, DatePicker } from '../../components/input';
 import { AntDesign } from '@expo/vector-icons';
 import { Button } from 'react-native-elements';
 import { UserService } from '../../service/firebase/UserService';
+import Room from './Room';
 
 export default class AddProject extends MainView{
 
@@ -162,7 +163,7 @@ export default class AddProject extends MainView{
                         onChangeText={this.handleProjectNameChange.bind(this)}
                     />
                 </View>
-                <View style={accountStyle.formRow}>
+                <View style={[accountStyle.formRow,{marginHorizontal: 10}]}>
                     <TextArea 
                         label={I18n.t('project.summary')}
                         underlineColorAndroid={'transparent'}
@@ -175,7 +176,7 @@ export default class AddProject extends MainView{
                         <View style={projectStyle.clientLabelArea}>
                             <Text style={mainStyle.inputLabel}>{I18n.t('project.client')}</Text>
                             {!this.isEditing() &&
-                                <View style={projectStyle.addClientArea}>
+                                <View style={[projectStyle.addClientArea]}>
                                     <TouchableOpacity onPress={() => { Actions.push('_addClient', {popTo: Actions.currentScene}) }} style={projectStyle.addClientClickArea}>
                                         <AntDesign size={16} name={'pluscircleo'} color={'rgb(191,8,17)'} />                                  
                                         <Text style={projectStyle.addClientText}>{' '}{I18n.t('newProject.newClient')}</Text>
@@ -258,6 +259,13 @@ export default class AddProject extends MainView{
     }
 
     renderCenter(){
+        if(this.state.roomModal) 
+            return(
+                <Room 
+                    onBack={this.toggleRoomModal.bind(this)}
+                    room={this.state.room}
+                />
+            )
         return(
             <View style={{flex:1}}>
                 <Header 
@@ -268,7 +276,7 @@ export default class AddProject extends MainView{
                     handleBack={this.handleBack.bind(this)}
                     leftIconColor={'rgb(226,0,6)'}
                     titleStyle={accountStyle.registerHeaderText}
-                    backgroundColor={secondaryColor}
+                    backgroundColor={'rgb(103,4,28)'}
                 />
                 <View style={projectStyle.projectTypeArea}>
                     <Text weight={'bold'}>{I18n.t('project.projectType')}</Text>
@@ -282,7 +290,6 @@ export default class AddProject extends MainView{
                 {this.state.projectType != null &&
                     this.renderForm()
                 }
-                {this.renderRoomModal()}
                 <KeyboardSpacer />
             </View>
         )
