@@ -22,7 +22,6 @@ export default class AddProject extends MainView{
     constructor(props,context){
         super(props,context);
         this.projects = getProjectTypes();
-        console.log(this.props.project);
         const project = this.props.project ||  {};
         const clientSelected = context.user.clients.find(client => client.email == project.customer);
         if(clientSelected){
@@ -43,6 +42,10 @@ export default class AddProject extends MainView{
             endDate: data.endDate || '',
             id: project.id || null
         }
+    }
+
+    isEditing(){
+        return this.state.id != null;
     }
 
     getInitialState(){
@@ -171,12 +174,14 @@ export default class AddProject extends MainView{
                     <View style={accountStyle.maskedInputArea}>
                         <View style={projectStyle.clientLabelArea}>
                             <Text style={mainStyle.inputLabel}>{I18n.t('project.client')}</Text>
-                            <View style={projectStyle.addClientArea}>
-                                <TouchableOpacity onPress={() => { Actions.push('_addClient', {popTo: Actions.currentScene}) }} style={projectStyle.addClientClickArea}>
-                                    <AntDesign size={16} name={'pluscircleo'} color={'rgb(191,8,17)'} />                                  
-                                    <Text style={projectStyle.addClientText}>{' '}{I18n.t('newProject.newClient')}</Text>
-                                </TouchableOpacity>
-                            </View>
+                            {!this.isEditing() &&
+                                <View style={projectStyle.addClientArea}>
+                                    <TouchableOpacity onPress={() => { Actions.push('_addClient', {popTo: Actions.currentScene}) }} style={projectStyle.addClientClickArea}>
+                                        <AntDesign size={16} name={'pluscircleo'} color={'rgb(191,8,17)'} />                                  
+                                        <Text style={projectStyle.addClientText}>{' '}{I18n.t('newProject.newClient')}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            }
                         </View>
                         <Select 
                             options={this.getClients()}
@@ -184,6 +189,7 @@ export default class AddProject extends MainView{
                             arrowColor={'rgb(226,0,6)'}
                             initial={this.state.clientSelected}
                             fullWidth
+                            disabled={this.isEditing()}
                         />
                     </View>
                 </View>
@@ -258,7 +264,7 @@ export default class AddProject extends MainView{
                     containerStyle={{
                         borderBottomWidth: 0
                     }}
-                    title={ I18n.t('section.addProject')}
+                    title={ I18n.t( this.isEditing() ? 'section.editProject' : 'section.addProject')}
                     handleBack={this.handleBack.bind(this)}
                     leftIconColor={'rgb(226,0,6)'}
                     titleStyle={accountStyle.registerHeaderText}

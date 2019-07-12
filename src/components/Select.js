@@ -17,6 +17,7 @@ export default class Select extends React.PureComponent{
     }
 
     toggleModal(){
+        if(this.props.disabled) return;
         this.setState({
             modalOpened: !this.state.modalOpened
         })
