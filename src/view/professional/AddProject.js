@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, Modal, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Modal, TouchableOpacity, FlatList } from 'react-native';
 import Projects from './Projects';
 import I18n from '../../i18n';
 import { Actions } from 'react-native-router-flux';
@@ -10,7 +10,7 @@ import { getProjectTypes } from '../../utils';
 import { MainContext } from '../../reducer';
 import { Input, TextArea, DatePicker } from '../../components/input';
 import { AntDesign } from '@expo/vector-icons';
-import { Button } from 'react-native-elements';
+import { Button, ListItem } from 'react-native-elements';
 import { UserService } from '../../service/firebase/UserService';
 import Room from './Room';
 
@@ -41,8 +41,25 @@ export default class AddProject extends MainView{
             summary: data.summary || '',
             startDate: data.startDate || '',
             endDate: data.endDate || '',
-            id: project.id || null
+            id: project.id || null,
+            rooms: data.rooms || [],
+            currentRoom: -1
         }
+    }
+
+    handleRoomSave(state){
+        const room = Object.assign({},state);
+        delete room.index;
+        const rooms = this.state.rooms.slice(0);
+        if(this.state.currentRoom > -1){
+            rooms[this.state.currentRoom] = room;
+        }
+        else rooms.push(room);
+        this.setState({
+            currentRoom: -1,
+            roomModal: false,
+            rooms
+        })
     }
 
     isEditing(){
@@ -62,8 +79,9 @@ export default class AddProject extends MainView{
         this.setState({clientSelected})
     }
 
-    toggleRoomModal(){
+    toggleRoomModal(currentRoom=-1){
         this.setState({
+            currentRoom,
             roomModal: !this.state.roomModal
         })
     }
@@ -103,7 +121,7 @@ export default class AddProject extends MainView{
     }
 
     handleFormSubmit(){
-        const { projectType, room, clientSelected, projectName, summary, startDate, endDate, loading } = this.state;
+        const { projectType, rooms, clientSelected, projectName, summary, startDate, endDate, loading } = this.state;
         if(projectType != null && clientSelected != null && projectName != ''&& 
             summary != '' && startDate != '' && endDate != ''){
             if(loading) return;
@@ -118,7 +136,8 @@ export default class AddProject extends MainView{
                         name: projectName,
                         summary: summary,
                         startDate: startDate,
-                        endDate: endDate
+                        endDate: endDate,
+                        rooms
                     }
                     UserService.createOrUpdateProject(myId,customerEmail,project,this.state.id).then(() => {
                         this.context.message('Projeto cadastrado com sucesso!');
@@ -150,6 +169,43 @@ export default class AddProject extends MainView{
             >
 
             </Modal>
+        )
+    }
+
+    renderRoomListItem({item, index}){
+        return(
+            <ListItem 
+                title={item.room.label}
+                titleStyle={{
+                    fontFamily: 'system-medium',
+                    color: 'rgb(77,77,77)',
+                    fontSize: 14
+                }}
+                chevron={{
+                    color: 'rgb(201,2,7)',
+                    type: 'entypo',
+                    name: 'chevron-right',
+                    size: 20
+                }}
+                containerStyle={{
+                    borderRadius: 5,
+                    marginVertical: 5
+                }}
+                onPress={() => {
+                    this.toggleRoomModal(index)
+                }}
+            />
+        )
+    }
+
+    renderRooms(){
+        if(this.state.rooms.length == 0) return <></>
+        return(
+            <FlatList 
+                data={this.state.rooms}
+                renderItem={this.renderRoomListItem.bind(this)}
+                keyExtractor={(i,k) => k.toString()}
+            />
         )
     }
 
@@ -244,6 +300,9 @@ export default class AddProject extends MainView{
                         </View>
                     </View>
                 </View>
+                <View>
+                    {this.renderRooms()}
+                </View>
                 <View style={{marginVertical: 20}}>
                     <Button 
                         title={I18n.t('project.save')}
@@ -259,13 +318,18 @@ export default class AddProject extends MainView{
     }
 
     renderCenter(){
-        if(this.state.roomModal) 
+        if(this.state.roomModal){
+            const currentRoom = this.state.currentRoom != -1 ? this.state.rooms[this.state.currentRoom] : null;
+            console.log(this.state.currentRoom, this.state.rooms, currentRoom);
             return(
                 <Room 
                     onBack={this.toggleRoomModal.bind(this)}
                     room={this.state.room}
+                    onSave={this.handleRoomSave.bind(this)}
+                    roomState={currentRoom}
                 />
             )
+        }
         return(
             <View style={{flex:1}}>
                 <Header 

@@ -213,6 +213,7 @@ export default {
         depth: 'PROFUNDIDADE',
         description: 'DESCRIÇÃO',
         projectFiles: 'IMAGENS E ARQUIVOS DO PROJETO',
-        addFile: 'ADICIONAR'
+        addFile: 'ADICIONAR',
+        save: 'SALVAR'
     }
 }
