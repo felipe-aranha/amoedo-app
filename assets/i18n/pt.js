@@ -224,5 +224,10 @@ export default {
             files: 'Arquivos',
             newImage: 'Nova imagem'
         }
+    },
+    mediaSelect: {
+        take: 'Tirar foto',
+        choose: 'Escolher da biblioteca',
+        cancel: 'cancelar'
     }
 }

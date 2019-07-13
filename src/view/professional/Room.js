@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Text, KeyboardSpacer, SizeInput, TextArea, Select } from '../../components';
+import { Header, Text, KeyboardSpacer, SizeInput, TextArea, Select, MediaSelect } from '../../components';
 import { View, ScrollView, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import { accountStyle, secondaryColor, mainStyle, projectStyle } from '../../style';
 import { Actions } from 'react-native-router-flux';
@@ -90,6 +90,10 @@ export default class Room extends React.PureComponent {
         this.setState({description})
     }
 
+    handleSelectMedia(media){
+        console.log(media);
+    }
+
     renderFilesModal(){
         return(
             <Modal
@@ -98,7 +102,7 @@ export default class Room extends React.PureComponent {
                 animationType={'fade'}
             >
                 <View style={[StyleSheet.absoluteFill, mainStyle.mainView]}>
-                    <View style={{marginHorizontal:30}}>
+                    <View style={{marginHorizontal:30, flex:1}}>
                         <View
                             style={{
                                 marginVertical:30,
@@ -129,6 +133,43 @@ export default class Room extends React.PureComponent {
                                     />
                                 </View>
                             </View>
+                        </View>
+                        <ScrollView>
+                            <View style={{
+                                flexWrap: 'wrap'
+                            }}>
+                                <MediaSelect
+                                    onMediaSelected={this.handleSelectMedia.bind(this)}
+                                    denyEdit
+                                >
+                                    <View
+                                        style={{
+                                            backgroundColor: '#fff',
+                                            width: 100,
+                                            height: 100,
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            padding: 20
+                                        }}
+                                    >
+                                        <AntDesign size={16} name={'pluscircleo'} color={secondaryColor} />
+                                        <Text style={{textAlign:'center'}} size={12} weight={'medium'}>{I18n.t('room.files.newImage')}</Text>
+                                    </View>
+                                </MediaSelect>
+                            </View>
+                        </ScrollView>
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'flex-end',
+                            alignItems: 'center'
+                        }}>
+                            <Button 
+                                title={I18n.t('room.save')}
+                                containerStyle={accountStyle.accountTypeButtonContainer}
+                                buttonStyle={[accountStyle.accountTypeButton,accountStyle.submitButton, projectStyle.buttonSecondary]}
+                                titleStyle={[accountStyle.accountTypeButtonTitle,projectStyle.submitButtonTitle]}
+                                onPress={this.handleFormSubmit.bind(this)}
+                            />
                         </View>
                     </View>
                 </View>

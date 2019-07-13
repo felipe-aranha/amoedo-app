@@ -15,6 +15,9 @@ export default StyleSheet.create({
     projectSaveButton: {
         backgroundColor: 'rgb(255,0,0)'
     },
+    buttonSecondary: {
+        backgroundColor: secondaryColor
+    },
     submitButtonTitle: {
         color: '#fff'
     },

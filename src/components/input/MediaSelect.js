@@ -2,10 +2,11 @@ import React from 'react';
 import ActionSheet from "react-native-actionsheet";
 import { TouchableOpacity } from 'react-native';
 import { UploadMedia } from '../../utils/UploadMedia';
+import I18n from '../../i18n';
 
-const TAKE = 'take picture';
-const CHOOSE = 'choose from ';
-const CANCEL = 'cancelar';
+const TAKE = I18n.t('mediaSelect.take');
+const CHOOSE = I18n.t('mediaSelect.choose');
+const CANCEL = I18n.t('mediaSelect.cancel');
 
 export class MediaSelect extends React.PureComponent{
 
@@ -13,16 +14,17 @@ export class MediaSelect extends React.PureComponent{
         super(props,state);
         this.actionSheet = React.createRef();
         this.options = [CANCEL,TAKE,CHOOSE];
+        this.allowsEditing = !this.props.denyEdit;
     }
 
     async handleTakePicture(){
-        const result = await UploadMedia.takePhotoAsync();
+        const result = await UploadMedia.takePhotoAsync(this.allowsEditing );
         if(result && this.props.onMediaSelected)
             this.props.onMediaSelected(result);
     }
 
     async handleChooseFromLibrary(){
-        const result = await UploadMedia.getFileAsync();
+        const result = await UploadMedia.getFileAsync(this.allowsEditing );
         if(result && this.props.onMediaSelected)
             this.props.onMediaSelected(result);
     }

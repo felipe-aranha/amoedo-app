@@ -8,21 +8,21 @@ export class UploadMedia{
         return status == 'granted'
     }
 
-    static async getFileAsync(){
+    static async getFileAsync(allowsEditing=true){
         const allowed = await UploadMedia.getPermissionAsync();
         if(!allowed) return false;
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: 'Images',
-            allowsEditing: true,
+            allowsEditing,
         })
         return result.cancelled ? false : result;
     }
 
-    static async takePhotoAsync(){
+    static async takePhotoAsync(allowsEditing=true){
         const allowed = await UploadMedia.getPermissionAsync();
         if(!allowed) return false;
         const result = await ImagePicker.launchCameraAsync({
-            allowsEditing: true,
+            allowsEditing
         })
         return result.cancelled ? false : result;
     }
