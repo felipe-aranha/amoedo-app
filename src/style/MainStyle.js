@@ -110,11 +110,12 @@ export default StyleSheet.create({
     textArea: {
         backgroundColor: '#fff',
         marginVertical: 10,
-        height: 80,
+        height: 90,
         fontFamily: 'system-medium',
         color: secondaryColor,
         fontSize: 14,
-        textAlignVertical: 'top'
+        textAlignVertical: 'top',
+        padding: 5
     },
     textAreaContainer: {
         flex:1, 

@@ -213,7 +213,16 @@ export default {
         depth: 'PROFUNDIDADE',
         description: 'DESCRIÇÃO',
         projectFiles: 'IMAGENS E ARQUIVOS DO PROJETO',
-        addFile: 'ADICIONAR',
-        save: 'SALVAR'
+        add: 'ADICIONAR',
+        products: 'PRODUTOS',
+        save: 'SALVAR',
+        files: {
+            title: 'Para prosseguir faça upload das imagens do projeto.',
+            label: 'Imagem',
+            before: 'Antes da obra',
+            after: 'Depois da obra',
+            files: 'Arquivos',
+            newImage: 'Nova imagem'
+        }
     }
 }

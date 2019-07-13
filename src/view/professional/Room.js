@@ -1,6 +1,6 @@
 import React from 'react';
-import { Header, Text, KeyboardSpacer, SizeInput, TextArea } from '../../components';
-import { View, ScrollView, TouchableOpacity } from 'react-native';
+import { Header, Text, KeyboardSpacer, SizeInput, TextArea, Select } from '../../components';
+import { View, ScrollView, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import { accountStyle, secondaryColor, mainStyle, projectStyle } from '../../style';
 import { Actions } from 'react-native-router-flux';
 import I18n from '../../i18n';
@@ -14,7 +14,16 @@ export default class Room extends React.PureComponent {
         this.state = {
             ...this.getInitialState(),
             index: this.props.index || -1,
+            filesModal: false,
+            productsModal: false,
+            currentCategory: null
         }
+    }
+
+    handleSelectCategory(cat){
+        this.setState({
+            currentCategory: cat
+        })
     }
 
     getInitialState(){
@@ -24,8 +33,33 @@ export default class Room extends React.PureComponent {
             height: roomState.height || '',
             depth: roomState.depth || '',
             description: roomState.description || '',
-            room: this.props.room || roomState.room || {}
+            room: this.props.room || roomState.room || {},
+            files: {
+                before: [],
+                after: [],
+                files: []
+            }
         }
+    }
+
+    getFileCategories(){
+        return [
+            {type: 'before', label: I18n.t('room.files.before') },
+            {type: 'after', label: I18n.t('room.files.after') },
+            {type: 'files', label: I18n.t('room.files.files') },
+        ]
+    }
+
+    toggleFilesModal(){
+        this.setState({
+            filesModal: !this.state.filesModal
+        })
+    }
+
+    toggleProductsModal(){
+        this.setState({
+            productsModal: !this.state.productsModal
+        })
     }
 
     handleBack(){
@@ -33,7 +67,11 @@ export default class Room extends React.PureComponent {
     }
 
     handleFormSubmit(){
-        this.props.onSave(this.state);
+        const { width, height, depth, description, room } = this.state;
+        const data = {
+            width, height, depth, description, room
+        }
+        this.props.onSave(data);
     }
 
     handleWidthChange(width){
@@ -52,10 +90,70 @@ export default class Room extends React.PureComponent {
         this.setState({description})
     }
 
+    renderFilesModal(){
+        return(
+            <Modal
+                visible={this.state.filesModal}
+                onRequestClose={() => {}}
+                animationType={'fade'}
+            >
+                <View style={[StyleSheet.absoluteFill, mainStyle.mainView]}>
+                    <View style={{marginHorizontal:30}}>
+                        <View
+                            style={{
+                                marginVertical:30,
+                            }}
+                        >
+                            <AntDesign 
+                                name={'close'}
+                                color={secondaryColor}
+                                onPress={this.toggleFilesModal.bind(this)}
+                                size={24}
+                                style={{
+                                    alignSelf: 'flex-end'
+                                }}
+                            />
+                        </View>
+                        <View style={{marginRight: 20}}>
+                            <Text size={16} weight={'semibold'}>{I18n.t('room.files.title')}</Text>
+                        </View>
+                        <View style={[accountStyle.formRow,{marginTop:20}]}>
+                            <View style={[projectStyle.roomInputArea,{marginVertical:0}]}>
+                                <View>
+                                    <Text style={mainStyle.inputLabel}>{I18n.t('room.files.label')}</Text>
+                                    <Select
+                                        options={this.getFileCategories()}
+                                        onOptionSelected={this.handleSelectCategory.bind(this)}
+                                        arrowColor={secondaryColor}
+                                        fullWidth
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
+    renderProductsModal(){
+        return(
+            <Modal
+                visible={this.state.productsModal}
+                onRequestClose={() => {}}
+                animationType={'fade'}
+            >
+
+            </Modal>
+        )
+    }
+
     render(){
         const { room } = this.state;
         return(
             <View style={{flex:1}}>
+                {this.renderFilesModal()}
+                {this.renderProductsModal()}
                 <Header 
                     containerStyle={{
                         borderBottomWidth: 0
@@ -116,9 +214,20 @@ export default class Room extends React.PureComponent {
                                 <View style={projectStyle.clientLabelArea}>
                                     <Text style={projectStyle.projectFilesText}>{I18n.t('room.projectFiles')}</Text>
                                     <View style={[projectStyle.addClientArea,{paddingRight:0}]}>
+                                        <TouchableOpacity onPress={this.toggleFilesModal.bind(this)} style={projectStyle.addClientClickArea}>
+                                            <AntDesign size={16} name={'pluscircleo'} color={'rgb(191,8,17)'} />                                  
+                                            <Text style={projectStyle.addClientText}>{' '}{I18n.t('room.add')}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={{marginHorizontal: 10, marginVertical: 20}}>
+                                <View style={projectStyle.clientLabelArea}>
+                                    <Text style={projectStyle.projectFilesText}>{I18n.t('room.products')}</Text>
+                                    <View style={[projectStyle.addClientArea,{paddingRight:0}]}>
                                         <TouchableOpacity onPress={() => {}} style={projectStyle.addClientClickArea}>
                                             <AntDesign size={16} name={'pluscircleo'} color={'rgb(191,8,17)'} />                                  
-                                            <Text style={projectStyle.addClientText}>{' '}{I18n.t('room.addFile')}</Text>
+                                            <Text style={projectStyle.addClientText}>{' '}{I18n.t('room.add')}</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>

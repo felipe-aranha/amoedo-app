@@ -6,7 +6,8 @@ export default class Text extends React.PureComponent{
         const props = this.props;
         return <_Text {...props} style={[{
             color: 'rgb(77,77,77)',
-            fontFamily: props.weight ? `system-${props.weight}` : 'system'
+            fontFamily: props.weight ? `system-${props.weight}` : 'system',
+            fontSize: props.size ? props.size : undefined
             },props.style
         ]}>{props.children}</_Text>
     }

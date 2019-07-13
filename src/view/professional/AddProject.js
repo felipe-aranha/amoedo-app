@@ -49,7 +49,6 @@ export default class AddProject extends MainView{
 
     handleRoomSave(state){
         const room = Object.assign({},state);
-        delete room.index;
         const rooms = this.state.rooms.slice(0);
         if(this.state.currentRoom > -1){
             rooms[this.state.currentRoom] = room;
@@ -352,7 +351,9 @@ export default class AddProject extends MainView{
                     />
                 </View>
                 {this.state.projectType != null &&
-                    this.renderForm()
+                    <View style={{flex:1, marginHorizontal:10}}>
+                        {this.renderForm()}
+                    </View>
                 }
                 <KeyboardSpacer />
             </View>

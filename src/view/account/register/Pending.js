@@ -22,8 +22,8 @@ export class Pending extends AccountBase{
     static contextType = MainContext;
 
     async componentDidMount(){
-        
-        if(!this.isProfessional()){
+        const isProfessional = this.isProfessional()
+        if(!isProfessional){
             this.db = UserService.getCustomerDB()
         }
         docId = this.context.user.magento.id.toString();
@@ -34,7 +34,7 @@ export class Pending extends AccountBase{
                 const { user, clients } = doc.data();
                 this.context.user.clients = await UserService.getMyClients(clients);
                 this.context.user.firebase = user;
-                if(this.context.user.isProfessional){
+                if(isProfessional){
                     switch(user.status){
                         case "approved":
                             Actions.reset('professional');
@@ -46,6 +46,7 @@ export class Pending extends AccountBase{
                             break;
                     }
                 } else {
+
                     this.logout();
                 }
             })
