@@ -216,6 +216,7 @@ export default {
         add: 'ADICIONAR',
         products: 'PRODUTOS',
         save: 'SALVAR',
+        uploading: 'Fazendo upload dos arquivos ({{qty}} de {{total}})',
         files: {
             title: 'Para prosseguir faça upload das imagens do projeto.',
             label: 'Imagem',

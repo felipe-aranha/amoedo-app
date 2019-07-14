@@ -35,7 +35,7 @@ export class MediaSelect extends React.PureComponent{
             case TAKE:
                 this.handleTakePicture();
                 break;
-            default:
+            case CHOOSE:
                 this.handleChooseFromLibrary();
                 break;
         }

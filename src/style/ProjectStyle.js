@@ -61,5 +61,14 @@ export default StyleSheet.create({
         color: 'rgb(88,12,33)',
         fontFamily: 'system-bold',
         fontSize: 12
+    },
+    roomAddPhotoArea:{
+        backgroundColor: '#fff',
+        width: 100,
+        height: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+        margin:10
     }
 })

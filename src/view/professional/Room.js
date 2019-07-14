@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Text, KeyboardSpacer, SizeInput, TextArea, Select, MediaSelect } from '../../components';
-import { View, ScrollView, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Modal, StyleSheet, Image } from 'react-native';
 import { accountStyle, secondaryColor, mainStyle, projectStyle } from '../../style';
 import { Actions } from 'react-native-router-flux';
 import I18n from '../../i18n';
@@ -52,7 +52,8 @@ export default class Room extends React.PureComponent {
 
     toggleFilesModal(){
         this.setState({
-            filesModal: !this.state.filesModal
+            filesModal: !this.state.filesModal,
+            currentCategory: null
         })
     }
 
@@ -67,9 +68,9 @@ export default class Room extends React.PureComponent {
     }
 
     handleFormSubmit(){
-        const { width, height, depth, description, room } = this.state;
+        const { width, height, depth, description, room, files } = this.state;
         const data = {
-            width, height, depth, description, room
+            width, height, depth, description, room, files
         }
         this.props.onSave(data);
     }
@@ -91,7 +92,19 @@ export default class Room extends React.PureComponent {
     }
 
     handleSelectMedia(media){
-        console.log(media);
+        if(media.cancelled) return;
+        const { currentCategory } = this.state;
+        if(currentCategory != null){
+            const files = Object.assign({},this.state.files);
+            files[currentCategory.type].push({
+                uri: media.uri,
+                process: true,
+                description: ''
+            });
+            this.setState({
+                files
+            })
+        }
     }
 
     renderFilesModal(){
@@ -134,34 +147,48 @@ export default class Room extends React.PureComponent {
                                 </View>
                             </View>
                         </View>
+                        {this.state.currentCategory != null &&
                         <ScrollView>
                             <View style={{
-                                flexWrap: 'wrap'
+                                flexWrap: 'wrap',
+                                flexDirection: 'row'
                             }}>
-                                <MediaSelect
-                                    onMediaSelected={this.handleSelectMedia.bind(this)}
-                                    denyEdit
-                                >
-                                    <View
-                                        style={{
-                                            backgroundColor: '#fff',
-                                            width: 100,
-                                            height: 100,
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            padding: 20
-                                        }}
+                                <>
+                                    {this.state.files[this.state.currentCategory.type] && this.state.files[this.state.currentCategory.type].map((file,index) => {
+                                        return(
+                                            <View
+                                                style={projectStyle.roomAddPhotoArea}
+                                                key={index}
+                                            >
+                                                <Image 
+                                                    style={{
+                                                        width: 100,
+                                                        height:100,
+                                                    }}
+                                                    resizeMode={'contain'}
+                                                    source={{uri:file.uri}}
+                                                />
+                                            </View>
+                                        )
+                                    })}
+                                    <MediaSelect
+                                        onMediaSelected={this.handleSelectMedia.bind(this)}
+                                        denyEdit
                                     >
-                                        <AntDesign size={16} name={'pluscircleo'} color={secondaryColor} />
-                                        <Text style={{textAlign:'center'}} size={12} weight={'medium'}>{I18n.t('room.files.newImage')}</Text>
-                                    </View>
-                                </MediaSelect>
+                                        <View style={projectStyle.roomAddPhotoArea}>
+                                            <AntDesign size={16} name={'pluscircleo'} color={secondaryColor} />
+                                            <Text style={{textAlign:'center'}} size={12} weight={'medium'}>{I18n.t('room.files.newImage')}</Text>
+                                        </View>
+                                    </MediaSelect>
+                                </>
                             </View>
                         </ScrollView>
+                        }
                         <View style={{
                             flex: 1,
                             justifyContent: 'flex-end',
-                            alignItems: 'center'
+                            alignItems: 'center',
+                            marginBottom: 30
                         }}>
                             <Button 
                                 title={I18n.t('room.save')}

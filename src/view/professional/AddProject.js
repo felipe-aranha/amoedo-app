@@ -119,24 +119,73 @@ export default class AddProject extends MainView{
         this.setState({endDate})
     }
 
+    getFilesForUpload(){
+        let files = [];
+        this.state.rooms.forEach(room => {
+            Object.keys(room.files).forEach(cat => {
+                category = room.files[cat];
+                const found = category.filter( file => file.process )
+				found.forEach(f => {
+					files.push(f.uri);
+				});
+                
+            })
+        })
+        return files;
+    }
+
+    updateFileUri(oldUri,newUri){
+        this.state.rooms.forEach(room => {
+            Object.keys(room.files).forEach(cat => {
+                category = room.files[cat];
+                category.forEach( file => {
+                    if(file.uri == oldUri){
+                        file.process = false;
+                        file.uri = newUri;
+                    }
+                })
+            })
+        })
+    }
+
+    async getUpdatedRooms(){
+        const uploadFiles = this.getFilesForUpload();
+        const total = uploadFiles.length;
+        let qty = 1;
+        if(total == 0) return this.state.rooms;
+        return await new Promise((resolve) => {
+            uploadFiles.forEach(async (file,i) => {
+                this.context.message(I18n.t('room.uploading',{total,qty}),0);
+                const uri = await UserService.uploadImageAsync(file);
+                this.updateFileUri(file,uri);
+                qty++;
+                if(i == total - 1)
+                    resolve()
+            })
+        })
+    }
+
     handleFormSubmit(){
-        const { projectType, rooms, clientSelected, projectName, summary, startDate, endDate, loading } = this.state;
+        const { projectType, clientSelected, projectName, summary, startDate, endDate, loading } = this.state;
         if(projectType != null && clientSelected != null && projectName != ''&& 
             summary != '' && startDate != '' && endDate != ''){
             if(loading) return;
             else {
                 this.setState({
                     loading: true
-                },() => {
+                }, async () => {
                     const myId = this.context.user.magento.id;
                     const customerEmail = clientSelected.email;
+                    await this.getUpdatedRooms();
+                    this.context.message('salvando...',2000);
+                    updatedRooms = this.state.rooms;
                     const project = {
                         type: projectType.name,
                         name: projectName,
                         summary: summary,
                         startDate: startDate,
                         endDate: endDate,
-                        rooms
+                        rooms: updatedRooms
                     }
                     UserService.createOrUpdateProject(myId,customerEmail,project,this.state.id).then(() => {
                         this.context.message('Projeto cadastrado com sucesso!');
@@ -319,7 +368,6 @@ export default class AddProject extends MainView{
     renderCenter(){
         if(this.state.roomModal){
             const currentRoom = this.state.currentRoom != -1 ? this.state.rooms[this.state.currentRoom] : null;
-            console.log(this.state.currentRoom, this.state.rooms, currentRoom);
             return(
                 <Room 
                     onBack={this.toggleRoomModal.bind(this)}
