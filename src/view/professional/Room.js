@@ -1,11 +1,11 @@
 import React from 'react';
 import { Header, Text, KeyboardSpacer, SizeInput, TextArea, Select, MediaSelect } from '../../components';
-import { View, ScrollView, TouchableOpacity, Modal, StyleSheet, Image } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Modal, StyleSheet, Image, Share, Platform } from 'react-native';
 import { accountStyle, secondaryColor, mainStyle, projectStyle } from '../../style';
 import { Actions } from 'react-native-router-flux';
 import I18n from '../../i18n';
 import { AntDesign } from '@expo/vector-icons';
-import { Button } from 'react-native-elements';
+import { Button, ButtonGroup } from 'react-native-elements';
 
 export default class Room extends React.PureComponent {
 
@@ -16,14 +16,25 @@ export default class Room extends React.PureComponent {
             index: this.props.index || -1,
             filesModal: false,
             productsModal: false,
-            currentCategory: null
+            currentCategory: null,
+            fileIndex: 0
         }
+    }
+
+    getFiles(){
+        const { fileIndex, files } = this.state;
+        const category = this.getFileCategories()[fileIndex].type;
+        return files[category];
     }
 
     handleSelectCategory(cat){
         this.setState({
             currentCategory: cat
         })
+    }
+
+    updateFilesIndex(fileIndex){
+        this.setState({fileIndex})
     }
 
     getInitialState(){
@@ -34,7 +45,7 @@ export default class Room extends React.PureComponent {
             depth: roomState.depth || '',
             description: roomState.description || '',
             room: this.props.room || roomState.room || {},
-            files: {
+            files: roomState.files || {
                 before: [],
                 after: [],
                 files: []
@@ -48,6 +59,45 @@ export default class Room extends React.PureComponent {
             {type: 'after', label: I18n.t('room.files.after') },
             {type: 'files', label: I18n.t('room.files.files') },
         ]
+    }
+
+    getFileOptions(){
+        return [
+            {type: 'delete', label: I18n.t('room.files.delete')},
+            {type: 'share', label: I18n.t('room.files.share')}
+        ]
+    }
+
+    handleFileOptionSelected(option){
+        switch(option.type){
+            case 'delete':
+                this.handleDelete(option.file);
+                break;
+            case 'share':
+                this.handleShare(option.file);
+        }
+    }
+
+    handleDelete(f){
+        console.log(f);
+        let files = Object.assign({},this.state.files);
+        Object.keys(files).forEach(cat => {
+            files[cat] = files[cat].filter(file => file.uri != f.uri) || [];
+        });
+        console.log(files);
+        this.setState({
+            files
+        })
+    }
+
+    handleShare(file){
+        const data = {}
+        if(Platform.OS == 'ios'){
+            data.url = file.uri
+        } else {
+            data.message = file.uri
+        }
+        Share.share(data);
     }
 
     toggleFilesModal(){
@@ -218,6 +268,7 @@ export default class Room extends React.PureComponent {
 
     render(){
         const { room } = this.state;
+        const files = this.getFiles();
         return(
             <View style={{flex:1}}>
                 {this.renderFilesModal()}
@@ -288,6 +339,93 @@ export default class Room extends React.PureComponent {
                                         </TouchableOpacity>
                                     </View>
                                 </View>
+                                <View style={{marginTop:10}}>
+                                    <ButtonGroup 
+                                        onPress={this.updateFilesIndex.bind(this)}
+                                        selectedIndex={this.state.fileIndex}
+                                        buttons={this.getFileCategories().map(cat => cat.label)}
+                                        containerStyle={{
+                                            borderRadius: 10
+                                        }}
+                                        selectedButtonStyle={{
+                                            backgroundColor: secondaryColor
+                                        }}
+                                        selectedTextStyle={{
+                                            color: '#fff',
+                                            fontSize: 12,
+                                            fontFamily: 'system-medium'
+                                        }}
+                                        textStyle={{
+                                            color: secondaryColor,
+                                            fontSize: 12,
+                                            fontFamily: 'system-medium'
+                                        }}
+                                    />
+                                </View>
+                                {files.length > 0 &&
+                                    <ScrollView 
+                                        horizontal   
+                                        style={{
+                                            marginVertical: 10,
+                                        }}
+                                    >
+                                        {files.map((file,idx) => {
+                                            let options = this.getFileOptions().map(option => {
+                                                option.file = file;
+                                                return option;
+                                            })
+                                            return( <View 
+                                                key={idx.toString()}
+                                                style={{
+                                                    padding: 5,
+                                                    paddingBottom: 0,
+                                                    margin: 5,
+                                                    backgroundColor: '#fff',
+                                                    borderRadius: 5
+                                                }}
+                                            >
+                                                <Image 
+                                                    source={{
+                                                        uri: file.uri
+                                                    }}
+                                                    style={{
+                                                        width: 110,
+                                                        height: 70
+                                                    }}
+                                                    resizeMode={'contain'}
+                                                />
+                                                <View
+                                                    style={{
+                                                        flexDirection: 'row',
+                                                        justifyContent:'flex-end'
+                                                    }}
+                                                >
+                                                        <Select
+                                                            options={options}
+                                                            onOptionSelected={this.handleFileOptionSelected.bind(this)}
+                                                        >
+                                                            <View
+                                                                style={{
+                                                                    borderWidth: 1,
+                                                                    borderColor: secondaryColor,
+                                                                    borderRadius: 10,
+                                                                    width: 20,
+                                                                    height:20,
+                                                                    justifyContent: 'center',
+                                                                    alignItems: 'center'
+                                                                }}
+                                                            >
+                                                                <AntDesign 
+                                                                    name={'ellipsis1'}
+                                                                    color={secondaryColor}
+                                                                />
+                                                            </View>
+                                                        </Select>
+                                                </View>
+                                            </View> )
+                                        })}
+                                    </ScrollView>
+                                }
                             </View>
                             <View style={{marginHorizontal: 10, marginVertical: 20}}>
                                 <View style={projectStyle.clientLabelArea}>
@@ -300,7 +438,7 @@ export default class Room extends React.PureComponent {
                                     </View>
                                 </View>
                             </View>
-                            <View style={{marginVertical: 20}}>
+                            <View style={{marginTop: 20,marginBottom:50}}>
                                 <Button 
                                     title={I18n.t('room.save')}
                                     containerStyle={accountStyle.accountTypeButtonContainer}

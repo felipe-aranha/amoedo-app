@@ -126,7 +126,8 @@ export default class AddProject extends MainView{
                 category = room.files[cat];
                 const found = category.filter( file => file.process )
 				found.forEach(f => {
-					files.push(f.uri);
+                    if(f && f.uri)
+					    files.push(f.uri);
 				});
                 
             })
@@ -188,7 +189,7 @@ export default class AddProject extends MainView{
                         rooms: updatedRooms
                     }
                     UserService.createOrUpdateProject(myId,customerEmail,project,this.state.id).then(() => {
-                        this.context.message('Projeto cadastrado com sucesso!');
+                        this.context.message(`Projeto ${this.isEditing() ? 'atualizado' : 'cadastrado'} com sucesso!`);
                         this.setState({
                             loading: 'false'
                         },() => {

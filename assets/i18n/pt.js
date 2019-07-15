@@ -223,7 +223,9 @@ export default {
             before: 'Antes da obra',
             after: 'Depois da obra',
             files: 'Arquivos',
-            newImage: 'Nova imagem'
+            newImage: 'Nova imagem',
+            delete: 'Excluir',
+            share: 'Compartilhar',
         }
     },
     mediaSelect: {
