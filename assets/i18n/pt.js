@@ -127,6 +127,7 @@ export default {
         addClient: 'CADASTRAR CLIENTE',
         projects: 'PROJETOS',
         addProject: 'CADASTRAR PROJETO',
+        editProject: 'EDITAR PROJETO',
         room: 'AMBIENTE',
         products: 'PRODUTOS'
     },
@@ -202,5 +203,34 @@ export default {
             residential: 'Residencial',
             others: 'Outros'
         }
+    },
+    newProject: {
+        newClient: 'NOVO CLIENTE'
+    },
+    room: {
+        width: 'LARGURA',
+        height: 'ALTURA',
+        depth: 'PROFUNDIDADE',
+        description: 'DESCRIÇÃO',
+        projectFiles: 'IMAGENS E ARQUIVOS DO PROJETO',
+        add: 'ADICIONAR',
+        products: 'PRODUTOS',
+        save: 'SALVAR',
+        uploading: 'Fazendo upload dos arquivos ({{qty}} de {{total}})',
+        files: {
+            title: 'Para prosseguir faça upload das imagens do projeto.',
+            label: 'Imagem',
+            before: 'Antes da obra',
+            after: 'Depois da obra',
+            files: 'Arquivos',
+            newImage: 'Nova imagem',
+            delete: 'Excluir',
+            share: 'Compartilhar',
+        }
+    },
+    mediaSelect: {
+        take: 'Tirar foto',
+        choose: 'Escolher da biblioteca',
+        cancel: 'cancelar'
     }
 }

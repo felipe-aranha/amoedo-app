@@ -50,6 +50,7 @@ export class TextArea extends React.PureComponent{
                     style={mainStyle.textArea}
                     {...props}
                     ref={props.inputRef}
+                    underlineColorAndroid={'transparent'}
                 />
                 <Text style={[accountStyle.inputError,accountStyle.maskedInputError]}>{props.errorMessage}</Text>
 
@@ -71,6 +72,37 @@ export class DatePicker extends React.PureComponent{
                 />
                 <Text style={[accountStyle.inputError,accountStyle.maskedInputError]}>{props.errorMessage}</Text>
 
+            </View>
+        )
+    }
+}
+
+export class SizeInput extends React.PureComponent{
+    render(){
+        const props = this.props;
+        return(
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                }}
+            >
+                <TextInput 
+                    style={[accountStyle.maskedInputText,{
+                        borderWidth: 1,
+                        borderColor: 'rgb(98,98,98)',
+                        borderRadius: 8,
+                        minWidth: 60,
+                        marginVertical: 10,
+                        textAlign: 'center'
+                    }]}                    
+                    {...props}
+                    ref={props.inputRef}
+                    keyboardType={'decimal-pad'}
+                />
+                <Text>{' M'}</Text>
             </View>
         )
     }

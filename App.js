@@ -14,8 +14,9 @@ export default class App extends React.Component {
 	constructor(props,state){
 		super(props,state);
 		this.state = AppContext;
-		console.disableYellowBox = true;
 		YellowBox.ignoreWarnings(['Setting a timer']);
+		console.ignoredYellowBox = ['Setting a timer'];
+		console.disableYellowBox = true;
 		this.customerService = new CustomerService();
 	}
 

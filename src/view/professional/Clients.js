@@ -35,22 +35,41 @@ export default class Clients extends Professional{
         Actions.reset('_addClient');
     }
 
-    componentDidMount(){
-        UserService.getProfessionalDoc(this.context.user.magento.id.toString()).onSnapshot(doc => {
-            const { clients } = doc.data();
-            clients.forEach(client => {
-                items = this.state.items || [];
-                found = items.find(c => c.email == client.email);
-                if(!found){
-                    newClient = UserService.getClient(client.email);
-                    currClients = items.slice(0);
-                    currClients.push(newClient);
-                    this.setState({
-                        items: currClients
-                    })
-                    this.context.user.clients = currClients;
+    async handleClientsSnapshot(data){
+        const { clients } = data;
+        const p = new Promise((resolve,reject) => {
+            clients.map( async (client,i) => {
+                this.addClientToContext(client.email);
+                if(i == clients.length -1){
+                    resolve();
                 }
             })
+        })
+        return Promise.all([p])
+        
+    }
+
+    async addClientToContext(email){
+        items = this.context.user.clients.slice(0) || [];
+        found = items.find(c => c.email == email);
+        if(!found){
+            newClient = await UserService.getClient(email);
+            currClients = items.slice(0);
+            currClients.push(newClient);
+            this.setState({
+                items: currClients
+            })
+            this.context.user.clients = currClients;
+        }
+    }
+
+    getProfessionalDoc(){
+        return UserService.getProfessionalDoc(this.context.user.magento.id.toString());
+    }
+
+    componentDidMount(){
+        this.subscription = this.getProfessionalDoc().onSnapshot(doc => {
+            this.handleClientsSnapshot(doc.data())
         })
     }
 

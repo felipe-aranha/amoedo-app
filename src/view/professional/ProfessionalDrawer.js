@@ -78,14 +78,14 @@ export default class ProfessionalDrawer extends MainView{
                         <AppIcon large name={'list'} style={drawerStyle.menuItemIcon} />
                         <Text style={drawerStyle.menuItemText}>{I18n.t('menu.projects')}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={drawerStyle.menuItemArea}>
+                    { /* <TouchableOpacity style={drawerStyle.menuItemArea}>
                         <AppIcon large name={'occurrence'} style={drawerStyle.menuItemIcon} />
                         <Text style={drawerStyle.menuItemText}>{I18n.t('menu.occurrences')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={drawerStyle.menuItemArea}>
                         <AppIcon large name={'chat'} style={drawerStyle.menuItemIcon} />
                         <Text style={drawerStyle.menuItemText}>{I18n.t('menu.chat')}</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */ }
                 </View>
                 <View style={{flex:1, justifyContent: 'flex-end', padding: 20, marginBottom: 20}}>
                         <View style={drawerStyle.divider}  
