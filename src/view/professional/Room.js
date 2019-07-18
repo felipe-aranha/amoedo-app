@@ -6,6 +6,7 @@ import { Actions } from 'react-native-router-flux';
 import I18n from '../../i18n';
 import { AntDesign } from '@expo/vector-icons';
 import { Button, ButtonGroup } from 'react-native-elements';
+import Catalog from '../catalog/Catalog';
 
 export default class Room extends React.PureComponent {
 
@@ -19,6 +20,11 @@ export default class Room extends React.PureComponent {
             currentCategory: null,
             fileIndex: 0
         }
+    }
+
+    handleCatalogChange(cart){
+        console.log(cart);
+        this.toggleProductsModal();
     }
 
     getFiles(){
@@ -254,25 +260,18 @@ export default class Room extends React.PureComponent {
         )
     }
 
-    renderProductsModal(){
-        return(
-            <Modal
-                visible={this.state.productsModal}
-                onRequestClose={() => {}}
-                animationType={'fade'}
-            >
-
-            </Modal>
-        )
-    }
-
     render(){
         const { room } = this.state;
         const files = this.getFiles();
+        if(this.state.productsModal)
+            return (
+                <Catalog 
+                    onBack={this.handleCatalogChange.bind(this)}
+                />
+            )
         return(
             <View style={{flex:1}}>
                 {this.renderFilesModal()}
-                {this.renderProductsModal()}
                 <Header 
                     containerStyle={{
                         borderBottomWidth: 0
@@ -431,7 +430,7 @@ export default class Room extends React.PureComponent {
                                 <View style={projectStyle.clientLabelArea}>
                                     <Text style={projectStyle.projectFilesText}>{I18n.t('room.products')}</Text>
                                     <View style={[projectStyle.addClientArea,{paddingRight:0}]}>
-                                        <TouchableOpacity onPress={() => {}} style={projectStyle.addClientClickArea}>
+                                        <TouchableOpacity onPress={this.toggleProductsModal.bind(this)} style={projectStyle.addClientClickArea}>
                                             <AntDesign size={16} name={'pluscircleo'} color={'rgb(191,8,17)'} />                                  
                                             <Text style={projectStyle.addClientText}>{' '}{I18n.t('room.add')}</Text>
                                         </TouchableOpacity>

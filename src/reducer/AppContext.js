@@ -3,7 +3,8 @@ import React from 'react';
 export const AppContext = {
     isReady: false,
     app: {
-        groups: []
+        groups: [],
+        categories: []
     },
     user: {
         token: null,

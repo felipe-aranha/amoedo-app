@@ -5,7 +5,13 @@ export class CatalogService extends HttpClient {
     basePath = 'rest/V1/';
 
 
-    getCategories(parent=2){
+    getCategories(){
+        const query = `searchCriteria[pageSize]=100`
+        const url = `${this.basePath}categories/list?${query}`;
+        return this.getAsync(url);
+    }
+
+    getSubCategories(parent=2){
         const query = `searchCriteria[pageSize]=100&searchCriteria[filterGroups][0][filters][0][field]=parent_id&searchCriteria[filterGroups][0][filters][0][value]=${parent}`
         const url = `${this.basePath}categories/list?${query}`;
         return this.getAsync(url);
