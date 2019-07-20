@@ -50,7 +50,7 @@ export default class ProfessionalDrawer extends MainView{
                         </View>
                     </View>
                     <Text
-                        numOfLines={1}
+                        numberOfLines={1}
                         style={drawerStyle.userName}
                     >
                         {`${user.magento.firstname} ${user.magento.lastname}`}

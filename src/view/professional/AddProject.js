@@ -311,6 +311,7 @@ export default class AddProject extends MainView{
                     />
                     <DatePicker 
                         label={I18n.t('project.endDate')}
+                        numberOfLines={1}
                         type={'datetime'}
                         options={{
                             format: 'DD/MM/YYYY'

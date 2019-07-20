@@ -112,15 +112,29 @@ export default class Products extends React.PureComponent{
     }
 
     addToCart(item){
-        let cart = this.state.cart.slice();
-        if(item.qty)
-            cart[item.sku] = {
-                name: item.name,
-                sku: item.sku,
-                qty: item.qty
-            }
-        else   
+        let cart = this.state.cart.slice(0);
+        let found = false;
+        if(item.qty == 0){
             cart = cart.filter(i => i.sku != item.sku);
+        } else {
+            cart.forEach(c => {
+                if(c.sku == item.sku){
+                    found = true;
+                    c.qty = item.qty
+                }
+            })
+            if(!found){
+                if(item.qty > 0){
+                    cart.push({
+                        name: item.name,
+                        sku: item.sku,
+                        qty: item.qty
+                    });
+                }
+            } 
+        }          
+        if(cart == null) cart = [];
+        console.log(cart);
         this.setState({cart})
         this.props.onCartChange(cart);
     }
@@ -186,7 +200,7 @@ export default class Products extends React.PureComponent{
     renderItem({item}){
         const image = this.getProductImage(item);
         return(
-            <View style={catalogStyle.prodictListArea}>
+            <View style={catalogStyle.productListArea}>
                 {image != null &&
                     <Image 
                         source={{uri: image}}
@@ -201,7 +215,6 @@ export default class Products extends React.PureComponent{
                         numberOfLines={2}
                         weight={'medium'} 
                         size={12}
-                        numOfLines={2}
                     >{item.name}</Text>
                     {this.renderPrice(item)}
                     {this.renderQty(item)}

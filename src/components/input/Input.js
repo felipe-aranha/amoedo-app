@@ -64,7 +64,7 @@ export class DatePicker extends React.PureComponent{
         const props = this.props;
         return(
             <View style={accountStyle.maskedInputArea}>
-                <Text style={mainStyle.inputLabel}>{props.label}</Text>
+                <Text numberOfLines={props.numberOfLines} style={mainStyle.inputLabel}>{props.label}</Text>
                 <TextInputMask 
                     style={accountStyle.maskedInputText}
                     {...props}

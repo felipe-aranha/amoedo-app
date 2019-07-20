@@ -5,7 +5,7 @@ import { accountStyle, secondaryColor, mainStyle, projectStyle } from '../../sty
 import { Actions } from 'react-native-router-flux';
 import I18n from '../../i18n';
 import { AntDesign } from '@expo/vector-icons';
-import { Button, ButtonGroup } from 'react-native-elements';
+import { Button, ButtonGroup, ListItem } from 'react-native-elements';
 import Catalog from '../catalog/Catalog';
 
 export default class Room extends React.PureComponent {
@@ -125,10 +125,11 @@ export default class Room extends React.PureComponent {
     }
 
     handleFormSubmit(){
-        const { width, height, depth, description, room, files } = this.state;
+        const { width, height, depth, description, room, files, cart } = this.state;
         const data = {
-            width, height, depth, description, room, files
+            width, height, depth, description, room, files, cart
         }
+        console.log(data);
         this.props.onSave(data);
     }
 
@@ -172,7 +173,7 @@ export default class Room extends React.PureComponent {
                 animationType={'fade'}
             >
                 <View style={[StyleSheet.absoluteFill, mainStyle.mainView]}>
-                    <View style={{marginHorizontal:30, flex:1}}>
+                    <View style={{paddingHorizontal:30, flex:1}}>
                         <View
                             style={{
                                 marginVertical:30,
@@ -434,8 +435,26 @@ export default class Room extends React.PureComponent {
                                     </View>
                                 </View>
                                 {this.state.cart.length > 0 &&
-                                    <View>
-                                        
+                                    <View style={{
+                                        marginTop: 20
+                                    }}>
+                                        {this.state.cart.map(item => (
+                                            <ListItem
+                                                key={item.sku} 
+                                                title={item.name}
+                                                titleProps={{
+                                                    numberOfLines: 1,
+                                                    style: {
+                                                        fontFamily: 'system-semibold',
+                                                        color: 'rgb(77,77,77)',
+                                                        fontSize: 10,
+                                                        marginRight: 20,
+                                                    }
+                                                }}
+                                                containerStyle={{borderRadius: 4, marginBottom: 5}}
+                                                chevron
+                                            />
+                                        ))}
                                     </View>
                                 }
                             </View>

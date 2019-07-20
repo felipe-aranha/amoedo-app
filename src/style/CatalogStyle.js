@@ -16,8 +16,8 @@ export default StyleSheet.create({
         paddingHorizontal: 0,
         paddingVertical: 25
     },
-    prodictListArea: {
-        flex:1,
+    productListArea: {
+        flex:0.5,
         borderWidth: 1,
         borderRadius: 4,
         borderColor: 'rgb(179,179,179)',

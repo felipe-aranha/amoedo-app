@@ -87,6 +87,7 @@ export class UserService{
             customer: customerEmail,
             data: project
         }
+        console.log(data);
         if(id != null)
             return UserService.getProjectDB().doc(id).set(data)
         return UserService.getProjectDB().add(data)

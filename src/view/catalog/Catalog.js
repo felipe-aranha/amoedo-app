@@ -35,7 +35,7 @@ export default class Catalog extends MainView{
     }
 
     handleBack(){
-        const { categoryTree } = this.state;
+        const { categoryTree, cart } = this.state;
         if(categoryTree.length == 1)
             this.props.onBack(cart);
         else {
@@ -45,6 +45,10 @@ export default class Catalog extends MainView{
                 categoryTree: cats
             })
         }
+    }
+
+    exit(){
+        this.props.onBack(this.state.cart);
     }
 
     async loadCategories(){
@@ -100,7 +104,7 @@ export default class Catalog extends MainView{
     }
 
     keyStractor(item,key){
-        return key.toString();
+        return item.sku;
     }
 
     renderItem({item}){
@@ -154,7 +158,7 @@ export default class Catalog extends MainView{
                             category={category}
                             cart={this.state.cart}
                             onCartChange={this.handleCartChange.bind(this)}
-                            onBack={this.handleBack.bind(this)}
+                            onBack={this.exit.bind(this)}
                         />
                     }
                     
