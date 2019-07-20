@@ -23,7 +23,7 @@ export default class Room extends React.PureComponent {
     }
 
     handleCatalogChange(cart){
-        console.log(cart);
+        this.setState({cart})
         this.toggleProductsModal();
     }
 
@@ -55,7 +55,8 @@ export default class Room extends React.PureComponent {
                 before: [],
                 after: [],
                 files: []
-            }
+            },
+            cart: roomState.cart || []
         }
     }
 
@@ -182,9 +183,7 @@ export default class Room extends React.PureComponent {
                                 color={secondaryColor}
                                 onPress={this.toggleFilesModal.bind(this)}
                                 size={24}
-                                style={{
-                                    alignSelf: 'flex-end'
-                                }}
+                                style={{alignSelf: 'flex-end'}}
                             />
                         </View>
                         <View style={{marginRight: 20}}>
@@ -205,10 +204,7 @@ export default class Room extends React.PureComponent {
                         </View>
                         {this.state.currentCategory != null &&
                         <ScrollView>
-                            <View style={{
-                                flexWrap: 'wrap',
-                                flexDirection: 'row'
-                            }}>
+                            <View style={{flexWrap: 'wrap',flexDirection: 'row'}}>
                                 <>
                                     {this.state.files[this.state.currentCategory.type] && this.state.files[this.state.currentCategory.type].map((file,index) => {
                                         return(
@@ -266,6 +262,7 @@ export default class Room extends React.PureComponent {
         if(this.state.productsModal)
             return (
                 <Catalog 
+                    cart={this.state.cart}
                     onBack={this.handleCatalogChange.bind(this)}
                 />
             )
@@ -436,6 +433,11 @@ export default class Room extends React.PureComponent {
                                         </TouchableOpacity>
                                     </View>
                                 </View>
+                                {this.state.cart.length > 0 &&
+                                    <View>
+                                        
+                                    </View>
+                                }
                             </View>
                             <View style={{marginTop: 20,marginBottom:50}}>
                                 <Button 

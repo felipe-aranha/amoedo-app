@@ -232,5 +232,14 @@ export default {
         take: 'Tirar foto',
         choose: 'Escolher da biblioteca',
         cancel: 'cancelar'
+    },
+    catalog: {
+        currency: 'R$ ',
+        from: 'De: ',
+        to: 'Por: ',
+        qty: 'Qtd',
+        add: 'Adicionar',
+        details: 'Detalhes',
+        continue: 'CONTINUAR'
     }
 }

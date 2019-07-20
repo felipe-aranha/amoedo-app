@@ -113,7 +113,7 @@ export default class Professional extends MainView{
                             data={this.state.items}
                             renderItem={this.renderItem.bind(this)}
                             keyStractor={this.keyStractor}
-                            loading={this.state.loading}
+                            refreshing={this.state.loading}
                         />
                     </View> :
                     this.renderEmptyList()
