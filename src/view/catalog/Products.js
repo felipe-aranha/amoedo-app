@@ -145,7 +145,9 @@ export default class Products extends React.PureComponent{
     }
 
     increase(item){
+        console.log(item);
         const stock = this.getAttributeValue(item,'quantity_and_stock_status') || 0;
+        console.log(stock);
         if(item.qty < stock){
             this.setQty(item,item.qty + 1)
         }
@@ -170,14 +172,14 @@ export default class Products extends React.PureComponent{
         this.props.onBack();
     }
 
-    renderQty(item){
-        const stock = this.getAttributeValue(item,'quantity_and_stock_status') || 0;
+    renderQty(item,big=false){
+        const stock = 3; // this.getAttributeValue(item,'quantity_and_stock_status') || 0;
         return(
             <View style={catalogStyle.qtyArea}>
                 <Text style={catalogStyle.qtdLabel}>{I18n.t('catalog.qty')}</Text>
-                <AntDesign onPress={this.decrease.bind(this,item)} name={'minuscircleo'} size={16} color={'rgb(77,77,77)'} />
+                <AntDesign onPress={this.decrease.bind(this,item)} name={'minuscircleo'} size={big? 20 : 16} color={'rgb(77,77,77)'} />
                 <Text style={catalogStyle.qtyValue}>{item.qty}</Text>
-                <AntDesign style={{opacity: item.qty < stock ? 1 : 0.5}} onPress={this.increase.bind(this,item)} name={'pluscircleo'} size={16} color={'rgb(77,77,77)'} />
+                <AntDesign style={{opacity: item.qty < stock ? 1 : 0.5}} onPress={this.increase.bind(this,item)} name={'pluscircleo'} size={big? 20 : 16} color={'rgb(77,77,77)'} />
             </View>
         )
     }

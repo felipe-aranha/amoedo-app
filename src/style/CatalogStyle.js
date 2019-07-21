@@ -96,6 +96,11 @@ export default StyleSheet.create({
         color: 'rgb(77,77,77)',
         fontSize: 10
     },
+    deleteButtonTitle:{
+        fontFamily: 'system-semibold',
+        color: 'rgb(77,77,77)',
+        fontSize: 14
+    },
     continueButtonArea: {
         justifyContent: 'center',
         height: 60,

@@ -240,6 +240,9 @@ export default {
         qty: 'Qtd',
         add: 'Adicionar',
         details: 'Detalhes',
-        continue: 'CONTINUAR'
+        continue: 'CONTINUAR',
+        productError: 'Ocorreu um erro ao consultar o produto',
+        delete: 'EXCLUIR',
+        deleted: 'Produto excluído!'
     }
 }

@@ -191,7 +191,7 @@ export default class AddProject extends MainView{
                     UserService.createOrUpdateProject(myId,customerEmail,project,this.state.id).then(() => {
                         this.context.message(`Projeto ${this.isEditing() ? 'atualizado' : 'cadastrado'} com sucesso!`);
                         this.setState({
-                            loading: 'false'
+                            loading: false
                         },() => {
                             Actions.reset('_projects');
                         })
@@ -199,7 +199,7 @@ export default class AddProject extends MainView{
                         console.log(e);
                         this.context.message('Erro ao cadastrar projeto. Tente novamente');
                         this.setState({
-                            loading: 'false'
+                            loading: false
                         })
                     })
                 })
@@ -401,7 +401,7 @@ export default class AddProject extends MainView{
                     />
                 </View>
                 {this.state.projectType != null &&
-                    <View style={{flex:1, marginHorizontal:10}}>
+                    <View style={{flex:1}}>
                         {this.renderForm()}
                     </View>
                 }

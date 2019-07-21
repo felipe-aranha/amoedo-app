@@ -120,4 +120,17 @@ export default StyleSheet.create({
     textAreaContainer: {
         flex:1, 
     }
-})
+});
+
+export const tagsStyles = {
+    p: {
+        fontSize: 14,
+        fontFamily: 'system',
+        color: 'rgb(77,77,77)',
+        marginTop: 10
+    },
+    a: {
+        color: secondaryColor,
+        textDecorationLine: 'none'
+    }
+}

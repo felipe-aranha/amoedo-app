@@ -7,6 +7,7 @@ import I18n from '../../i18n';
 import { AntDesign } from '@expo/vector-icons';
 import { Button, ButtonGroup, ListItem } from 'react-native-elements';
 import Catalog from '../catalog/Catalog';
+import Product from '../catalog/Product';
 
 export default class Room extends React.PureComponent {
 
@@ -17,6 +18,7 @@ export default class Room extends React.PureComponent {
             index: this.props.index || -1,
             filesModal: false,
             productsModal: false,
+            product: null,
             currentCategory: null,
             fileIndex: 0
         }
@@ -25,6 +27,32 @@ export default class Room extends React.PureComponent {
     handleCatalogChange(cart){
         this.setState({cart})
         this.toggleProductsModal();
+    }
+
+    handleUpdateProduct(item){
+        console.log(item);
+        if(!item) {
+            this.setState({
+                product: null
+            })
+            return;
+        }
+        let cart = this.state.cart.slice(0);
+        if(item.qty == 0){
+            cart = cart.filter(i => i.sku != item.sku);
+        } else {
+            cart.forEach(c => {
+                if(c.sku == item.sku){
+                    c.qty = item.qty
+                }
+            })
+        }          
+        if(cart == null) cart = [];
+        console.log(cart);
+        this.setState({
+            cart,
+            product: null
+        })
     }
 
     getFiles(){
@@ -149,6 +177,10 @@ export default class Room extends React.PureComponent {
         this.setState({description})
     }
 
+    handleActiveProduct(product){
+        this.setState({product})
+    }
+
     handleSelectMedia(media){
         if(media.cancelled) return;
         const { currentCategory } = this.state;
@@ -246,7 +278,7 @@ export default class Room extends React.PureComponent {
                             <Button 
                                 title={I18n.t('room.save')}
                                 containerStyle={accountStyle.accountTypeButtonContainer}
-                                buttonStyle={[accountStyle.accountTypeButton,accountStyle.submitButton, projectStyle.buttonSecondary]}
+                                buttonStyle={[accountStyle.accountTypeButton, projectStyle.buttonSecondary]}
                                 titleStyle={[accountStyle.accountTypeButtonTitle,projectStyle.submitButtonTitle]}
                                 onPress={this.handleFormSubmit.bind(this)}
                             />
@@ -260,6 +292,13 @@ export default class Room extends React.PureComponent {
     render(){
         const { room } = this.state;
         const files = this.getFiles();
+        if(this.state.product != null)
+            return(
+                <Product 
+                    item={this.state.product}
+                    onBack={this.handleUpdateProduct.bind(this)}
+                />
+            )
         if(this.state.productsModal)
             return (
                 <Catalog 
@@ -453,6 +492,7 @@ export default class Room extends React.PureComponent {
                                                 }}
                                                 containerStyle={{borderRadius: 4, marginBottom: 5}}
                                                 chevron
+                                                onPress={this.handleActiveProduct.bind(this,item)}
                                             />
                                         ))}
                                     </View>
