@@ -41,7 +41,7 @@ export default {
     style: {
         primaryColor: "rgb(241,206,0)",
         secondaryColor: "rgb(88,12,33)",
-        tertiaryColor: "",
+        tertiaryColor: "rgb(226,0,6)",
         quaternaryColor: "",
         mainBgColor: "rgb(238,238,238)"
     }

@@ -6,7 +6,7 @@ import { Actions } from 'react-native-router-flux';
 import { Input, Button } from 'react-native-elements';
 import { AppIcon, Text, KeyboardSpacer } from '../../components';
 import I18n from '../../i18n';
-import { accountStyle } from '../../style';
+import { accountStyle, tertiaryColor, secondaryColor } from '../../style';
 import { CustomerService } from '../../service';
 import * as Utils from '../../utils';
 import { MainContext } from '../../reducer';
@@ -79,6 +79,7 @@ export default class Login extends AccountBase{
                 <ImageBackground
                     source={require('../../../assets/images/account/login-navbar-x2.png')}
                     resizeMode={'stretch'}
+                    tintColor={this.context.userType == 'customer' ? tertiaryColor : secondaryColor}
                     style={accountStyle.loginNavBarBackground}
                 >
                     <View style={{flex:1}}>

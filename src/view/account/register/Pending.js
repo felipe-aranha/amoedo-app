@@ -24,7 +24,9 @@ export class Pending extends AccountBase{
     async componentDidMount(){
         const isProfessional = this.isProfessional()
         if(!isProfessional){
-            this.db = UserService.getCustomerDB()
+            this.context.userType = 'customer';
+            this.processCustomerLogin();
+            return;
         }
         docId = this.context.user.magento.id.toString();
         const userExists = await UserService.userExists(docId,this.db);
@@ -53,6 +55,17 @@ export class Pending extends AccountBase{
         } else {
             Actions.reset('account');
         }
+    }
+
+    async processCustomerLogin(){
+        this.db = UserService.getCustomerDB();
+        const firebaseUser = await UserService.getClient(this.context.user.magento.email);
+        if(firebaseUser != null){
+            // TODO
+        } else {
+            Actions.reset('account')
+        }
+
     }
 
     isProfessional(){

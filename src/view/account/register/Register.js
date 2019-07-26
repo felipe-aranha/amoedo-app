@@ -43,9 +43,11 @@ export default class Register extends MainView{
             tax_class_name: "Retail Customer",
           };
         this.sections = [{name:'personal-data'}];
-        if(!this.isStudent())
-            this.sections.push({name:'professional-data'})
-        this.sections.push({name:'upload-files'})
+        if(this.context.userType != 'customer'){
+            if(!this.isStudent())
+                this.sections.push({name:'professional-data'})
+            this.sections.push({name:'upload-files'})
+        }
         this.state = initialState;
         this.customerService = new CustomerService();
     }

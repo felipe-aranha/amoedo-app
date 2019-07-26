@@ -18,6 +18,9 @@ export default class ProfileSelection extends MainView {
 
     constructor(props,context){
         super(props,context);
+        if(context.userType == 'customer'){
+            Actions.replace('customerRegister')
+        }
         this.customerService = new CustomerService();
         this.state = {
             profiles: context.app.groups,

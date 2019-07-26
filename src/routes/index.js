@@ -16,7 +16,8 @@ import {
     Register,
     Pending,
     Professional,
-    AddClient
+    AddClient,
+    CustomerRegister
 } from '../view';
 import Toast from 'react-native-easy-toast';
 import { MainContext } from '../reducer';
@@ -25,7 +26,7 @@ import { Projects } from '../view/professional';
 import { AddProject } from '../view/professional';
 import I18n from '../i18n';
 
-export class Routes extends React.Component{
+export class Routes extends React.PureComponent{
 
     static contextType = MainContext;
 
@@ -92,11 +93,11 @@ export class Routes extends React.Component{
                     <Modal panHandlers={null} key='main'>
                         <Scene initial={this.context.user.token == null} hideNavBar key='accountType' component={AccountType} />
                         <Stack hideNavBar key='account'>
-                            <MainContext.Consumer>
-                                <Scene initial={!this.state.isLoggedIn} hideNavBar key='login' component={Login} />
-                                <Scene initial={this.state.isLoggedIn} hideNavBar key='profileSelection' component={ProfileSelection} />
-                                <Scene key='register' hideNavBar component={Register} />
-                            </MainContext.Consumer>
+                            <Scene initial={!this.state.isLoggedIn} hideNavBar key='login' component={Login} />
+                            <Scene initial={this.state.isLoggedIn} hideNavBar key='profileSelection' component={ProfileSelection} />
+                            <Scene key='customerRegister' hideNavBar component={CustomerRegister} />
+                            <Scene key='register' hideNavBar component={Register} />
+                                
                         </Stack>
                         <Stack initial={this.context.user.token != null} hideNavBar key='purgatory'>
                             <Scene hideNavBar key='pendingAccount' component={Pending} />
@@ -111,7 +112,7 @@ export class Routes extends React.Component{
                             </Drawer>   
                         </Stack>
                     </Modal>
-                </Router>   
+                </Router>
                 <Toast position={'bottom'} ref={this.toast} />
             </View>         
         );
