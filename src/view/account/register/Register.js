@@ -2,7 +2,7 @@ import React from 'react';
 import { MainView } from '../../MainView';
 import { Header, Text, Select, AppIcon, KeyboardSpacer } from '../../../components';
 import { View, StatusBar, TouchableOpacity, ScrollView, Alert } from 'react-native';
-import { secondaryColor, accountStyle } from '../../../style';
+import { secondaryColor, accountStyle, tertiaryColor } from '../../../style';
 import { PersonalData } from './PersonalData';
 import { Documents } from './Documents';
 import { ProfessionalData } from './ProfessionalData';
@@ -334,7 +334,12 @@ export default class Register extends MainView{
         }
     }
 
+    isCustomer(){
+        return this.context.userType == 'customer';
+    }
+
     renderCenter(){
+        const isCustomer = this.isCustomer();
         return (
             <View style={{
                 flex:1
@@ -343,14 +348,14 @@ export default class Register extends MainView{
                     containerStyle={{
                         borderBottomWidth: 0
                     }}
-                    title={this.profile.name}
+                    title={isCustomer ? I18n.t('section.client') :this.profile.name}
                     handleBack={this.handleBack.bind(this)}
                     leftIconColor={'rgb(242,242,242)'}
                     titleStyle={accountStyle.registerHeaderText}
-                    backgroundColor={secondaryColor}
+                    backgroundColor={isCustomer ? tertiaryColor : secondaryColor}
                 />
                 <View
-                    style={accountStyle.registerContentArea}
+                    style={isCustomer ? accountStyle.registerCustomerContentArea : accountStyle.registerContentArea}
                 >
                     {this.sections.map((section,key) =>{
                         const isActive = this.state.activeSection == section.name;

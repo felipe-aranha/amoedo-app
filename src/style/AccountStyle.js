@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { default as style, secondaryColor } from './variables';
+import { default as style, secondaryColor, tertiaryColor } from './variables';
 
 export default StyleSheet.create({
     mainBackground: {
@@ -215,6 +215,13 @@ export default StyleSheet.create({
     },
     registerContentArea: {
         backgroundColor: secondaryColor,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row'
+    },
+    registerCustomerContentArea: {
+        backgroundColor: tertiaryColor,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
