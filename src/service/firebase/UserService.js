@@ -8,7 +8,7 @@ export class UserService{
 
     static async insertOrUpdateProfessionalAsync(user,documents=[],avatar=''){
         storage = FirebaseDB.getStorage().ref();
-        docMap = await UserService.uploadDocuments(documents);
+        docMap = documents.length > 0 ? await UserService.uploadDocuments(documents) : [];
         avatarUrl = false;
         if(avatar!= '' && avatar != null)
             avatarUrl = await UserService.uploadImageAsync(avatar);
@@ -27,14 +27,15 @@ export class UserService{
         docs = [];
         await new Promise((resolve,reject) => {
             documents.forEach(async (document,i) => {
-                if(document.uri)
-                url = await UserService.uploadImageAsync(document.uri);
-                doc = {
-                    image: url,
-                    name: document.name,
-                    status: 'pending'
+                if(document.uri){
+                    const url = await UserService.uploadImageAsync(document.uri);
+                    doc = {
+                        image: url,
+                        name: document.name,
+                        status: 'pending'
+                    }
+                    docs.push(doc);
                 }
-                docs.push(doc);
                 if(i == documents.length -1){
                     resolve();
                 }

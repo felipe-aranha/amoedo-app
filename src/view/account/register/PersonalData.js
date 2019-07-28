@@ -23,7 +23,7 @@ export class PersonalData extends Form {
     }
 
     isStudent(){
-        return ~this.props.profile.code.toLowerCase().indexOf('estudante')
+        return !~this.props.profile.code.toLowerCase().indexOf('profissional') 
     }
 
     getDocumentType(){

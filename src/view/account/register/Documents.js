@@ -15,27 +15,27 @@ export class Documents extends PersonalData {
         super(props,context);
 
         const documents = [
-            { state: 'rgDocument', name: 'rg' },
-            { state: 'cpfDocument', name: 'cpf' }
+            { state: 'rgDocument', name: 'rg', required: false },
+            { state: 'cpfDocument', name: 'cpf', required: false }
         ]
 
         if(!this.isStudent()){
             switch(this.props.profile.name.toLowerCase()){
                 case 'arquiteto':
-                    documents.push({state: 'cauDocument', name: 'cau'});
+                    documents.push({state: 'cauDocument', name: 'cau', required: true});
                     break;
                 case 'designer':
-                    documents.push({state: 'abdDocument', name: 'abd'});
+                    documents.push({state: 'abdDocument', name: 'abd', required: true});
                     break;
                 case 'engenheiro':
-                    documents.push({state: 'creaDocument', name: 'crea'});
+                    documents.push({state: 'creaDocument', name: 'crea', required: true});
                     break;
                 default:
-                    documents.push({state: 'cnpjDocument', name: 'cnpj'});
+                    documents.push({state: 'cnpjDocument', name: 'cnpj', required: true});
                     break;
             }
         }
-        documents.push({state: 'proofDocument', name: 'proofOfAddress'})
+        documents.push({state: 'proofDocument', name: 'proofOfAddress', required: false})
         this.state = { 
             ...super.getInitialState(),
             documents,
@@ -55,7 +55,7 @@ export class Documents extends PersonalData {
     isFormValid(){
         valid = true;
         this.state.documents.forEach(document => {
-            if (!this.notEmpty(document.state)){
+            if (!this.notEmpty(document.state) && document.required){
                 valid = false;
             }
         })
@@ -134,7 +134,7 @@ export class Documents extends PersonalData {
             return (
                 <ListItem 
                     key={document.name}
-                    title={I18n.t(`form.${document.name}`)}
+                    title={I18n.t(`document.${document.name}`)}
                     titleStyle={{
                         color: 'rgb(77,77,77)',
                         textTransform: 'uppercase',

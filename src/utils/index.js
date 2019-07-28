@@ -38,7 +38,7 @@ export const parseDate = (d) => {
 	o = ~d.indexOf("-") ? "-" : "/";
 	n = ~d.indexOf("-") ? "/" : "-";
 	a = d.split(o);
-	if(a.length != 3) return false;
+	if(a.length != 3) return undefined;
 	nd = `${a[2]}${n}${a[1]}${n}${a[0]}`;
 	return nd
 }

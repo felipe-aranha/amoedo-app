@@ -18,7 +18,7 @@ export class ProfessionalData extends PersonalData {
     titleHighlight = I18n.t('account.register.professionalDataHighlight');
 
     isFormValid(){
-        return this.notEmpty('cnpj',14) && this.notEmpty('companyName') && this.notEmpty('monthlyProjects');
+        return true;
     }
 
     renderForm(){
