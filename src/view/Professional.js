@@ -72,7 +72,6 @@ export default class Professional extends MainView{
     }
 
     componentDidMount(){
-        this.toggleDrawer();
     }
 
     toggleDrawer(){

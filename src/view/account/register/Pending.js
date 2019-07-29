@@ -39,6 +39,7 @@ export class Pending extends AccountBase{
                 if(isProfessional){
                     switch(user.status){
                         case "approved":
+                            this.context.openDrawer = true;
                             Actions.reset('professional');
                             break;
                         default:

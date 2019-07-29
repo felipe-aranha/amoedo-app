@@ -42,6 +42,10 @@ export default class Projects extends Professional{
     }
 
     componentDidMount(){
+        if(this.context.openDrawer){
+            this.context.openDrawer = false;
+            Actions.drawerOpen();
+        }
         const myId = this.context.user.magento.id;
         const myProjects = UserService.getProjects(myId);
         this.subscription = myProjects.onSnapshot(doc => {
