@@ -191,6 +191,8 @@ export default {
         }
     },
     project: {
+        projects: 'Projetos',
+        budgets: 'Orçamentos',
         projectType: 'TIPO DE PROJETO',
         projectName: 'NOME DO PROJETO',
         summary: 'RESUMO',

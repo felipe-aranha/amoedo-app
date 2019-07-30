@@ -4,7 +4,8 @@ import uuid from 'uuid';
 export class UserService{
 
     static CUSTOMER = 'customer';
-    static PROFESSIONAL = 'professional'
+    static PROFESSIONAL = 'professional';
+    static PROJECT = 'project';
 
     static async insertOrUpdateProfessionalAsync(user,documents=[],avatar=''){
         storage = FirebaseDB.getStorage().ref();
@@ -67,19 +68,18 @@ export class UserService{
         return await snapshot.ref.getDownloadURL();
       }
     
-    static insertOrUpdateCustomerAsync(customer){
+    static async insertOrUpdateCustomerAsync(customer,verify){
         customer = Object.assign({},customer);
         const db = UserService.getCustomerDB();
-        return db.doc(customer.email).set(customer);
+
+        const exists = verify ? await UserService.userExists(customer.email,db) : false;
+        if(!exists)
+            return await db.doc(customer.email).set(customer);
     }
 
-    static insertAndAttachCustomer(customer,professionalDoc){
-        return UserService.insertOrUpdateCustomerAsync(customer).then(() => {
-            return UserService.addCustomerToProfessional(customer,professionalDoc);
-        }).catch(e => {
-            console.log(e);
-            return false;
-        })
+    static async insertAndAttachCustomer(customer,professionalDoc){
+        await UserService.insertOrUpdateCustomerAsync(customer,true);
+        return UserService.addCustomerToProfessional(customer,professionalDoc);
     }
 
     static createOrUpdateProject(professionalId,customerEmail,project,id=null){
@@ -151,6 +151,11 @@ export class UserService{
         return db.where('professional','==',professional);
     }
 
+    static getCustomerProjects(customer){
+        const db = UserService.getProjectDB();
+        return db.where('customer','==',customer);
+    }
+
     static getProfessionalDoc(docID){
         return UserService.getProfessionalDB().doc(docID.toString());
     }
@@ -164,7 +169,7 @@ export class UserService{
     }
 
     static getProjectDB(){
-        return FirebaseDB.getCollection('projects')
+        return FirebaseDB.getCollection(UserService.PROJECT)
     }
 
 }

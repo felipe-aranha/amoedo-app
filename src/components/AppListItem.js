@@ -40,7 +40,7 @@ export class AppListItem extends React.PureComponent{
                                 color: 'rgb(77,77,77)',
                                 fontSize: 12
                             }}
-                        >{` ${subtitle1}`}</Text>
+                        >{` ${subtitle1 || ''}`}</Text>
                     </View>
                     <View style={{
                         flexDirection: 'row', 
@@ -55,7 +55,7 @@ export class AppListItem extends React.PureComponent{
                                 fontSize: 12
                             }}
                             numberOfLines={1}
-                        >{` ${subtitle2}`}</Text>
+                        >{` ${subtitle2 || ''}`}</Text>
                     </View>
                 </View>
             }

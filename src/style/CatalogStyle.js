@@ -10,7 +10,7 @@ export default StyleSheet.create({
     },
     list: {
         backgroundColor: '#fff',
-        paddingHorizontal: 20
+        marginHorizontal: 20
     },
     listContainer: {
         paddingHorizontal: 0,

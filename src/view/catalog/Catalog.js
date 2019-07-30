@@ -144,7 +144,7 @@ export default class Catalog extends MainView{
                     titleStyle={accountStyle.registerHeaderText}
                     backgroundColor={'rgb(103,4,28)'}
                 />
-                <View style={{flex:1}}>
+                <View style={{flex:1, backgroundColor:'#fff'}}>
                     {category.children != '' ? 
                         <FlatList
                             style={catalogStyle.list}
