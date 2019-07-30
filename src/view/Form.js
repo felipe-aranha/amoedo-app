@@ -302,7 +302,7 @@ export default class Form extends React.PureComponent{
     }
 
     notEmpty(state,length=1){
-        return this.state[state].trim().length >= length;
+        return this.state[state] && this.state[state].trim().length >= length;
     }
 
     // inputs

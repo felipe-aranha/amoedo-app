@@ -25,6 +25,8 @@ import { ProfessionalDrawer, Clients } from '../view/professional';
 import { Projects } from '../view/professional';
 import { AddProject } from '../view/professional';
 import I18n from '../i18n';
+import CustomerDrawer from '../view/customer/CustomerDrawer';
+import CustomerProjects from '../view/customer/CustomerProjects';
 
 export class Routes extends React.PureComponent{
 
@@ -111,6 +113,11 @@ export class Routes extends React.PureComponent{
                                 <Scene hideNavBar key='addProject' component={AddProject} />
                             </Drawer>   
                         </Stack>
+                        <Drawer drawerWidth={drawerWidth} contentComponent={CustomerDrawer} hideNavBar key='customer'>
+                            <Stack hideNavBar key='customerStack'>
+                                <Scene hideNavBar key='projects' component={CustomerProjects} />
+                            </Stack>
+                        </Drawer>
                     </Modal>
                 </Router>
                 <Toast position={'bottom'} ref={this.toast} />

@@ -20,6 +20,51 @@ export default class ProfessionalDrawer extends MainView{
         }
     }
 
+    renderItems(){
+        return(
+            <View style={drawerStyle.menuArea}>
+                <TouchableOpacity onPress={() => {this.goTo('_clients')}} style={drawerStyle.menuItemArea}>
+                    <AppIcon large name={'clients'} style={drawerStyle.menuItemIcon} />
+                    <Text style={drawerStyle.menuItemText}>{I18n.t('menu.clients')}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {this.goTo('_projects')}} style={drawerStyle.menuItemArea}>
+                    <AppIcon large name={'list'} style={drawerStyle.menuItemIcon} />
+                    <Text style={drawerStyle.menuItemText}>{I18n.t('menu.projects')}</Text>
+                </TouchableOpacity>
+                { /* <TouchableOpacity style={drawerStyle.menuItemArea}>
+                    <AppIcon large name={'occurrence'} style={drawerStyle.menuItemIcon} />
+                    <Text style={drawerStyle.menuItemText}>{I18n.t('menu.occurrences')}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={drawerStyle.menuItemArea}>
+                    <AppIcon large name={'chat'} style={drawerStyle.menuItemIcon} />
+                    <Text style={drawerStyle.menuItemText}>{I18n.t('menu.chat')}</Text>
+                </TouchableOpacity> */ }
+            </View>
+        )
+    }
+
+    renderBottomItems(){
+        return(
+            <View style={{flex:1, justifyContent: 'flex-end', padding: 20, marginBottom: 20}}>
+                    <View style={drawerStyle.divider}  
+                    />
+                    {/* <TouchableOpacity style={drawerStyle.menuItemArea}>
+                        <AppIcon large name={'settings'} style={drawerStyle.menuItemIcon} />
+                        <Text style={drawerStyle.menuItemText}>{I18n.t('menu.settings')}</Text>
+                        </TouchableOpacity> */}
+                    <TouchableOpacity onPress={this.logout.bind(this)} style={drawerStyle.menuItemArea}>
+                        <AppIcon large name={'logout'} style={drawerStyle.menuItemIcon} />
+                        <Text style={drawerStyle.menuItemText}>{I18n.t('menu.logout')}</Text>
+                    </TouchableOpacity>
+            </View>
+        )
+    }
+
+    getUserType(){
+        const { user } = this.context;
+        return user.group.name.toUpperCase();
+    }
+
     render(){
         const { user } = this.context;
         return(
@@ -58,7 +103,7 @@ export default class ProfessionalDrawer extends MainView{
                     <Text
                         style={drawerStyle.userType}
                     >
-                        {user.group.name.toUpperCase()}
+                        {this.getUserType()}
                     </Text>
                     <GradientButton 
                         vertical
@@ -69,36 +114,8 @@ export default class ProfessionalDrawer extends MainView{
                         titleStyle={drawerStyle.editText}
                     />
                 </View>
-                <View style={drawerStyle.menuArea}>
-                    <TouchableOpacity onPress={() => {this.goTo('_clients')}} style={drawerStyle.menuItemArea}>
-                        <AppIcon large name={'clients'} style={drawerStyle.menuItemIcon} />
-                        <Text style={drawerStyle.menuItemText}>{I18n.t('menu.clients')}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {this.goTo('_projects')}} style={drawerStyle.menuItemArea}>
-                        <AppIcon large name={'list'} style={drawerStyle.menuItemIcon} />
-                        <Text style={drawerStyle.menuItemText}>{I18n.t('menu.projects')}</Text>
-                    </TouchableOpacity>
-                    { /* <TouchableOpacity style={drawerStyle.menuItemArea}>
-                        <AppIcon large name={'occurrence'} style={drawerStyle.menuItemIcon} />
-                        <Text style={drawerStyle.menuItemText}>{I18n.t('menu.occurrences')}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={drawerStyle.menuItemArea}>
-                        <AppIcon large name={'chat'} style={drawerStyle.menuItemIcon} />
-                        <Text style={drawerStyle.menuItemText}>{I18n.t('menu.chat')}</Text>
-                    </TouchableOpacity> */ }
-                </View>
-                <View style={{flex:1, justifyContent: 'flex-end', padding: 20, marginBottom: 20}}>
-                        <View style={drawerStyle.divider}  
-                        />
-                        <TouchableOpacity style={drawerStyle.menuItemArea}>
-                            <AppIcon large name={'settings'} style={drawerStyle.menuItemIcon} />
-                            <Text style={drawerStyle.menuItemText}>{I18n.t('menu.settings')}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={this.logout.bind(this)} style={drawerStyle.menuItemArea}>
-                            <AppIcon large name={'logout'} style={drawerStyle.menuItemIcon} />
-                            <Text style={drawerStyle.menuItemText}>{I18n.t('menu.logout')}</Text>
-                        </TouchableOpacity>
-                </View>
+                {this.renderItems()}
+                {this.renderBottomItems()}
             </View>
         )
     }

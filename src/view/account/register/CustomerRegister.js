@@ -3,12 +3,15 @@ import Register from './Register';
 import * as Utils from '../../../utils';
 import { AddClientForm } from '../../professional/AddClient';
 import { Check, Text } from '../../../components';
-import { View } from 'react-native';
+import { View, Alert } from 'react-native';
 import I18n from '../../../i18n';
 import { MainContext } from '../../../reducer';
 import { accountStyle, tertiaryColor } from '../../../style';
 import Form from '../../Form';
 import { Button } from 'react-native-elements';
+import { Customer, Address } from '../../../model/magento';
+import { UserService } from '../../../service/firebase/UserService';
+import { Actions } from 'react-native-router-flux';
 
 export default class CustomerRegister extends Register {
 
@@ -18,6 +21,7 @@ export default class CustomerRegister extends Register {
         super(props,context);
         this.state = {
             activeSection: 'personal-data',
+            personalData: {}
         }
     }
 
@@ -32,8 +36,7 @@ export default class CustomerRegister extends Register {
         else {
             const { personalData, professionalData, documents, loading } = this.state;
             this.customer = {
-                ...magento,
-                group_id: this.profile.id,
+                ...magento
             }
             const dob = Utils.parseDate(personalData.dob);
             if(dob){
@@ -53,32 +56,91 @@ export default class CustomerRegister extends Register {
         }
     }
 
+    createUser(){
+        const { personalData } = this.state;
+        if(this.context.user.magento.id){
+            this.updateUser();
+            return;
+        }
+        const { firstname, lastname } = Utils.parseName(personalData.name);
+        let address = this.fillAddress(firstname, lastname);
+        let customer = new Customer(address, personalData.cell || personalData.phone);
+        customer = {
+            ...customer,
+            dob: Utils.parseDate(personalData.dob),
+            taxvat: personalData.cpf,
+            firstname,
+            lastname,
+            email: personalData.email
+        }
+        let customerRegister = new CustomerRegister(customer, personalData.password);
+        this.customer = customerRegister;
+        if(this.isRegistered && this.user != null){
+            this.firebaseRegister();
+            return;
+        }
+        this.customerService.register(customerRegister.customer,customerRegister.password).then(response => {
+            this.processApiReturn(response);
+        }).catch(e => {
+            this.processApiCatch(e);
+        })
+    }
+
     handlePersonalDataContinue(state){
         if(this.state.loading) return;
+        const { magento } = this.context && this.context.user ? this.context.user : {};
+        const loggedIn = magento.id ? true : false;
+        const personType = this.state.personType || 1;
         this.setState({
             personalData: state,
             loading: true
         },() => {
-            const { firstname, lastname } = Utils.parseName(state.name);
-            data = {
-                customer: {
-                    email: state.email,
-                    firstname,
-                    lastname,
-                    taxvat: state.cpf
-                },
-                password: state.password
-            } 
-            this.customerService.register(data.customer,data.password).then(response => {
-                if(response.id){
-                    this.setState({
-                        userRegistered: true
-                    })
-                }
-            }).catch(e => {
-                
-            })
+            this.openModalLoading();
+            if(loggedIn){
+                return this.updateUser();
+            } else {
+                return this.createUser();
+            }
         });
+    }
+
+    async firebaseRegister(customerId=null){
+        const { personalData } = this.state;
+        const personType = this.state.personType || 1;
+        const { magento } = this.context && this.context.user ? this.context.user : {};
+        const loggedIn = magento.id ? true : false;
+        let address = new Address();
+            address = loggedIn ? magento.addresses[0] : {
+                address: personalData.address,
+                city: personalData.city,
+                complement: personalData.complement,
+                neighborhood: personalData.neighborhood,
+                number: personalData.number,
+                state: personalData.state,
+                zipCode: personalData.zipCode
+            }
+            let customer = new Customer(Object.assign({},address));
+            customer = {
+                ...customer,
+                avatar: personalData.avatar,
+                cellphone: personalData.cell,
+                document: this.state.personType == 1 ? personalData.cpf : personalData.cnpj,
+                documentType: personType == 1 ? "cpf" : "cnpj",
+                email: loggedIn ? magento.email : personalData.email,
+                instagram: personalData.instagram,
+                name: loggedIn ? `${magento.firstname} ${magento.lastname}` :personalData.name,
+                rg: personalData.rg,
+                telephone: personalData.phone
+            }
+            response = await UserService.insertOrUpdateCustomerAsync(customer);
+            this.context.message(I18n.t(`form.${response != false ? 'success' : 'fail'}`))
+            if(response != false){
+                Actions.reset('purgatory');
+            }
+            else 
+                this.setState({
+                    loading: false
+                })
     }
 
     changePersonType(personType){
@@ -113,7 +175,7 @@ export default class CustomerRegister extends Register {
                         {[1,2].map( key => 
                             <Check 
                                 key={key.toString()}
-                                title={I18n.t(`addClient.personType.${key}`)}
+                                title={I18n.t(`form.personType.${key}`)}
                                 onPress={this.changePersonType.bind(this,key)}
                                 checked={personType == key}
                             />
@@ -122,7 +184,7 @@ export default class CustomerRegister extends Register {
                 }
                 <CustomerRegisterForm
                     key={personType.toString()} 
-                    initialState={this.context.user.magento}
+                    initialState={this.state.personalData}
                     onContinue={this.handlePersonalDataContinue.bind(this)}
                     personType={personType}
                     loading={this.state.loading}
@@ -150,8 +212,13 @@ export class CustomerRegisterForm extends Form {
     }
 
     isFormValid(){
-        isNameValid =  this.notEmpty('name');
-        return isNameValid && this.state.emailValid;
+        const { magento } = this.context && this.context.user ? this.context.user : {};
+        const loggedIn = magento.id ? true : false;
+        const isNameValid = this.notEmpty('name') || loggedIn;
+        const isCpfValid = this.notEmpty(this.props.personType == 1 ? 'cpf' : 'cnpj') || loggedIn;
+        const isEmailValid = this.state.emailValid || loggedIn;
+        const isPhonevalid = this.notEmpty('phone') || this.notEmpty('cell');
+        return isNameValid && isCpfValid && isEmailValid && isPhonevalid;
     }
 
     render(){
@@ -160,7 +227,7 @@ export class CustomerRegisterForm extends Form {
                 {this.renderForm()}
                 <View style={{marginVertical: 20}}>
                 <Button 
-                    title={I18n.t('addClient.submit')}
+                    title={I18n.t('addpersonalData.submit')}
                     containerStyle={accountStyle.accountTypeButtonContainer}
                     buttonStyle={[accountStyle.accountTypeButton,{backgroundColor:tertiaryColor}]}
                     titleStyle={[accountStyle.accountTypeButtonTitle]}
