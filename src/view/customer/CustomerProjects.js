@@ -61,6 +61,9 @@ export default class CustomerProjects extends Customer {
                                 chevronColor={tertiaryColor}
                                 icon1={'check-warning'}
                                 subtitle1={I18n.t('list.project.inProgress')}
+                                onPress={() => {
+                                    Actions.push('cart',{project: item, room})
+                                }}
                            />
                        )
                    })} 
@@ -101,7 +104,7 @@ export default class CustomerProjects extends Customer {
                 <ButtonGroup 
                     onPress={this.updateFilesIndex.bind(this)}
                     selectedIndex={this.getFileIndex()}
-                    buttons={[I18n.t('project.projects'),I18n.t('project.budgets')]}
+                    buttons={[I18n.t('project.projects'),I18n.t('project.quotes')]}
                     containerStyle={{
                         borderRadius: 10
                     }}

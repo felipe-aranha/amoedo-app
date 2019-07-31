@@ -135,7 +135,7 @@ export default class Professional extends MainView{
                         }}
                         title={this.title}
                         handleBack={this.handleBack.bind(this)}
-                        leftIconColor={'rgb(242,242,242)'}
+                        leftIconColor={this.leftIconColor || 'rgb(242,242,242)'}
                         titleStyle={[accountStyle.registerHeaderText,this.titleStyle]}
                         backgroundColor={this.barColor}
                         leftIcon={

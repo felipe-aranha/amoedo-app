@@ -139,7 +139,9 @@ export default {
         addProject: 'CADASTRAR PROJETO',
         editProject: 'EDITAR PROJETO',
         room: 'AMBIENTE',
-        products: 'PRODUTOS'
+        products: 'PRODUTOS',
+        quote: 'RESUMO DE ORÇAMENTO',
+        payment: 'PAGAMENTO'
     },
     menu: {
         clients: 'Clientes',
@@ -192,7 +194,7 @@ export default {
     },
     project: {
         projects: 'Projetos',
-        budgets: 'Orçamentos',
+        quotes: 'Orçamentos',
         projectType: 'TIPO DE PROJETO',
         projectName: 'NOME DO PROJETO',
         summary: 'RESUMO',
@@ -256,5 +258,17 @@ export default {
         productError: 'Ocorreu um erro ao consultar o produto',
         delete: 'EXCLUIR',
         deleted: 'Produto excluído!'
+    },
+    checkout: {
+        billingAddress: 'Endereço de cobrança',
+        shippingAddress: 'Endereço de entrega',
+        newAddress: 'Novo endereço',
+        subtotal: 'Subtotal',
+        send: 'ENVIAR PARA PAGAMENTO',
+        finish: 'FINALIZAR PAGAMENTO',
+        payment: 'Pagamento',
+        ship: 'Frete',
+        paymentMethod: 'Forma de pagamento',
+        saveAddress: 'SALVAR ENDEREÇO'
     }
 }

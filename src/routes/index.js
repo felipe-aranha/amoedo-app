@@ -27,6 +27,7 @@ import { AddProject } from '../view/professional';
 import I18n from '../i18n';
 import CustomerDrawer from '../view/customer/CustomerDrawer';
 import CustomerProjects from '../view/customer/CustomerProjects';
+import CustomerCart from '../view/customer/CustomerCart';
 
 export class Routes extends React.PureComponent{
 
@@ -116,6 +117,7 @@ export class Routes extends React.PureComponent{
                         <Drawer drawerWidth={drawerWidth} contentComponent={CustomerDrawer} hideNavBar key='customer'>
                             <Stack hideNavBar key='customerStack'>
                                 <Scene hideNavBar key='projects' component={CustomerProjects} />
+                                <Scene hideNavBar key='cart' component={CustomerCart} />
                             </Stack>
                         </Drawer>
                     </Modal>

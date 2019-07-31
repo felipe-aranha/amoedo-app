@@ -91,7 +91,7 @@ export default class ProfessionalDrawer extends MainView{
                                 height={32}
                                 title={<MaterialIcons size={18} name={'check'} />}
                                 titleStyle={drawerStyle.editText}
-                            />
+                            /> 
                         </View>
                     </View>
                     <Text
@@ -105,6 +105,7 @@ export default class ProfessionalDrawer extends MainView{
                     >
                         {this.getUserType()}
                     </Text>
+                    {/*
                     <GradientButton 
                         vertical
                         colors={['rgb(170,4,8)','rgb(226,0,6)']}
@@ -112,7 +113,7 @@ export default class ProfessionalDrawer extends MainView{
                         height={36}
                         title={'Editar'}
                         titleStyle={drawerStyle.editText}
-                    />
+                    /> */}
                 </View>
                 {this.renderItems()}
                 {this.renderBottomItems()}
