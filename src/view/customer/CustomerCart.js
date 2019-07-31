@@ -23,10 +23,16 @@ export default class CustomerCart extends Customer{
         super(props,context);
         this.state = {
             items: [],
-            billingAddress: null,
-            shippingAddress: null,
+            billingAddress: this.getDefaultAddress('billing'),
+            shippingAddress: this.getDefaultAddress('shipping'),
             cart: props.room.cart || [],
         }
+        console.log(this.state);
+    }
+
+    getDefaultAddress(type){
+        const { magento } = this.context.user;
+        return magento.addresses.find(address => address[`default_${type}`] == true) || null;
     }
 
     renderLeftIcon(){
@@ -39,8 +45,14 @@ export default class CustomerCart extends Customer{
     renderAddresses(){
         return(
             <View>
-                <SelectAddress type='shipping' />
-                <SelectAddress type='billing' />
+                <SelectAddress 
+                    type='shipping'
+                    selected={this.state.shippingAddress} 
+                />
+                <SelectAddress 
+                    type='billing' 
+                    selected={this.state.billingAddress}
+                />
             </View>
         )
     }

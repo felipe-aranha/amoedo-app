@@ -134,7 +134,6 @@ export default class Products extends React.PureComponent{
             } 
         }          
         if(cart == null) cart = [];
-        console.log(cart);
         this.setState({cart})
         this.props.onCartChange(cart);
     }
@@ -145,9 +144,7 @@ export default class Products extends React.PureComponent{
     }
 
     increase(item){
-        console.log(item);
         const stock = this.getAttributeValue(item,'quantity_and_stock_status') || 0;
-        console.log(stock);
         if(item.qty < stock){
             this.setQty(item,item.qty + 1)
         }

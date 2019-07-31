@@ -30,7 +30,6 @@ export default class Room extends React.PureComponent {
     }
 
     handleUpdateProduct(item){
-        console.log(item);
         if(!item) {
             this.setState({
                 product: null
@@ -48,7 +47,6 @@ export default class Room extends React.PureComponent {
             })
         }          
         if(cart == null) cart = [];
-        console.log(cart);
         this.setState({
             cart,
             product: null
@@ -114,12 +112,10 @@ export default class Room extends React.PureComponent {
     }
 
     handleDelete(f){
-        console.log(f);
         let files = Object.assign({},this.state.files);
         Object.keys(files).forEach(cat => {
             files[cat] = files[cat].filter(file => file.uri != f.uri) || [];
         });
-        console.log(files);
         this.setState({
             files
         })
@@ -157,7 +153,6 @@ export default class Room extends React.PureComponent {
         const data = {
             width, height, depth, description, room, files, cart
         }
-        console.log(data);
         this.props.onSave(data);
     }
 

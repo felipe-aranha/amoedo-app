@@ -11,7 +11,6 @@ import { View, FlatList } from 'react-native';
 export default class CustomerProjects extends Customer {
 
     updateFilesIndex(fileIndex){
-        console.log(fileIndex);
         this.setState({fileIndex})
     }
 
@@ -48,7 +47,6 @@ export default class CustomerProjects extends Customer {
     renderItem({item}){
         leftIcon = <Image style={{width:50,height:50}} source={require('../../../assets/images/icons/list-project-x2.png')} />
         if(this.getFileIndex() == 1){
-            console.log(item);
             return(
                 <>
                    {item.data.rooms.map((room,i) => {

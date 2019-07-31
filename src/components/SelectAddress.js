@@ -56,7 +56,6 @@ export class SelectAddress extends React.PureComponent{
             }
             magento.addresses.push(address);
             this.customerService.updateCustomer(magento.id,magento).then(r => {
-                console.log(r);
                 this.context.user.magento = magento;
                 this.setState({
                     addresses: magento.addresses,
@@ -68,7 +67,6 @@ export class SelectAddress extends React.PureComponent{
                 })
 
             }).catch(e => {
-                console.log(e);
                 this.setState({
                     loading: false
                 })
@@ -96,15 +94,12 @@ export class SelectAddress extends React.PureComponent{
                             }}
                         />
                     }
-                    title={{
+                    titleStyle={{
                         color: 'rgb(77,77,77)',
                         fontFamily: 'system-bold',
                         fontSize: 12
                     }}
-                    subtitle={`${address.street.filter(s => s != '').join(', ')}`}
-                    chevron={{
-                        color: tertiaryColor
-                    }}
+                    title={`${address.street.filter(s => s != '').join(', ')}`}
                     onPress={this.toggleModal.bind(this)}
                 />
             )
@@ -154,7 +149,7 @@ export class SelectAddress extends React.PureComponent{
         return <Text weight={'bold'}>
             {selected == null ? 
                 I18n.t('checkout.newAddress') : 
-                ''
+                <Text weight={'medium'} size={10} color={'rgb(57,57,57)'}>{selected.street.filter(s => s != '').join(', ')}</Text>
             }
         </Text>
     }
@@ -186,8 +181,8 @@ export class SelectAddress extends React.PureComponent{
                     subtitle={this.renderAddressName()}
                     chevron={{
                         color: tertiaryColor,
-                        name: selected == null ? 'plus' : undefined,
-                        type: 'font-awesome'
+                        name: selected == null ? 'plus' : 'chevron-right',
+                        type: 'entypo'
                     }}
                     onPress={this.toggleModal.bind(this)}
                 />
