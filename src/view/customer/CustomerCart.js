@@ -143,7 +143,7 @@ export default class CustomerCart extends Customer{
         let selectedCart = this.state.selectedCart.slice();
         const checked = selectedCart.find(i => i.sku = item.sku) || false;
         if(checked != false){
-            selectedCart = this.state.selectedCart.filter(i => i.sku != item.sku) || [];
+            selectedCart = this.state.selectedCart.slice().filter(i => i.sku != item.sku) || [];
         } else {
             selectedCart.push(item);
         }
