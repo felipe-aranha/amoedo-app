@@ -52,6 +52,13 @@ export default class CustomerCart extends Customer{
         if(this.state.cart.length > this.state.cartItems.length){
             this.loadCartItems();
         }
+        this.checkoutService.getCartItems().then(response =>{
+            if(response.length > 0){
+                response.forEach(item => {
+                    this.checkoutService.deleteCartItem(item.item_id);
+                })
+            }
+        })
     }
 
     loadCartItems(){

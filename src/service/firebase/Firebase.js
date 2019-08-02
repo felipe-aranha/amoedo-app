@@ -20,8 +20,4 @@ export class FirebaseDB{
         return storage;
     }
 
-    static getFirestore(){
-        return firestore;
-    }
-
 }

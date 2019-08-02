@@ -9,6 +9,14 @@ export class CheckoutService extends HttpClient {
         return this.postAsync(`${this.basePath}carts/mine`);
     }
 
+    async getCartItems(){
+        return this.getAsync(`${this.basePath}carts/mine/items`);
+    }
+
+    async deleteCartItem(item){
+        return this.deleteAsync(`${this.basePath}carts/mine/items/${item}`);
+    }
+
     async addToCart(items,quoteId){
         return new Promise((resolve) => {
             items.forEach(async (item,i) => {
