@@ -269,6 +269,11 @@ export default {
         payment: 'Pagamento',
         ship: 'Frete',
         paymentMethod: 'Forma de pagamento',
-        saveAddress: 'SALVAR ENDEREÇO'
+        saveAddress: 'SALVAR ENDEREÇO',
+        error: {
+            noBillingAddress: 'Informe um endereço de cobrança!',
+            noShippingAddress: 'Informe um endereço de entrega!',
+            noCartItems: 'Nenhum item selecionado'
+        }
     }
 }
