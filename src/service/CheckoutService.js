@@ -1,4 +1,5 @@
 import { HttpClient } from './HttpClient';
+import variables from '../utils';
 
 export class CheckoutService extends HttpClient {
 
@@ -61,6 +62,27 @@ export class CheckoutService extends HttpClient {
         return this.postAsync(`${this.basePath}carts/mine/shipping-information`,data)
     }
 
+    async setCreditCardInfo(cc,billingAddress){
+        const data = {
+            type: "card",
+            card: {
+                type: "credit",
+                ...cc,
+                billing_address: {
+                    street: billingAddress.address[0] || "",
+                    number: billingAddress.address[1] || "",
+                    zip_code: billingAddress.postcode,
+                    neighborhood: billingAddress.address[3] || "",
+                    complement: billingAddress.address[2] || "",
+                    city: billingAddress.city,
+                    state: billingAddress.region.region_code,
+                    country: billingAddress.country_id
+                }
+            }
+        }
+        this.postAsync(`https://api.mundipagg.com/core/v1/tokens?appId=${variables.mundipagg.appId}`, data)
+    }
+
     parseAddress(address,email){
         return {
             region: address.region.region,
@@ -79,3 +101,9 @@ export class CheckoutService extends HttpClient {
     }
 
 }
+
+/*
+
+{paymentMethod":{"method":"mundipagg_creditcard","additional_data":{"cc_type":"Visa","cc_last_4":"1111","cc_exp_year":"2029","cc_exp_month":"12","cc_owner":"cvs","cc_savecard":0,"cc_saved_card":"","cc_installments":1,"cc_token_credit_card":"token_YoL7qgrSJCz3lKMQ"}}}
+
+*/

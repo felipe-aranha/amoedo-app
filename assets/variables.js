@@ -19,6 +19,9 @@ export default {
         messagingSenderId: "259660110621",
         appId: "1:259660110621:web:2fb9034f44d7cbc3"
     },
+    mundipagg: {
+        appId: 'pk_YMjLq3UvGHyRrpk4'
+    },
     app: {
         project:{
             projectType: [
