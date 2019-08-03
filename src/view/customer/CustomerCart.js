@@ -222,7 +222,12 @@ export default class CustomerCart extends Customer{
     }
 
     renderCartHeader(){
-        return(<></>);
+        const { room, project } = this.props;
+        return(
+            <View style={{backgroundColor:'#fff',padding:20}}>
+                <Text weight={'bold'} size={12} >{`${room.room.label} - ${project.data.name}`}</Text>
+            </View>
+        );
     }
 
     renderCartFooter(){
