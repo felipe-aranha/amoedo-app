@@ -10,6 +10,7 @@ import { CatalogService } from '../../service/CatalogService';
 import { Check, Text } from '../../components';
 import variables from '../../utils';
 import { CheckoutService } from '../../service/CheckoutService';
+import { Actions } from 'react-native-router-flux';
 
 export default class CustomerCart extends Customer{
 
@@ -22,6 +23,7 @@ export default class CustomerCart extends Customer{
     }
     leftIconColor = 'rgb(226,0,6)';
     title= I18n.t('section.quote');
+    isCheckout = false;
 
     constructor(props,context){
         super(props,context);
@@ -34,7 +36,7 @@ export default class CustomerCart extends Customer{
             shippingAddress: this.getDefaultAddress('shipping'),
             cart: props.room.cart || [],
             cartItems: props.cartItems || [],
-            selectedCart: props.selectedCart || props.room.cart || [],
+            selectedCart: props.selectedCart || this.isCheckout ? [] : props.room.cart || [],
             loading: false
         }
     }
@@ -140,6 +142,8 @@ export default class CustomerCart extends Customer{
     }
 
     toggleItem(item){
+        return;
+        if(this.isCheckout) return;
         let selectedCart = this.state.selectedCart.slice();
         const checked = selectedCart.find(i => i.sku = item.sku) || false;
         if(checked != false){
@@ -150,16 +154,16 @@ export default class CustomerCart extends Customer{
         this.setState({
             selectedCart
         },() => {
-            console.log(this.state.selectedCart);
+            // console.log(this.state.selectedCart);
         })
     }
 
     renderCartItem({item}){
         const { selectedCart } = this.state;
         const checked = selectedCart.find(i => i.sku = item.sku) || false;
+        if(this.isCheckout && !checked) return <></>;
         const image = this.getProductImage(item);
         const prices = this.getProductPrices(item);
-        console.log(`image ${image}`)
         return(
             <View
                 style={{
@@ -189,7 +193,7 @@ export default class CustomerCart extends Customer{
                     />
                 </View>
                 <View>
-                    <Text weight={'medium'} size={10}>{item.qty}</Text>
+                    <Text weight={'medium'} size={10}>{checked.qty}</Text>
                 </View>
                 <View style={{flex:1, paddingHorizontal: 10}}>
                     <Text weight={'medium'} size={10}>{item.name}</Text>
@@ -205,11 +209,50 @@ export default class CustomerCart extends Customer{
     renderCartItems(){
         return(
             <View style={{flex:1}}>
+                {this.renderCartHeader()}
                 <FlatList
                     data={this.state.cartItems}
                     renderItem={this.renderCartItem.bind(this)}
                     keyExtractor={(i,k) => k.toString()}
+                    removeClippedSubviews={false}
                 />
+                {this.renderCartFooter()}
+            </View>
+        )
+    }
+
+    renderCartHeader(){
+        return(<></>);
+    }
+
+    renderCartFooter(){
+        return(
+            <View style={{backgroundColor:'#fff',padding:20}}>
+                {this.renderSubtotal()}
+            </View>
+        );
+    }
+
+    renderSubtotal(){
+        const { cartItems, selectedCart } = this.state;
+        let price = 0;
+        cartItems.forEach(i => {
+            const found = selectedCart.find(ii => ii.sku == i.sku);
+            if(found)
+                price += i.price * found.qty;
+        })
+        return(
+            <View style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+                <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start'}}>
+                    <Text weight={'medium'} size={10} color={'rgb(57,57,57)'} >{I18n.t('checkout.subtotal')}</Text>
+                </View>
+                <View style={{flex:1,flexDirection:'row',justifyContent:'flex-end'}}>
+                <Text weight={'medium'} size={10} color={'rgb(57,57,57)'} >{`R$ ${price.toFixed(2)}`}</Text>
+                </View>
             </View>
         )
     }
@@ -223,6 +266,11 @@ export default class CustomerCart extends Customer{
                 this.checkoutService.addToCart(this.state.selectedCart,response).then(r => {
                     this.setState({
                         loading: false
+                    },() => {
+                        Actions.push('checkout', {
+                            room: this.props.room,
+                            cartItems: this.state.cartItems
+                        })
                     })
                 })
             }).catch(e => {

@@ -26,10 +26,8 @@ export class CheckoutService extends HttpClient {
                         quote_id: quoteId
                     }
                 }
-                console.log(item);
-                // await this.deleteAsync(`${this.basePath}carts/mine/items/item`);
+                console.log(data);
                 const response = await this.postAsync(`${this.basePath}carts/mine/items`, data);
-                console.log(response);
                 if(i == items.length - 1)
                     resolve(true);
             })
