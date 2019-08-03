@@ -211,6 +211,7 @@ export default class CustomerCart extends Customer{
             <View style={{flex:1}}>
                 {this.renderCartHeader()}
                 <FlatList
+                    key={this.state.selectedCart.length}
                     data={this.state.cartItems}
                     renderItem={this.renderCartItem.bind(this)}
                     keyExtractor={(i,k) => k.toString()}
@@ -238,6 +239,10 @@ export default class CustomerCart extends Customer{
         );
     }
 
+    getCurrencyValue(value){
+        return `R$ ${value.toFixed(2)}`;
+    }
+
     renderSubtotal(){
         const { cartItems, selectedCart } = this.state;
         let price = 0;
@@ -246,6 +251,10 @@ export default class CustomerCart extends Customer{
             if(found)
                 price += i.price * found.qty;
         })
+        return this.renderFooterItem(I18n.t('checkout.subtotal'),this.getCurrencyValue(price));
+    }
+
+    renderFooterItem(label,value){
         return(
             <View style={{
                 flexDirection: 'row',
@@ -253,10 +262,10 @@ export default class CustomerCart extends Customer{
                 alignItems: 'center'
             }}>
                 <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start'}}>
-                    <Text weight={'medium'} size={10} color={'rgb(57,57,57)'} >{I18n.t('checkout.subtotal')}</Text>
+                    <Text weight={'medium'} size={10} color={'rgb(57,57,57)'} >{label}</Text>
                 </View>
                 <View style={{flex:1,flexDirection:'row',justifyContent:'flex-end'}}>
-                <Text weight={'medium'} size={10} color={'rgb(57,57,57)'} >{`R$ ${price.toFixed(2)}`}</Text>
+                <Text weight={'medium'} size={10} color={'rgb(57,57,57)'} >{value}</Text>
                 </View>
             </View>
         )
@@ -285,8 +294,10 @@ export default class CustomerCart extends Customer{
                         loading: false
                     },() => {
                         Actions.push('checkout', {
-                            room: this.props.room,
-                            cartItems: this.state.cartItems
+                            ...this.props,
+                            cartItems: this.state.cartItems,
+                            billingAddress: this.state.billingAddress,
+                            shippingAddress: this.state.shippingAddress
                         })
                     })
                 })

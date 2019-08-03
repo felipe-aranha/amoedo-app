@@ -261,13 +261,16 @@ export default {
     },
     checkout: {
         billingAddress: 'Endereço de cobrança',
+        loading: 'carregando',
+        unavailableShipping: 'indisponível',
         shippingAddress: 'Endereço de entrega',
         newAddress: 'Novo endereço',
         subtotal: 'Subtotal',
         send: 'ENVIAR PARA PAGAMENTO',
         finish: 'FINALIZAR PAGAMENTO',
         payment: 'Pagamento',
-        ship: 'Frete',
+        shipping: 'Frete',
+        total: 'Total',
         paymentMethod: 'Forma de pagamento',
         saveAddress: 'SALVAR ENDEREÇO',
         error: {
