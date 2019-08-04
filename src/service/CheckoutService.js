@@ -27,7 +27,6 @@ export class CheckoutService extends HttpClient {
                         quote_id: quoteId
                     }
                 }
-                console.log(data);
                 const response = await this.postAsync(`${this.basePath}carts/mine/items`, data);
                 if(i == items.length - 1)
                     resolve(true);
@@ -43,7 +42,6 @@ export class CheckoutService extends HttpClient {
                 same_as_billing: 1
             }
         }
-        address.region = address.region.region;
         return this.postAsync(`${this.basePath}carts/mine/estimate-shipping-methods`,data)
     }
 
@@ -58,29 +56,32 @@ export class CheckoutService extends HttpClient {
                 shipping_method_code: method.method_code
             }
         }
-        console.log(data, method);
         return this.postAsync(`${this.basePath}carts/mine/shipping-information`,data)
     }
 
-    async setCreditCardInfo(cc,billingAddress){
+    async setCreditCardInfo(number,holder_name,exp_month,exp_year,cvv,billingAddress){
         const data = {
             type: "card",
             card: {
                 type: "credit",
-                ...cc,
+                number,
+                holder_name,
+                exp_month,
+                exp_year,
+                cvv,
                 billing_address: {
-                    street: billingAddress.address[0] || "",
-                    number: billingAddress.address[1] || "",
+                    street: billingAddress.street[0] || "",
+                    number: billingAddress.street[1] || "",
                     zip_code: billingAddress.postcode,
-                    neighborhood: billingAddress.address[3] || "",
-                    complement: billingAddress.address[2] || "",
+                    neighborhood: billingAddress.street[3] || "",
+                    complement: billingAddress.street[2] || "",
                     city: billingAddress.city,
                     state: billingAddress.region.region_code,
                     country: billingAddress.country_id
                 }
             }
         }
-        this.postAsync(`https://api.mundipagg.com/core/v1/tokens?appId=${variables.mundipagg.appId}`, data)
+        return this.postAsync(`https://api.mundipagg.com/core/v1/tokens?appId=${variables.mundipagg.appId}`, data);
     }
 
     parseAddress(address,email){
@@ -98,6 +99,27 @@ export class CheckoutService extends HttpClient {
             email,
             telephone: address.telephone,
         }
+    }
+
+    order(request){
+        const card = request.card || {};
+        const data = {
+            paymentMethod: {
+    	    	method: "mundipagg_billet"
+            },
+            additional_data:{
+                cc_type: card.brand,
+                cc_last_4: card.last_four_digits,
+                cc_exp_year: card.exp_year,
+                cc_exp_month: card.exp_month,
+                cc_owner: card.holder_name,
+                cc_savecard: 0,
+                cc_saved_card:"",
+                cc_installments: 1,
+                cc_token_credit_card: request.id
+            }
+        }
+        return this.postAsync(`${this.basePath}carts/mine/payment-information`,data);
     }
 
 }

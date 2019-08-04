@@ -196,7 +196,6 @@ export default class AddProject extends MainView{
                             Actions.reset('_projects');
                         })
                     }).catch(e => {
-                        console.log(e);
                         this.context.message('Erro ao cadastrar projeto. Tente novamente');
                         this.setState({
                             loading: false

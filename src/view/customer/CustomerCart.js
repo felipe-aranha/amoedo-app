@@ -201,7 +201,7 @@ export default class CustomerCart extends Customer{
                 <View style={{alignSelf:'flex-end'}}>
                     <Text size={10} weight={'semibold'}>{prices.special || prices.regular}</Text>
                 </View>
-                <Divider style={{ backgroundColor: 'rgba(77,77,77,0.8)' }} />
+                <Divider />
             </View>
         )
     }
@@ -248,8 +248,9 @@ export default class CustomerCart extends Customer{
         let price = 0;
         cartItems.forEach(i => {
             const found = selectedCart.find(ii => ii.sku == i.sku);
+            const prices = this.getProductPrices(i);
             if(found)
-                price += i.price * found.qty;
+                price += (prices.specialPrice || prices.regularPrice) * found.qty;
         })
         return this.renderFooterItem(I18n.t('checkout.subtotal'),this.getCurrencyValue(price));
     }
@@ -274,15 +275,15 @@ export default class CustomerCart extends Customer{
     handleFormSubmit(){
         if(this.state.loading) return;
         if(this.state.billingAddress == null){
-            this.context.message('checkout.error.noBillingAddres');
+            this.context.message(I18n.t('checkout.error.noBillingAddres'));
             return;
         }
         if(this.state.shippingAddress == null){
-            this.context.message('checkout.error.noShippingAddres');
+            this.context.message(I18n.t('checkout.error.noShippingAddres'));
             return;
         }
         if(this.state.selectedCart.length == 0){
-            this.context.message('checkout.error.noCartItems')
+            this.context.message(I18n.t('checkout.error.noCartItems'))
             return;
         }
         this.setState({

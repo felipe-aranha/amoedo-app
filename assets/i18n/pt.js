@@ -268,15 +268,31 @@ export default {
         subtotal: 'Subtotal',
         send: 'ENVIAR PARA PAGAMENTO',
         finish: 'FINALIZAR PAGAMENTO',
+        creditCardTitle: 'CARTÃO DE CRÉDITO',
         payment: 'Pagamento',
         shipping: 'Frete',
         total: 'Total',
-        paymentMethod: 'Forma de pagamento',
+        paymentMethod: 'Formas de pagamento',
+        add: 'Adicionar',
         saveAddress: 'SALVAR ENDEREÇO',
         error: {
             noBillingAddress: 'Informe um endereço de cobrança!',
             noShippingAddress: 'Informe um endereço de entrega!',
-            noCartItems: 'Nenhum item selecionado'
+            noCartItems: 'Nenhum item selecionado!',
+            noPayment: 'Nenum método de pagamento foi selecionado!',
+            generic: 'Ocorreu um erro ao processar o pagamento. Tente novamente!'
+        },
+        card: {
+            number: 'NÚMERO DO CARTÃO',
+            date: 'VALIDADE',
+            cvv: 'CVV',
+            name: 'NOME DO TITULAR',
+            save: 'SALVAR',
+            error: 'Dados inválidos. Verifique todos os campos'
         }
+    },
+    order: {
+        title: 'Solicitação efetuada com sucesso!',
+        message: 'Estamos aguardando a confirmação de pagamento do pedido #{{order}} pela administradora do cartão.\n\nAssim que seu pedido for aprovado, você receberá um e-mail de confirmação.'
     }
 }

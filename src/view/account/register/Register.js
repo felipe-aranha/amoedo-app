@@ -247,7 +247,6 @@ export default class Register extends MainView{
     }
 
     processApiCatch(e){
-        console.log(e);
         this.closeModalLoading();
         Alert.alert(I18n.t('common.error'),I18n.t('account.errorMessage.registerError'));
         this.setState({
@@ -287,7 +286,6 @@ export default class Register extends MainView{
             else 
                 Actions.reset('purgatory');
         }).catch(e => {
-            console.log(e);
             this.context.message(I18n.t('account.errorMessage.registerError'));
             this.closeModalLoading();
             this.setState({

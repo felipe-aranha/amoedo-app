@@ -78,7 +78,6 @@ export default class Products extends React.PureComponent{
                     finished: items.length < pageSize
                 })
             }).catch(e => {
-                console.log(e);
                 this.setState({
                     loading: false,
                     refreshing: false

@@ -76,7 +76,7 @@ export class MainView extends React.Component{
         })
     }
 
-    renderLoadinModal(){
+    renderLoadingModal(){
         const { modalLoading } = this.state || {};
         if(typeof(modalLoading) !== 'undefined' && modalLoading != null)
             return(
@@ -102,7 +102,7 @@ export class MainView extends React.Component{
             <View style={[StyleSheet.absoluteFill, mainStyle.mainView]}>
                 <StatusBar barStyle={this.barStyle} />
                 {this.renderCenter()}
-                {this.renderLoadinModal()}
+                {this.renderLoadingModal()}
             </View>
         )
     }

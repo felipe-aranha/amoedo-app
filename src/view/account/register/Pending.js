@@ -60,7 +60,9 @@ export class Pending extends AccountBase{
 
     async processCustomerLogin(){
         this.db = UserService.getCustomerDB();
-        const firebaseUser = await UserService.getClient(this.context.user.magento.email);
+        const firebaseUser = await UserService.getClient(this.context.user.magento.email).catch(e => {
+            this.logout();
+        });
         if(firebaseUser != null){
             this.context.user.firebase = firebaseUser;
             Actions.reset('customer');

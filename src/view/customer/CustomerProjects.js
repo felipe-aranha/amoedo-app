@@ -91,7 +91,7 @@ export default class CustomerProjects extends Customer {
 
     getFileIndex(){
         const { fileIndex } = this.state;
-        const f =  typeof(fileIndex) !== 'undefined' ? fileIndex : 0;
+        const f =  typeof(fileIndex) !== 'undefined' ? fileIndex : this.props.index || 0;
         return f;
     }
 
