@@ -18,6 +18,7 @@ export default class ProfileSelection extends MainView {
 
     constructor(props,context){
         super(props,context);
+        console.log(context);
         if(context.userType == 'customer'){
             Actions.replace('customerRegister')
         }

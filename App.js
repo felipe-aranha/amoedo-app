@@ -42,6 +42,7 @@ export default class App extends React.Component {
 		p2 = this.cacheImages([
 			require('./assets/images/account/account-bg-x2.jpg'),
 			require('./assets/images/account/login-bg-x2.png'),
+			require('./assets/images/account/customer-login-navbar-x2.png'),
 			require('./assets/images/account/login-navbar-x2.png'),
 			require('./assets/images/brand-logo-x2.png'),
 			require('./assets/images/icons/camera-x2.png'),

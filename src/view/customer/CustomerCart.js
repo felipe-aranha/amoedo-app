@@ -275,11 +275,11 @@ export default class CustomerCart extends Customer{
     handleFormSubmit(){
         if(this.state.loading) return;
         if(this.state.billingAddress == null){
-            this.context.message(I18n.t('checkout.error.noBillingAddres'));
+            this.context.message(I18n.t('checkout.error.noBillingAddress'));
             return;
         }
         if(this.state.shippingAddress == null){
-            this.context.message(I18n.t('checkout.error.noShippingAddres'));
+            this.context.message(I18n.t('checkout.error.noShippingAddress'));
             return;
         }
         if(this.state.selectedCart.length == 0){

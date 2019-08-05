@@ -166,11 +166,11 @@ export default class CustomerCheckout extends CustomerCart{
         const { loading, shippingAddress, billingAddress, selectedCart, selectedPayment, card } = this.state;
         if(loading) return;
         if(billingAddress == null){
-            this.context.message(I18n.t('checkout.error.noBillingAddres'));
+            this.context.message(I18n.t('checkout.error.noBillingAddress'));
             return;
         }
         if(shippingAddress == null){
-            this.context.message(I18n.t('checkout.error.noShippingAddres'));
+            this.context.message(I18n.t('checkout.error.noShippingAddress'));
             return;
         }
         if(selectedCart.length == 0){

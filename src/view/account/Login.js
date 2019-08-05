@@ -74,13 +74,15 @@ export default class Login extends AccountBase{
     }
 
     renderContent(){
+        console.log(this.context.userType);
+        const isCustomer = this.context.userType == 'customer';
         return(
             <View style={{flex:1}}>
                 <ImageBackground
-                    source={require('../../../assets/images/account/login-navbar-x2.png')}
+                    source={isCustomer ? require('../../../assets/images/account/customer-login-navbar-x2.png') : require('../../../assets/images/account/login-navbar-x2.png')}
                     resizeMode={'stretch'}
-                    tintColor={this.context.userType == 'customer' ? tertiaryColor : secondaryColor}
-                    style={accountStyle.loginNavBarBackground}
+                    tintColor={isCustomer ? tertiaryColor : secondaryColor}
+                    style={[accountStyle.loginNavBarBackground,{tintColor: isCustomer ? tertiaryColor : secondaryColor}]}
                 >
                     <View style={{flex:1}}>
                         <View style={accountStyle.loginHeaderBackArea}>
