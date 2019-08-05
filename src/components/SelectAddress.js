@@ -74,6 +74,11 @@ export class SelectAddress extends React.PureComponent{
         }) 
     }
 
+    selectAddress(address){
+        this.props.onSelect(address);
+        this.toggleModal();
+    }
+
     listAddresses(){
         const { magento } = this.context.user;
         const { selected } = this.state;
@@ -100,7 +105,7 @@ export class SelectAddress extends React.PureComponent{
                         fontSize: 12
                     }}
                     title={`${address.street.filter(s => s != '').join(', ')}`}
-                    onPress={this.toggleModal.bind(this)}
+                    onPress={this.selectAddress.bind(this, address)}
                 />
             )
         })
