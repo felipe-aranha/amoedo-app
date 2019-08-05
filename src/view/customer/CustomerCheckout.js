@@ -189,19 +189,34 @@ export default class CustomerCheckout extends CustomerCart{
                 if(response.errors){
                     this.closeModalLoading();
                     this.context.message(I18n.t('checkout.error.generic'));
+                    this.setState({
+                        loading: false
+                    })
                 } else {
                     this.checkoutService.order(response).then( order => {
                         this.closeModalLoading();
-                        Actions.reset('order',{order})
+                        this.setState({
+                            loading: false
+                        })
+                        if(typeof(order) === 'object' && order.message)
+                            this.context.message(I18n.t('checkout.error.refused'),2000);
+                        else 
+                            Actions.reset('order',{order})
                     }).catch(e => {
                         this.closeModalLoading();
                         this.context.message(I18n.t('checkout.error.generic'));
+                        this.setState({
+                            loading: false
+                        })
                     })
                 }
             }).catch(e => {
                 console.log(e);
                 this.closeModalLoading();
                 this.context.message(I18n.t('checkout.error.generic'));
+                this.setState({
+                    loading: false
+                })
             })
         })
     }

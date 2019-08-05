@@ -280,7 +280,8 @@ export default {
             noShippingAddress: 'Informe um endereço de entrega!',
             noCartItems: 'Nenhum item selecionado!',
             noPayment: 'Nenum método de pagamento foi selecionado!',
-            generic: 'Ocorreu um erro ao processar o pagamento. Tente novamente!'
+            generic: 'Ocorreu um erro ao processar o pagamento. Tente novamente!',
+            refused: 'Pagamento não autorizado. Revise os dados do cartão'
         },
         card: {
             number: 'NÚMERO DO CARTÃO',

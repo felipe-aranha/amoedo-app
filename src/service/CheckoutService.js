@@ -105,18 +105,18 @@ export class CheckoutService extends HttpClient {
         const card = request.card || {};
         const data = {
             paymentMethod: {
-    	    	method: "mundipagg_billet"
-            },
-            additional_data:{
-                cc_type: card.brand,
-                cc_last_4: card.last_four_digits,
-                cc_exp_year: card.exp_year,
-                cc_exp_month: card.exp_month,
-                cc_owner: card.holder_name,
-                cc_savecard: 0,
-                cc_saved_card:"",
-                cc_installments: 1,
-                cc_token_credit_card: request.id
+                method: "mundipagg_creditcard",
+                additional_data:{
+                    cc_savecard: 0,
+                    cc_saved_card: "",
+                    cc_type: card.brand,
+                    cc_last_4: card.last_four_digits,
+                    cc_exp_year: card.exp_year,
+                    cc_exp_month: card.exp_month,
+                    cc_owner: card.holder_name,
+                    cc_installments: 1,
+                    cc_token_credit_card: request.id
+                }
             }
         }
         return this.postAsync(`${this.basePath}carts/mine/payment-information`,data);
