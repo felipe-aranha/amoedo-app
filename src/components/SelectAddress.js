@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Modal, ScrollView, View } from 'react-native';
+import { Image, Modal, ScrollView, View, Platform } from 'react-native';
 import { MainContext } from '../reducer';
 import { ListItem, Button } from 'react-native-elements';
 import I18n from '../i18n';
@@ -119,11 +119,11 @@ export class SelectAddress extends React.PureComponent{
                visible={this.state.modal} 
             >
                 <Header 
-                    containerStyle={{
+                    containerStyle={Platform.OS == 'android' ? {
                         borderBottomWidth: 0,
                         paddingTop:0,
                         height: 60
-                    }}
+                    } : undefined}
                     handleBack={this.toggleModal.bind(this)}
                     titleStyle={[AccountStyle.registerHeaderText,{color: 'rgb(57,57,57)'}]}
                     title={I18n.t(`checkout.${type}Address`)}

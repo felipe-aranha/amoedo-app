@@ -3,7 +3,7 @@ import CustomerCart from './CustomerCart';
 import { tertiaryColor, accountStyle, primaryColor, mainStyle, projectStyle } from '../../style';
 import { Button, Divider } from 'react-native-elements';
 import I18n from '../../i18n';
-import { View, Modal, ScrollView, Keyboard, Alert } from 'react-native';
+import { View, Modal, ScrollView, Keyboard, Alert, Platform } from 'react-native';
 import { MainContext } from '../../reducer';
 import { Header, Text, Input, DatePicker, KeyboardSpacer } from '../../components';
 import { Actions } from 'react-native-router-flux';
@@ -306,11 +306,11 @@ export default class CustomerCheckout extends CustomerCart{
                 onRequestClose={() => {}}
             >
                 <Header 
-                    containerStyle={{
+                    containerStyle={Platform.OS == 'android' ? {
                         borderBottomWidth: 0,
                         paddingTop:0,
                         height: 60
-                    }}
+                    } : undefined}
                     title={I18n.t('checkout.creditCardTitle')}
                     handleBack={this.togglePaymentModal.bind(this)}
                     leftIconColor={'rgb(226,0,6)'}
