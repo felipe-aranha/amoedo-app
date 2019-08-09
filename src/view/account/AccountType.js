@@ -10,6 +10,7 @@ import { Text } from '../../components';
 import { Button } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 import { MainContext } from '../../reducer';
+import * as WebBrowser from 'expo-web-browser';
 
 export default class AccountType extends AccountBase{
 
@@ -30,7 +31,7 @@ export default class AccountType extends AccountBase{
     }
 
     handleAssistanceButtonPress(){
-        this.context.message('Não implementado ainda');
+        WebBrowser.openBrowserAsync('https://www.amoedo.com.br/assistencia-tecnica/')
     }
 
     renderContent(){

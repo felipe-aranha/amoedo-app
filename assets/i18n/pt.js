@@ -51,7 +51,9 @@ export default {
             register: 'CRIAR CONTA'
         },
         errorMessage: {
+            error: 'Erro!',
             password: 'min de 6 caracteres',
+            customerNotFound: 'Você precisa ser cadastrado por um profissional para acessar o sistema',
             name: 'nome e sobrenome',
             confirmPassword: 'senhas diferentes',
             emailRegistered: 'e-mail já cadastrado',

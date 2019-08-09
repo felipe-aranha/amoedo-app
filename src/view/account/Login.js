@@ -1,6 +1,6 @@
 import React from 'react';
 import { AccountBase } from './AccountBase';
-import { ImageBackground, View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { ImageBackground, View, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Actions } from 'react-native-router-flux';
 import { Input, Button } from 'react-native-elements';
@@ -10,6 +10,7 @@ import { accountStyle, tertiaryColor, secondaryColor } from '../../style';
 import { CustomerService } from '../../service';
 import * as Utils from '../../utils';
 import { MainContext } from '../../reducer';
+import { UserService } from '../../service/firebase/UserService';
 
 export default class Login extends AccountBase{
 
@@ -29,7 +30,8 @@ export default class Login extends AccountBase{
             email: '',
             emailError: '',
             password: '',
-            loading: false
+            loading: false,
+            customerStep: 1
         }
         this.customerService = new CustomerService();
     }
@@ -43,27 +45,79 @@ export default class Login extends AccountBase{
     }
 
     handleBack(){
-        Actions.reset('accountType');
+        if(this.isCustomer() && this.state.customerStep == 2){
+            this.setState({
+                customerStep: 1
+            })
+        } 
+        else
+            Actions.reset('accountType');
+    }
+
+    handleDefaultError(e){
+        if(e)
+            console.log(e);
+        this.setState({
+            loading: false
+        })
+    }
+
+    async handleCustomerSubmit(){
+        const { customerStep, email, password } = this.state;
+        if(customerStep == 1){
+            customer = await UserService.getClient(email);
+            if(customer == null){
+                Alert.alert(I18n.t('account.errorMessage.error'),I18n.t('account.errorMessage.customerNotFound'));
+                this.setState({
+                    loading: false
+                })
+                return;
+            } else {
+                this.customerService.isEmailAvailable(email).then(response => {
+                    if(!response){
+                        this.setState({
+                            customerStep: 2,
+                            loading: false
+                        })
+                    } else {
+                        this.context.login();
+                        Actions.reset('account', { customer })
+                    }
+                }).catch( e => {
+                    this.handleDefaultError(e);
+                })
+            }
+        } else {
+            this.login(email,password);
+        }
     }
 
     handleSubmit(){
         const { loading, email, password } = this.state;
         if(loading) return;
-        if(!Utils.isEmailValid(email)){
-            this.setState({
-                emailError: I18n.t('account.errorMessage.invalidEmail')
-            })
-            return;
-        }
         this.setState({
-            loading:true
-        }, () => {
+            loading: true
+        },() => {
+            if(this.isCustomer()){
+                this.handleCustomerSubmit();
+                return;
+            }
+            if(!Utils.isEmailValid(email)){
+                this.setState({
+                    emailError: I18n.t('account.errorMessage.invalidEmail'),
+                    loading: false
+                })
+                return;
+            }
             this.login(email,password);
         })
+        
     }
 
     goToPassword(){
-        if(this.password.current)
+        if(this.isCustomer())
+            this.handleSubmit();
+        else if(this.password.current)
             this.password.current.focus()
     }
 
@@ -73,16 +127,67 @@ export default class Login extends AccountBase{
         })
     }
 
+    renderEmail(){
+        return(
+            <Input 
+                onChangeText={this.handleEmailChange.bind(this)}
+                keyboardType={'email-address'}
+                autoCapitalize={'none'}
+                leftIcon={<AppIcon name={'email'} />}
+                placeholder={I18n.t('account.login.email')}
+                inputContainerStyle={accountStyle.inputContainterStyle}
+                inputStyle={accountStyle.inputStyle}
+                placeholderTextColor={'#fff'}
+                onSubmitEditing={this.goToPassword.bind(this)}
+                ref={this.email}
+                containerStyle={accountStyle.inputWrapperStyle}
+                errorMessage={this.state.emailError}
+            />
+        )
+    }
+
+    renderPassword(){
+        return(
+            <Input 
+                onChangeText={this.handlePasswordChange.bind(this)}
+                onSubmitEditing={this.handleSubmit.bind(this)}
+                keyboardType={'default'}
+                autoCapitalize={'none'}
+                leftIcon={<AppIcon name={'password'} />}
+                placeholder={I18n.t('account.login.password')}
+                inputContainerStyle={accountStyle.inputContainterStyle}
+                inputStyle={accountStyle.inputStyle}
+                placeholderTextColor={'#fff'}
+                returnKeyType={'go'}
+                ref={this.password}
+                containerStyle={accountStyle.inputWrapperStyle}
+                secureTextEntry={!this.state.showPassword}
+                rightIcon={{
+                    name: this.state.showPassword ? 'eye' : 'eye-slash',
+                    type:'font-awesome',
+                    color: '#fff',
+                    size: 16,
+                    onPress: this.togglePasswordField.bind(this),
+                    iconStyle: {
+                        marginRight: 15
+                    }
+                }}
+            />
+        )
+    }
+
+    isCustomer(){
+        return this.context.userType == 'customer';
+    }
+
     renderContent(){
-        console.log(this.context.userType);
-        const isCustomer = this.context.userType == 'customer';
         return(
             <View style={{flex:1}}>
                 <ImageBackground
-                    source={isCustomer ? require('../../../assets/images/account/customer-login-navbar-x2.png') : require('../../../assets/images/account/login-navbar-x2.png')}
+                    source={this.isCustomer() ? require('../../../assets/images/account/customer-login-navbar-x2.png') : require('../../../assets/images/account/login-navbar-x2.png')}
                     resizeMode={'stretch'}
-                    tintColor={isCustomer ? tertiaryColor : secondaryColor}
-                    style={[accountStyle.loginNavBarBackground,{tintColor: isCustomer ? tertiaryColor : secondaryColor}]}
+                    tintColor={this.isCustomer() ? tertiaryColor : secondaryColor}
+                    style={[accountStyle.loginNavBarBackground,{tintColor: this.isCustomer() ? tertiaryColor : secondaryColor}]}
                 >
                     <View style={{flex:1}}>
                         <View style={accountStyle.loginHeaderBackArea}>
@@ -114,45 +219,8 @@ export default class Login extends AccountBase{
                 </ImageBackground>
                 <ScrollView style={accountStyle.loginFormArea}>
                     <View style={accountStyle.loginMainView}>
-                        <Input 
-                            onChangeText={this.handleEmailChange.bind(this)}
-                            keyboardType={'email-address'}
-                            autoCapitalize={'none'}
-                            leftIcon={<AppIcon name={'email'} />}
-                            placeholder={I18n.t('account.login.email')}
-                            inputContainerStyle={accountStyle.inputContainterStyle}
-                            inputStyle={accountStyle.inputStyle}
-                            placeholderTextColor={'#fff'}
-                            onSubmitEditing={this.goToPassword.bind(this)}
-                            ref={this.email}
-                            containerStyle={accountStyle.inputWrapperStyle}
-                            errorMessage={this.state.emailError}
-                        />
-                        <Input 
-                            onChangeText={this.handlePasswordChange.bind(this)}
-                            onSubmitEditing={this.handleSubmit.bind(this)}
-                            keyboardType={'default'}
-                            autoCapitalize={'none'}
-                            leftIcon={<AppIcon name={'password'} />}
-                            placeholder={I18n.t('account.login.password')}
-                            inputContainerStyle={accountStyle.inputContainterStyle}
-                            inputStyle={accountStyle.inputStyle}
-                            placeholderTextColor={'#fff'}
-                            returnKeyType={'go'}
-                            ref={this.password}
-                            containerStyle={accountStyle.inputWrapperStyle}
-                            secureTextEntry={!this.state.showPassword}
-                            rightIcon={{
-                                name: this.state.showPassword ? 'eye' : 'eye-slash',
-                                type:'font-awesome',
-                                color: '#fff',
-                                size: 16,
-                                onPress: this.togglePasswordField.bind(this),
-                                iconStyle: {
-                                    marginRight: 15
-                                }
-                            }}
-                        />
+                        {(!this.isCustomer() || this.state.customerStep == 1) && this.renderEmail()}
+                        {(!this.isCustomer() || this.state.customerStep == 2) && this.renderPassword()}
                         <View style={accountStyle.loginButtonContainter}>
                             <Button 
                                 title={I18n.t('account.login.enter')}
@@ -173,12 +241,14 @@ export default class Login extends AccountBase{
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            <TouchableOpacity onPress={() => { Actions.push('profileSelection') }} style={accountStyle.loginSignInButton}>
-                                <Text style={accountStyle.loginSignInButtonText}>
-                                    {I18n.t('account.login.register')}
-                                    <Text style={accountStyle.loginSignInButtonTextHighlight}>{I18n.t('account.login.here')}</Text>!
-                                </Text>
-                            </TouchableOpacity>
+                            {!this.isCustomer() &&
+                                <TouchableOpacity onPress={() => { Actions.push('profileSelection') }} style={accountStyle.loginSignInButton}>
+                                    <Text style={accountStyle.loginSignInButtonText}>
+                                        {I18n.t('account.login.register')}
+                                        <Text style={accountStyle.loginSignInButtonTextHighlight}>{I18n.t('account.login.here')}</Text>!
+                                    </Text>
+                                </TouchableOpacity>
+                            }
                         </View>
                     </View>
                 </ScrollView>

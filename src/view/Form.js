@@ -26,7 +26,7 @@ export default class Form extends React.PureComponent{
 
     getInitialState(){
         const initialState = Object.keys(this.props.initialState).length > 0 ? this.props.initialState : false;
-        return initialState || {
+        return {
             showPassword: false,
             showPasswordConfirmation: false,
             password: '',
@@ -67,6 +67,7 @@ export default class Form extends React.PureComponent{
             creaDocument: '',
             proofDocument: '',
             cnpjDocument: '',
+            ...initialState
         }
     }
 

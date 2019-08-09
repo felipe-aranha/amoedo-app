@@ -101,8 +101,7 @@ export class Routes extends React.PureComponent{
                             <Scene initial={!this.state.isLoggedIn} hideNavBar key='login' component={Login} />
                             <Scene initial={this.state.isLoggedIn} hideNavBar key='profileSelection' component={ProfileSelection} />
                             <Scene key='customerRegister' hideNavBar component={CustomerRegister} />
-                            <Scene key='register' hideNavBar component={Register} />
-                                
+                            <Scene key='register' hideNavBar component={Register} />         
                         </Stack>
                         <Stack initial={this.context.user.token != null} hideNavBar key='purgatory'>
                             <Scene hideNavBar key='pendingAccount' component={Pending} />

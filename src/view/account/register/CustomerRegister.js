@@ -19,11 +19,16 @@ export default class CustomerRegister extends Register {
 
     constructor(props,context){
         super(props,context);
+        const customer = props.customer || {};
+        const address = typeof(customer.address) == 'object' ? customer.address : {};
         this.state = {
             activeSection: 'personal-data',
-            personalData: {}
+            personalData: {
+                ...customer,
+                ...address
+            }
         }
-    }
+    }    
 
     handleBack(){
         this.logout();
@@ -175,7 +180,7 @@ export default class CustomerRegister extends Register {
                         {[1,2].map( key => 
                             <Check 
                                 key={key.toString()}
-                                title={I18n.t(`form.personType.${key}`)}
+                                title={I18n.t(`addClient.personType.${key}`)}
                                 onPress={this.changePersonType.bind(this,key)}
                                 checked={personType == key}
                             />
@@ -188,6 +193,7 @@ export default class CustomerRegister extends Register {
                     onContinue={this.handlePersonalDataContinue.bind(this)}
                     personType={personType}
                     loading={this.state.loading}
+                    customer={this.props.customer}
                 />
             </View>
         )
@@ -216,8 +222,11 @@ export class CustomerRegisterForm extends Form {
         const loggedIn = magento.id ? true : false;
         const isNameValid = this.notEmpty('name') || loggedIn;
         const isCpfValid = this.notEmpty(this.props.personType == 1 ? 'cpf' : 'cnpj') || loggedIn;
-        const isEmailValid = this.state.emailValid || loggedIn;
+        const isEmailValid = this.state.emailValid || loggedIn || this.props.customer.email;
         const isPhonevalid = this.notEmpty('phone') || this.notEmpty('cell');
+        console.log({
+            isNameValid, isCpfValid, isEmailValid, isPhonevalid
+        })
         return isNameValid && isCpfValid && isEmailValid && isPhonevalid;
     }
 
@@ -227,7 +236,7 @@ export class CustomerRegisterForm extends Form {
                 {this.renderForm()}
                 <View style={{marginVertical: 20}}>
                 <Button 
-                    title={I18n.t('addpersonalData.submit')}
+                    title={I18n.t('addClient.submit')}
                     containerStyle={accountStyle.accountTypeButtonContainer}
                     buttonStyle={[accountStyle.accountTypeButton,{backgroundColor:tertiaryColor}]}
                     titleStyle={[accountStyle.accountTypeButtonTitle]}
@@ -241,18 +250,19 @@ export class CustomerRegisterForm extends Form {
 
     renderForm(){
         const { magento } = this.context && this.context.user ? this.context.user : {};
+        const customer = this.props.customer || {}
+        const email = magento.email || customer.email
         const loggedIn = magento.id ? true : false;
         const address = magento.addresses && magento.addresses.length > 0;
         return(
             <>
             <View style={[accountStyle.formRow,{marginBottom: 20}]}>
                 {this.renderAvatar({color:tertiaryColor})}
-                {!loggedIn && this.renderName()}
-                {loggedIn && this.renderEmail(magento.email)}
+                {this.renderEmail(email)}
             </View>
             {!loggedIn &&
                 <View style={accountStyle.formRow}>
-                    {this.renderEmail()}
+                    {this.renderName()}
                 </View>
             }
             {!loggedIn &&

@@ -20,7 +20,7 @@ export default class ProfileSelection extends MainView {
         super(props,context);
         console.log(context);
         if(context.userType == 'customer'){
-            Actions.replace('customerRegister')
+            Actions.replace('customerRegister', { customer: this.props.customer || null })
         }
         this.customerService = new CustomerService();
         this.state = {
