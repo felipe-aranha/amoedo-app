@@ -9,7 +9,7 @@ import { MainContext } from '../../../reducer';
 import { accountStyle, tertiaryColor } from '../../../style';
 import Form from '../../Form';
 import { Button } from 'react-native-elements';
-import { Customer, Address } from '../../../model/magento';
+import { Customer, Address, CustomerRegister as CR } from '../../../model/magento';
 import { UserService } from '../../../service/firebase/UserService';
 import { Actions } from 'react-native-router-flux';
 
@@ -39,7 +39,7 @@ export default class CustomerRegister extends Register {
         if(this.isRegistered)
             this.firebaseRegister(magento.id);
         else {
-            const { personalData, professionalData, documents, loading } = this.state;
+            const { personalData } = this.state;
             this.customer = {
                 ...magento
             }
@@ -70,15 +70,17 @@ export default class CustomerRegister extends Register {
         const { firstname, lastname } = Utils.parseName(personalData.name);
         let address = this.fillAddress(firstname, lastname);
         let customer = new Customer(address, personalData.cell || personalData.phone);
+        const group = this.context.app.groups.find(g => g.customer);
         customer = {
             ...customer,
             dob: Utils.parseDate(personalData.dob),
             taxvat: personalData.cpf,
             firstname,
             lastname,
-            email: personalData.email
+            email: personalData.email,
+            group_id: group.id
         }
-        let customerRegister = new CustomerRegister(customer, personalData.password);
+        let customerRegister = new CR(customer, personalData.password);
         this.customer = customerRegister;
         if(this.isRegistered && this.user != null){
             this.firebaseRegister();
@@ -138,9 +140,9 @@ export default class CustomerRegister extends Register {
                 telephone: personalData.phone
             }
             response = await UserService.insertOrUpdateCustomerAsync(customer);
-            this.context.message(I18n.t(`form.${response != false ? 'success' : 'fail'}`))
+            this.context.message(I18n.t(`${response != false ? 'account.register.success' : 'account.errorMessage.registerError'}`))
             if(response != false){
-                Actions.reset('purgatory');
+                this.login(personalData.email,personalData.password);
             }
             else 
                 this.setState({
@@ -224,10 +226,8 @@ export class CustomerRegisterForm extends Form {
         const isCpfValid = this.notEmpty(this.props.personType == 1 ? 'cpf' : 'cnpj') || loggedIn;
         const isEmailValid = this.state.emailValid || loggedIn || this.props.customer.email;
         const isPhonevalid = this.notEmpty('phone') || this.notEmpty('cell');
-        console.log({
-            isNameValid, isCpfValid, isEmailValid, isPhonevalid
-        })
-        return isNameValid && isCpfValid && isEmailValid && isPhonevalid;
+        const isPasswordValid = loggedIn || (this.notEmpty('password',5) && this.state.password == this.state.confirmPassword)
+        return isNameValid && isCpfValid && isEmailValid && isPhonevalid && isPasswordValid;
     }
 
     render(){

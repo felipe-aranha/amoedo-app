@@ -75,7 +75,7 @@ export class Pending extends AccountBase{
     isProfessional(){
         const { app, user } = this.context;
         found = false;
-        app.groups.forEach(group => {
+        app.groups.filter(group => !group.customer).forEach(group => {
             if(group.id == user.magento.group_id){
                 found = true;
                 this.context.user.group = group;

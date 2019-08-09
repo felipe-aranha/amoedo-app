@@ -71,7 +71,9 @@ export class UserService{
     static async insertOrUpdateCustomerAsync(customer,verify){
         customer = Object.assign({},customer);
         const db = UserService.getCustomerDB();
-
+        if(customer.avatar && customer.avatar != '' && customer.avatar != null){
+            customer.avatar = await UserService.uploadImageAsync(customer.avatar);
+        }
         const exists = verify ? await UserService.userExists(customer.email,db) : false;
         if(!exists)
             return await db.doc(customer.email).set(customer);

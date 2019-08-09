@@ -164,7 +164,7 @@ export default class Register extends MainView{
         return {
             ...address,
             city: personalData.city,
-            company: professionalData.companyName,
+            company: professionalData ? professionalData.companyName : '',
             fax: personalData.phone,
             firstname,
             lastname,

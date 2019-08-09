@@ -10,7 +10,7 @@ export class Customer {
         this.created_in = "app";
         if(address && Object.keys(address).length > 0)
             this.addresses = [
-                Object.assign(new Address(), address)
+                Object.assign({}, address)
             ];
         this.dob = "";
         this.custom_attributes = [

@@ -50,7 +50,7 @@ export class CustomerService extends HttpClient {
     async getCustomerGroups(){
         return this.getAsync('rest/V1/customerGroups/search?searchCriteria[currentPage]=0').then(result => {
             if(!result.items) return [];
-            profiles = result.items.filter(item => item.code.startsWith('Perfil'));
+            profiles = result.items.filter(item => item.code.startsWith('Perfil') || item.code == 'app');
             return profiles.map(profile => {
                 name = profile.code.replace('Perfil ','');
                 subProfiles = result.items.filter(item => item.code.endsWith(name) && item.id != profile.id);
@@ -63,6 +63,7 @@ export class CustomerService extends HttpClient {
                 return {
                     ...profile,
                     name,
+                    customer: profile.code == 'app',
                     children: subProfiles
                 }
             });

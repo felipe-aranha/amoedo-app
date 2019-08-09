@@ -18,13 +18,12 @@ export default class ProfileSelection extends MainView {
 
     constructor(props,context){
         super(props,context);
-        console.log(context);
         if(context.userType == 'customer'){
             Actions.replace('customerRegister', { customer: this.props.customer || null })
         }
         this.customerService = new CustomerService();
         this.state = {
-            profiles: context.app.groups,
+            profiles: context.app.groups.filter(group => !group.customer),
             loading: false,
             error: false,
             mainProfile: null,

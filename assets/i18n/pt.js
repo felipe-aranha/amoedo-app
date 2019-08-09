@@ -48,7 +48,8 @@ export default {
             professionalDataTitle: 'DADOS ',
             professionalDataHighlight: 'PROFISSIONAIS',
             documentsTitle: 'DOCUMENTOS',
-            register: 'CRIAR CONTA'
+            register: 'CRIAR CONTA',
+            success: 'Cadastrado com sucesso! Efetuando login.'
         },
         errorMessage: {
             error: 'Erro!',
