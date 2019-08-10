@@ -256,6 +256,7 @@ export default {
         to: 'Por: ',
         qty: 'Qtd',
         add: 'Adicionar',
+        remove: 'Remover',
         details: 'Detalhes',
         continue: 'CONTINUAR',
         productError: 'Ocorreu um erro ao consultar o produto',

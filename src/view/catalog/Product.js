@@ -66,7 +66,7 @@ export default class Product extends Products{
     }
 
     handleSave(){
-        this.props.onBack(product);
+        this.props.onBack(this.state.product);
     }
 
     handleError(){

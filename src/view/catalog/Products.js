@@ -91,6 +91,14 @@ export default class Products extends React.PureComponent{
         return attr ? attr.value : undefined;
     }
 
+    getStock(item){
+        let stock = this.getAttributeValue(item,'quantity_and_stock_status') || 0;
+        if(Array.isArray(stock) && stock[0]){
+            stock = stock[1] || 1
+        }  else stock = 0;
+        return stock;
+    }
+
     getProductImage(item){
         const image = this.getAttributeValue(item,'image');
         return image ? `${this.baseUrl}${image}` : null;
@@ -112,25 +120,23 @@ export default class Products extends React.PureComponent{
 
     addToCart(item){
         let cart = this.state.cart.slice(0);
-        let found = false;
-        if(item.qty == 0){
-            cart = cart.filter(i => i.sku != item.sku);
-        } else {
-            cart.forEach(c => {
-                if(c.sku == item.sku){
-                    found = true;
-                    c.qty = item.qty
-                }
+        let found = cart.find(c => c.sku == item.sku);
+        if(found){
+            cart = cart.filter(c => c.sku != item.sku);
+            this.setState({
+                cart
             })
-            if(!found){
-                if(item.qty > 0){
-                    cart.push({
-                        name: item.name,
-                        sku: item.sku,
-                        qty: item.qty
-                    });
-                }
-            } 
+            this.props.onCartChange(cart);
+            return;
+        }
+        else {
+            if(item.qty > 0){
+                cart.push({
+                    name: item.name,
+                    sku: item.sku,
+                    qty: item.qty
+                });
+            }
         }          
         if(cart == null) cart = [];
         this.setState({cart})
@@ -143,7 +149,10 @@ export default class Products extends React.PureComponent{
     }
 
     increase(item){
-        const stock = this.getAttributeValue(item,'quantity_and_stock_status') || 0;
+        let stock = this.getStock(item);
+        if(Array.isArray(stock) && stock[0]){
+            stock = stock[1] || 1
+        }   
         if(item.qty < stock){
             this.setQty(item,item.qty + 1)
         }
@@ -169,7 +178,7 @@ export default class Products extends React.PureComponent{
     }
 
     renderQty(item,big=false){
-        const stock = 3; // this.getAttributeValue(item,'quantity_and_stock_status') || 0;
+        const stock = this.getStock(item);
         return(
             <View style={catalogStyle.qtyArea}>
                 <Text style={catalogStyle.qtdLabel}>{I18n.t('catalog.qty')}</Text>
@@ -197,6 +206,8 @@ export default class Products extends React.PureComponent{
 
     renderItem({item}){
         const image = this.getProductImage(item);
+        let cart = this.state.cart.slice(0);
+        const found = cart.find(c => c.sku == item.sku);
         return(
             <View style={catalogStyle.productListArea}>
                 {image != null &&
@@ -226,7 +237,7 @@ export default class Products extends React.PureComponent{
                             numberOfLines: 1,
                             style: catalogStyle.addButtonTitle
                         }}
-                        title={I18n.t('catalog.add')}
+                        title={I18n.t(`catalog.${found ? 'remove' : 'add'}`)}
                     />
                     <Button 
                         type={'outline'}

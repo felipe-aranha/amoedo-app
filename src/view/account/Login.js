@@ -1,6 +1,6 @@
 import React from 'react';
 import { AccountBase } from './AccountBase';
-import { ImageBackground, View, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { ImageBackground, View, Image, TouchableOpacity, ScrollView, Alert, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Actions } from 'react-native-router-flux';
 import { Input, Button } from 'react-native-elements';
@@ -31,7 +31,8 @@ export default class Login extends AccountBase{
             emailError: '',
             password: '',
             loading: false,
-            customerStep: 1
+            customerStep: 1,
+            modalRecovery: false
         }
         this.customerService = new CustomerService();
     }
@@ -176,13 +177,30 @@ export default class Login extends AccountBase{
         )
     }
 
+    togglePasswordRecovery(){
+        this.setState({
+            modalRecovery: !this.state.modalRecovery
+        })
+    }
+
     isCustomer(){
         return this.context.userType == 'customer';
+    }
+
+    renderModalRecovery(){
+        return(
+            <Modal
+                
+            >
+
+            </Modal>
+        )
     }
 
     renderContent(){
         return(
             <View style={{flex:1}}>
+                {this.renderModalRecovery()}
                 <ImageBackground
                     source={this.isCustomer() ? require('../../../assets/images/account/customer-login-navbar-x2.png') : require('../../../assets/images/account/login-navbar-x2.png')}
                     resizeMode={'stretch'}
@@ -233,7 +251,7 @@ export default class Login extends AccountBase{
                                     color: '#000'
                                 }}
                             />
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={this.togglePasswordRecovery.bind(this)}>
                                 <Text style={accountStyle.forgotPasswordText}>{I18n.t('account.login.forgot')}</Text>
                             </TouchableOpacity>
                         </View>
