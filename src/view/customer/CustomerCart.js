@@ -72,7 +72,6 @@ export default class CustomerCart extends Customer{
             this.state.cart.forEach((item,i) => {
                 this.catalogService.getProductBySku(item.sku).then(response => {
                     if(response.sku){
-                        response.qty = item.qty;
                         const cartItems = this.state.cartItems.slice();
                         cartItems.push(response);
                         this.setState({cartItems})
@@ -142,14 +141,15 @@ export default class CustomerCart extends Customer{
     }
 
     toggleItem(item){
-        return;
         if(this.isCheckout) return;
         let selectedCart = this.state.selectedCart.slice();
-        const checked = selectedCart.find(i => i.sku = item.sku) || false;
+        const checked = selectedCart.find(i => i.sku == item.sku) || false;
         if(checked != false){
             selectedCart = this.state.selectedCart.slice().filter(i => i.sku != item.sku) || [];
         } else {
-            selectedCart.push(item);
+            const i = this.state.cart.find(c => c.sku == item.sku);
+            if(i)
+                selectedCart.push(i);
         }
         this.setState({
             selectedCart
@@ -160,7 +160,7 @@ export default class CustomerCart extends Customer{
 
     renderCartItem({item}){
         const { selectedCart } = this.state;
-        const checked = selectedCart.find(i => i.sku = item.sku) || false;
+        const checked = selectedCart.find(i => i.sku == item.sku) || false;
         if(this.isCheckout && !checked) return <></>;
         const image = this.getProductImage(item);
         const prices = this.getProductPrices(item);
@@ -249,8 +249,9 @@ export default class CustomerCart extends Customer{
         cartItems.forEach(i => {
             const found = selectedCart.find(ii => ii.sku == i.sku);
             const prices = this.getProductPrices(i);
-            if(found)
+            if(found) {
                 price += (prices.specialPrice || prices.regularPrice) * found.qty;
+            }
         })
         return this.renderFooterItem(I18n.t('checkout.subtotal'),this.getCurrencyValue(price));
     }
@@ -297,13 +298,13 @@ export default class CustomerCart extends Customer{
                         Actions.push('checkout', {
                             ...this.props,
                             cartItems: this.state.cartItems,
+                            selectedCart: this.state.selectedCart,
                             billingAddress: this.state.billingAddress,
                             shippingAddress: this.state.shippingAddress
                         })
                     })
                 })
             }).catch(e => {
-                console.log(e);
                 this.setState({
                     loading: false
                 })

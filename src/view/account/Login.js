@@ -190,7 +190,7 @@ export default class Login extends AccountBase{
     renderModalRecovery(){
         return(
             <Modal
-                
+                visible={this.state.modalRecovery}
             >
 
             </Modal>
