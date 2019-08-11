@@ -95,7 +95,7 @@ export default class Products extends React.PureComponent{
         let stock = this.getAttributeValue(item,'quantity_and_stock_status') || 0;
         if(Array.isArray(stock) && stock[0]){
             stock = stock[1] || 1
-        }  else stock = 0;
+        }
         return stock;
     }
 

@@ -211,7 +211,6 @@ export default class CustomerCheckout extends CustomerCart{
                     })
                 }
             }).catch(e => {
-                console.log(e);
                 this.closeModalLoading();
                 this.context.message(I18n.t('checkout.error.generic'));
                 this.setState({

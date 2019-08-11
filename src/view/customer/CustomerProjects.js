@@ -85,7 +85,7 @@ export default class CustomerProjects extends Customer {
     renderEmptyList(){
         image = require('../../../assets/images/icons/x-x2.png');
         title = I18n.t('empty.projects.title');
-        subtitle = I18n.t('empty.projects.subtitle');
+        subtitle = '';
         return super.renderEmptyList(image,title,subtitle);
     }
 

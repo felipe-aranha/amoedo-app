@@ -204,7 +204,7 @@ export default class AddProject extends MainView{
                 })
             }
         } else {
-            this.context.message(I18n.t('verifique os campos antes de continuar'));
+            this.context.message('verifique os campos antes de continuar');
         }
     }
 
