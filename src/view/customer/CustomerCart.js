@@ -37,7 +37,8 @@ export default class CustomerCart extends Customer{
             cart: props.room.cart || [],
             cartItems: props.cartItems || [],
             selectedCart: props.selectedCart || this.isCheckout ? [] : props.room.cart || [],
-            loading: false
+            loading: false,
+            project: props.project
         }
     }
 

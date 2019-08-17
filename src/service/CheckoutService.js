@@ -122,6 +122,19 @@ export class CheckoutService extends HttpClient {
         return this.postAsync(`${this.basePath}carts/mine/payment-information`,data);
     }
 
+    getOrder(orderId){
+        return this.getAsync(`${this.basePath}orders/${orderId}`);
+    }
+
+    setOrderComment(orderId,project){
+        data = {
+            statusHistory: {
+                comment: `{"Origin":"AppAmoedo","customer_id":"${project.customer}","professional_id":"${project.professional}","project_id":"${project.id}"}`
+            }
+        }
+        return this.postAsync(`${this.basePath}orders/${orderId}/comments`, data);
+    }
+
 }
 
 /*

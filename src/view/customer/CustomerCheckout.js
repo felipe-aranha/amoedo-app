@@ -201,7 +201,7 @@ export default class CustomerCheckout extends CustomerCart{
                         if(typeof(order) === 'object' && order.message)
                             this.context.message(I18n.t('checkout.error.refused'),2000);
                         else 
-                            Actions.reset('order',{order})
+                            Actions.reset('order', { order, project: this.props.project })
                     }).catch(e => {
                         this.closeModalLoading();
                         this.context.message(I18n.t('checkout.error.generic'));
