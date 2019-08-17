@@ -80,6 +80,12 @@ export default StyleSheet.create({
         fontFamily: 'system',
         fontSize: 14
     },
+    inputForgotStyle: {
+        color: 'rgb(77,77,77)',
+        paddingLeft: 10,
+        fontFamily: 'system',
+        fontSize: 14
+    },
     inputWrapperStyle: {
         marginVertical: 10
     },

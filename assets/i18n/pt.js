@@ -32,6 +32,10 @@ export default {
             enter: "ACESSAR",
             register: "Novo? Cadastre-se ",
             here: "aqui",
+            forgotDescription: 'Se você não lembra sua senha de acesso, apenas informe seu e-mail e nós iremos ajudá-lo.',
+            forgotButton: 'Recuperar senha',
+            forgotError: 'O e-mail informado não foi encontrado.',
+            forgotSuccess: 'Em breve você receberá um e-mail com instruções sobre como recuperar sua senha.'
         },
         profileSelection: {
             title: 'PERFIL',
@@ -144,7 +148,8 @@ export default {
         room: 'AMBIENTE',
         products: 'PRODUTOS',
         quote: 'RESUMO DE ORÇAMENTO',
-        payment: 'PAGAMENTO'
+        payment: 'PAGAMENTO',
+        passwordRecovery: 'Esqueceu a sua senha?'
     },
     menu: {
         clients: 'Clientes',

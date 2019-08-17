@@ -1,12 +1,12 @@
 import React from 'react';
 import { AccountBase } from './AccountBase';
-import { ImageBackground, View, Image, TouchableOpacity, ScrollView, Alert, Modal } from 'react-native';
+import { ImageBackground, View, Image, TouchableOpacity, ScrollView, Alert, Modal, Platform, StyleSheet, Keyboard } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Actions } from 'react-native-router-flux';
 import { Input, Button } from 'react-native-elements';
-import { AppIcon, Text, KeyboardSpacer } from '../../components';
+import { AppIcon, Text, KeyboardSpacer, Header } from '../../components';
 import I18n from '../../i18n';
-import { accountStyle, tertiaryColor, secondaryColor } from '../../style';
+import { accountStyle, tertiaryColor, secondaryColor, mainStyle, projectStyle } from '../../style';
 import { CustomerService } from '../../service';
 import * as Utils from '../../utils';
 import { MainContext } from '../../reducer';
@@ -32,7 +32,8 @@ export default class Login extends AccountBase{
             password: '',
             loading: false,
             customerStep: 1,
-            modalRecovery: false
+            modalRecovery: false,
+            forgotLoading: false
         }
         this.customerService = new CustomerService();
     }
@@ -143,6 +144,7 @@ export default class Login extends AccountBase{
                 ref={this.email}
                 containerStyle={accountStyle.inputWrapperStyle}
                 errorMessage={this.state.emailError}
+                value={this.state.email}
             />
         )
     }
@@ -187,12 +189,97 @@ export default class Login extends AccountBase{
         return this.context.userType == 'customer';
     }
 
+    handleForgotSubmit(){
+        if(this.state.forgotLoading) return;
+        Keyboard.dismiss();
+        if(!Utils.isEmailValid(this.state.email)){
+            this.setState({
+                emailError: I18n.t('account.errorMessage.invalidEmail')
+            })
+        }
+        else {
+            this.setState({
+                forgotLoading: true
+            },() => {
+                this.customerService.sendRecoveryEmail(this.state.email).then(r => {
+                    this.setState({
+                        forgotLoading: false,
+                    })
+                    if(!r.message)
+                        this.togglePasswordRecovery();
+                    Alert.alert(
+                        '',
+                        I18n.t(`account.login.forgot${!r.message ? 'Success' : 'Error'}`)
+                    )
+                }).catch(e => {
+                    this.setState({
+                        forgotLoading: false,
+                    })
+                })
+            })
+        }
+    }
+
     renderModalRecovery(){
         return(
             <Modal
                 visible={this.state.modalRecovery}
+                onRequestClose={() => {}}
+                animationType={'slide'}
+                transparent={false}
             >
-
+                <View style={[StyleSheet.absoluteFill, mainStyle.mainView]}>
+                    <Header 
+                        containerStyle={Platform.OS == 'android' ? {
+                            borderBottomWidth: 0,
+                            paddingTop:20,
+                            height: 60
+                        } : undefined}
+                        title={I18n.t('section.passwordRecovery')}
+                        handleBack={this.togglePasswordRecovery.bind(this)}
+                        leftIconColor={this.isCustomer() ? tertiaryColor : secondaryColor}
+                        titleStyle={[accountStyle.registerHeaderText,{color: 'rgb(57,57,57)'}]}
+                        backgroundColor={'transparent'}
+                    />
+                    <View style={{flex:1,padding: 20}}>
+                        <View style={{marginBottom: 20 }}>
+                            <Text weight={'medium'} size={14}>{I18n.t('account.login.forgotDescription')}</Text>
+                        </View>
+                        <View style={{marginBottom: 20}}>
+                            <View style={accountStyle.formRow}>
+                                <Input 
+                                    onChangeText={this.handleEmailChange.bind(this)}
+                                    value={this.state.email}
+                                    keyboardType={'email-address'}
+                                    autoCapitalize={'none'}
+                                    placeholder={I18n.t('account.login.email')}
+                                    placeholderTextColor={'rgb(77,77,77)'}
+                                    onSubmitEditing={this.handleForgotSubmit.bind(this)}
+                                    ref={this.email}
+                                    errorMessage={this.state.emailError}
+                                    containerStyle={{flex:1}}
+                                    labelStyle={accountStyle.inputLabel}
+                                    inputContainerStyle={accountStyle.inputContainter}
+                                    inputStyle={accountStyle.input}
+                                    errorStyle={accountStyle.inputError}
+                                    errorProps={{
+                                        numberOfLines: 1
+                                    }}
+                                />
+                            </View>
+                        </View>
+                        <View style={{marginHorizontal: 10}}>
+                            <Button 
+                                title={I18n.t('account.login.forgotButton')}
+                                containerStyle={accountStyle.accountTypeButtonContainer}
+                                buttonStyle={[accountStyle.accountTypeButton,accountStyle.submitButton, {backgroundColor: this.isCustomer() ? tertiaryColor : secondaryColor}]}
+                                titleStyle={[accountStyle.accountTypeButtonTitle,projectStyle.submitButtonTitle]}
+                                onPress={this.handleForgotSubmit.bind(this)}
+                                loading={this.state.forgotLoading}
+                            />
+                        </View>
+                    </View>
+                </View>
             </Modal>
         )
     }

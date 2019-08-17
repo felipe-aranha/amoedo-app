@@ -47,6 +47,14 @@ export class CustomerService extends HttpClient {
         return false;
     }
 
+    sendRecoveryEmail(email){
+        const data = {
+            email,
+            template: 'email_reset'
+        }
+        return this.putAsync(`${this.basePath}/password`,data);
+    }
+
     async getCustomerGroups(){
         return this.getAsync('rest/V1/customerGroups/search?searchCriteria[currentPage]=0').then(result => {
             if(!result.items) return [];
