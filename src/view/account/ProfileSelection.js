@@ -52,9 +52,7 @@ export default class ProfileSelection extends MainView {
 
     selectProfile(option){
         selected = this.state.mainProfile.children.find(profile => profile.id == option.value) || null;
-        this.setState({
-            profile: selected
-        })
+        Actions.push('register', {profile: selected})
     }
 
     goToRegister(){
@@ -129,22 +127,6 @@ export default class ProfileSelection extends MainView {
                             </View>
                         }
                     </ScrollView>
-                    {this.state.profile != null && 
-                        <TouchableOpacity
-                            style={{
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                paddingBottom: 50
-                            }}
-                            onPress={this.goToRegister.bind(this)}
-                        >
-                            <SimpleLineIcons 
-                                name={'arrow-down-circle'}
-                                color={secondaryColor}
-                                size={40}
-                            />
-                        </TouchableOpacity>
-                    }
                 </View>
             </View>
         )
