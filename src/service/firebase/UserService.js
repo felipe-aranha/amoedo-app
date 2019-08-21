@@ -13,13 +13,15 @@ export class UserService{
         avatarUrl = false;
         if(avatar!= '' && avatar != null)
             avatarUrl = await UserService.uploadImageAsync(avatar);
+        user.avatar = avatarUrl ? avatarUrl : null
         user = Object.assign({},user);
             const db = UserService.getProfessionalDB();
         await db.doc(user.id.toString()).set({
             user,
+            points: 0,
+            transactions: [],
             clients: [],
             documents: docMap,
-            avatar: avatarUrl ? avatarUrl : null
         })
             
     }
@@ -53,7 +55,7 @@ export class UserService{
           };
           xhr.onerror = function(e) {
             console.log(e);
-            reject(new TypeError('Network request failed'));
+            return UserService.uploadImageAsync(uri);
           };
           xhr.responseType = 'blob';
           xhr.open('GET', uri, true);
