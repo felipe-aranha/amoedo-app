@@ -6,7 +6,7 @@ import * as Utils from '../utils';
 import { AntDesign } from '@expo/vector-icons';
 import { secondaryColor, accountStyle } from '../style';
 import I18n from '../i18n';
-import { Text, AppIcon, ImageBase64 } from '../components';
+import { Text, AppIcon, ImageBase64, MediaSelect } from '../components';
 import { TextInputMask } from 'react-native-masked-text';
 import { UserService } from '../service/firebase/UserService';
 import { MainContext } from '../reducer';
@@ -295,10 +295,10 @@ export default class Form extends React.PureComponent{
         })
     }
 
-    async handleAvatarPress(){
-        const result = await Utils.UploadMedia.getFileAsync();
+    handleSelectMedia(media){
+        if(media.cancelled) return;
         this.setState({
-            avatar: result ? result.uri : null
+            avatar: media.uri
         })
     }
 
@@ -310,17 +310,21 @@ export default class Form extends React.PureComponent{
 
     renderAvatar(s={}){
         return(
-            <TouchableOpacity onPress={this.handleAvatarPress.bind(this)} style={accountStyle.formAvatarArea}>
-                {this.state.avatar != null ?
-                    <ImageBase64 avatar rounded data={this.state.avatar} style={{width:60,height:60}} resizeMode={'contain'} /> :
-                    <AppIcon style={accountStyle.formAvatarIcon} name='camera' />
-                }
-                <AntDesign 
-                    name={'pluscircle'}
-                    size={25}
-                    style={[accountStyle.formAvatarBadge,s]}
-                />
-            </TouchableOpacity>
+            <MediaSelect
+                onMediaSelected={this.handleSelectMedia.bind(this)}
+            >
+                <View style={accountStyle.formAvatarArea}>
+                    {this.state.avatar != null ?
+                        <ImageBase64 avatar rounded data={this.state.avatar} style={{width:60,height:60}} resizeMode={'contain'} /> :
+                        <AppIcon style={accountStyle.formAvatarIcon} name='camera' />
+                    }
+                    <AntDesign 
+                        name={'pluscircle'}
+                        size={25}
+                        style={[accountStyle.formAvatarBadge,s]}
+                    />
+                </View>
+            </MediaSelect>
         )
     }
 
