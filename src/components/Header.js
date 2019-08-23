@@ -26,10 +26,10 @@ export default class AppHeader extends React.PureComponent{
                 leftComponent={this.props.leftIcon ||
                     <TouchableOpacity
                         hitSlop={{
-                            top:10,
-                            bottom: 10,
-                            left:10,
-                            right:10
+                            top:20,
+                            bottom: 20,
+                            left:20,
+                            right:20
                         }}
                         onPress={this.props.handleBack}
                         style={{
