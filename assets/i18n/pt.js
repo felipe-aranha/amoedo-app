@@ -149,7 +149,8 @@ export default {
         products: 'PRODUTOS',
         quote: 'RESUMO DE ORÇAMENTO',
         payment: 'PAGAMENTO',
-        passwordRecovery: 'Esqueceu a sua senha?'
+        passwordRecovery: 'Esqueceu a sua senha?',
+        myProfile: 'Meu Perfil'
     },
     menu: {
         clients: 'Clientes',

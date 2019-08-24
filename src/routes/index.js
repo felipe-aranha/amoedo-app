@@ -17,7 +17,8 @@ import {
     Pending,
     Professional,
     AddClient,
-    CustomerRegister
+    CustomerRegister,
+    EditProfile
 } from '../view';
 import Toast from 'react-native-easy-toast';
 import { MainContext } from '../reducer';
@@ -121,6 +122,7 @@ export class Routes extends React.PureComponent{
                             </Stack>
                         </Drawer>
                         <Scene  hideNavBar key='order' component={Order} />
+                        <Scene hideNavBar key='editProfile' component={EditProfile} />
                     </Modal>
                 </Router>
                 <Toast position={'bottom'} ref={this.toast} />

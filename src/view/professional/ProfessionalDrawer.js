@@ -105,15 +105,15 @@ export default class ProfessionalDrawer extends MainView{
                     >
                         {this.getUserType()}
                     </Text>
-                    {/*
                     <GradientButton 
+                        onPress={() => { Actions.push('editProfile') }}
                         vertical
                         colors={['rgb(170,4,8)','rgb(226,0,6)']}
                         width={80}
                         height={36}
                         title={'Editar'}
                         titleStyle={drawerStyle.editText}
-                    /> */}
+                    />
                 </View>
                 {this.renderItems()}
                 {this.renderBottomItems()}
