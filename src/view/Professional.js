@@ -22,6 +22,7 @@ export default class Professional extends MainView{
     showFloatingButton = false;
     floatingButtonTitle = '';
     icon = require('../../assets/images/icons/user-add-x2.png');
+    listStyle = {}
 
     renderLeftIcon(){
         return this.renderDrawerIcon();
@@ -113,6 +114,7 @@ export default class Professional extends MainView{
                             renderItem={this.renderItem.bind(this)}
                             keyStractor={this.keyStractor}
                             refreshing={this.state.loading}
+                            style={this.listStyle}
                         />
                     </View> :
                     this.renderEmptyList()

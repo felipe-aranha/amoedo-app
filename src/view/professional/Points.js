@@ -13,6 +13,7 @@ export default class Points extends Professional{
     static contextType = MainContext;
 
     title = I18n.t('section.points');
+    listStyle = { margin: 20 }
 
     constructor(props,context){
         super(props,context);
@@ -41,8 +42,18 @@ export default class Points extends Professional{
     }
 
     renderItem({item}){
+        const points = `${item.amount >= 0 ? '+' : '-' } ${Math.abs(item.amount)}`;
+        const textColor = item.amount >= 0 ? 'rgb(61,123,186)' : 'rgb(226,0,6)';
         return(
-            <ListItem />
+            <ListItem 
+                containerStyle={{ marginTop: 5 }}
+                rightElement={(
+                    <View>
+                        <Text weight={'bold'} color={textColor}>{points}</Text>
+                        <Text weight={'medium'} color={textColor} style={{textAlign:'right'}}>{I18n.t('points.points')}</Text>
+                    </View>
+                )}
+            />
         )
     }
 
