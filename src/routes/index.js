@@ -112,9 +112,9 @@ export class Routes extends React.PureComponent{
                             <Scene hideNavBar key='professionalMain' component={Professional} />
                             <Scene hideNavBar key='clients' component={Clients} /> 
                             <Scene hideNavBar key='addClient' component={AddClient} />
-                            <Scene hideNavBar key='projects' component={Projects} />
+                            <Scene initial hideNavBar key='projects' component={Projects} />
                             <Scene hideNavBar key='addProject' component={AddProject} />
-                            <Scene initial hideNavBar key='points' component={Points} />
+                            <Scene hideNavBar key='points' component={Points} />
                         </Drawer>   
                         <Drawer drawerWidth={drawerWidth} contentComponent={CustomerDrawer} hideNavBar key='customer'>
                             <Stack hideNavBar key='customerStack'>
