@@ -7,6 +7,7 @@ import { Text } from '../../components';
 import { MainContext } from '../../reducer';
 import { UserService } from '../../service/firebase/UserService';
 import { ListItem } from 'react-native-elements';
+import { moment } from '../../utils';
 
 export default class Points extends Professional{
 
@@ -19,10 +20,7 @@ export default class Points extends Professional{
         super(props,context);
         this.state = {
             points: '-',
-            items: [
-                { date: '15/jun', client: 'Claudia Ferreira', amount: 100 },
-                { date: '13/jun', client: 'Rodrigo Ferreira', amount: -100 }
-            ]
+            items: []
         }
     }
 
@@ -31,7 +29,7 @@ export default class Points extends Professional{
             const { points, transactions } = doc.data();
             this.setState({
                 points, 
-                // items: transactions
+                items: transactions
             })
 
         })
@@ -42,11 +40,25 @@ export default class Points extends Professional{
     }
 
     renderItem({item}){
-        const points = `${item.amount >= 0 ? '+' : '-' } ${Math.abs(item.amount)}`;
-        const textColor = item.amount >= 0 ? 'rgb(61,123,186)' : 'rgb(226,0,6)';
+        const points = `${item.points >= 0 ? '+' : '-' } ${Math.abs(item.points || 0)}`;
+        const textColor = item.points >= 0 ? 'rgb(61,123,186)' : 'rgb(226,0,6)';
+        const formatedDate = moment(item.createdAt,'YYYY-MM-DD HH:mm:ss').format('DD/MMM');
         return(
             <ListItem 
                 containerStyle={{ marginTop: 5 }}
+                leftElement={(
+                    <Text size={12} weight={'medium'}>{formatedDate}</Text>
+                )}
+                title={(
+                    <View style={{flex:1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
+                        <View style={{flex:1}}>
+                            <Text style={{textAlign:'center'}} numberOfLines={1} size={12} weight={'medium'}>{item.customer_name}</Text>
+                        </View>
+                        <View style={{flex:1}}>
+                            <Text style={{textAlign:'right'}} numberOfLines={1} size={12} weight={'medium'}>{I18n.t(`points.${item.points >= 0 ? 'credited' : 'debited'}`)}</Text>
+                        </View>
+                    </View>
+                )}
                 rightElement={(
                     <View>
                         <Text weight={'bold'} color={textColor}>{points}</Text>

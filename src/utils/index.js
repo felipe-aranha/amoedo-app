@@ -2,6 +2,8 @@ import variables from '../../assets/variables';
 import I18n from '../i18n';
 export default variables;
 
+export { default as moment } from './moment';
+
 export { UploadMedia } from './UploadMedia';
 
 export const isEmailValid = (email) => {
