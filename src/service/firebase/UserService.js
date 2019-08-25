@@ -26,6 +26,14 @@ export class UserService{
             
     }
 
+    static async updateAvatar(user, avatar){
+        let avatarUrl = false;
+        if(avatar!= '' && avatar != null)
+            avatarUrl = await UserService.uploadImageAsync(avatar);
+        user.avatar = avatarUrl ? avatarUrl : null;
+        console.log(user);
+    }
+
     static async uploadDocuments(documents){
         docs = [];
         await new Promise((resolve,reject) => {

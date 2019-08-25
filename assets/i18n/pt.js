@@ -305,5 +305,8 @@ export default {
     order: {
         title: 'Solicitação efetuada com sucesso!',
         message: 'Estamos aguardando a confirmação de pagamento do pedido #{{order}} pela administradora do cartão.\n\nAssim que seu pedido for aprovado, você receberá um e-mail de confirmação.'
+    },
+    editProfile: {
+        changeProfilePicture: 'Alterar foto do perfil'
     }
 }

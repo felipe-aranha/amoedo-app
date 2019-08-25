@@ -1,21 +1,37 @@
 import React from 'react';
 import { MainView } from './MainView';
 import { MainContext } from '../reducer';
-import { View, TouchableOpacity, ScrollView } from 'react-native';
-import { Header } from '../components';
+import { View, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
+import { Header, MediaSelect, Text } from '../components';
 import { AntDesign } from '@expo/vector-icons';
 import I18n from '../i18n';
 import { secondaryColor, tertiaryColor } from '../style';
+import { Avatar } from 'react-native-elements';
 
 export default class EditProfile extends MainView{
 
     static contextType = MainContext;
 
+    constructor(props,context){
+        super(props,context);
+        this.state = {
+            avatar: context.user.firebase.avatar || null
+        }
+    }
+
     isProfessional(){
         return this.context.user.isProfessional;
     }
 
+    changeAvatar(media){
+        if(media.cancelled) return;
+        this.setState({
+            avatar: media.uri
+        })
+    }
+
     renderCenter(){
+        const { avatar } = this.state;
         return(
             <View style={{backgroundColor: 'rgb(238,238,238)', flex: 1}}>
                 <Header
@@ -47,11 +63,61 @@ export default class EditProfile extends MainView{
                         </TouchableOpacity>
                     }
                 />
-                <ScrollView>
+                <ScrollView style={{paddingVertical: 20}}>
+                    <View
+                        style={{
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <MediaSelect onMediaSelected={this.changeAvatar.bind(this)}>
+                            {avatar == null && avatar != '' ?
+                                <Avatar 
+                                    rounded
+                                    size={'large'}
+                                    source={{uri: this.state.avatar}}
+                                /> :
+                                <ImageBackground
+                                    source={require('../../assets/images/icons/avatar-bg.png')}
+                                    style={{
+                                        width: 140,
+                                        height: 140,
+                                        shadowColor: '#000',
+                                        shadowOpacity: 0.5,
+                                        shadowOffset: {
+                                            width: 140,
+                                            height: 140
+                                        }
+                                    }}
+                                >
 
+                                </ImageBackground>
+                            }
+                            <Text 
+                                weight={'medium'} 
+                                size={14} 
+                                color={'rgb(121,121,121)'} 
+                                style={{
+                                    textAlign: 'center'
+                                }}
+                            >
+                                {I18n.t('editProfile.changeProfilePicture')}
+                            </Text>
+                        </MediaSelect>
+                    </View>
                 </ScrollView>
             </View>
         )
     }
 
 }
+
+{/* <Avatar 
+                                    rounded
+                                    size={'large'}
+                                    source={require('../../assets/images/icons/personal-data-x2.png')}
+                                    imageProps={{
+                                        resizeMode: 'contain',
+                                        tintColor: 'rgb(71,71,71)',
+                                    }}
+                                /> */}

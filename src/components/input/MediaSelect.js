@@ -48,7 +48,7 @@ export class MediaSelect extends React.PureComponent{
 
     render(){
         return(
-            <TouchableOpacity onPress={this.handlePress.bind(this)}>
+            <TouchableOpacity style={{justifyContent: 'center', alignItems:'center'}} onPress={this.handlePress.bind(this)}>
                 {this.props.children}
                 <ActionSheet 
                     ref={this.actionSheet}
