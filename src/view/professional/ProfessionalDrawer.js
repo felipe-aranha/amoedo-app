@@ -31,6 +31,10 @@ export default class ProfessionalDrawer extends MainView{
                     <AppIcon large name={'list'} style={drawerStyle.menuItemIcon} />
                     <Text style={drawerStyle.menuItemText}>{I18n.t('menu.projects')}</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => {this.goTo('_points')}} style={drawerStyle.menuItemArea}>
+                    <AppIcon large name={'points'} style={drawerStyle.menuItemIcon} />
+                    <Text style={drawerStyle.menuItemText}>{I18n.t('menu.points')}</Text>
+                </TouchableOpacity>
                 { /* <TouchableOpacity style={drawerStyle.menuItemArea}>
                     <AppIcon large name={'occurrence'} style={drawerStyle.menuItemIcon} />
                     <Text style={drawerStyle.menuItemText}>{I18n.t('menu.occurrences')}</Text>

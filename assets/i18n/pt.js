@@ -149,6 +149,7 @@ export default {
         products: 'PRODUTOS',
         quote: 'RESUMO DE ORÇAMENTO',
         payment: 'PAGAMENTO',
+        points: 'PROGRAMA DE PONTOS',
         passwordRecovery: 'Esqueceu a sua senha?',
         myProfile: 'Meu Perfil'
     },
@@ -157,6 +158,7 @@ export default {
         projects: 'Projetos',
         occurrences: 'Ocorrências',
         chat: 'Chat',
+        points: 'Programa de pontos',
         settings: 'Configurações',
         logout: 'Sair'
     },
@@ -308,5 +310,11 @@ export default {
     },
     editProfile: {
         changeProfilePicture: 'Alterar foto do perfil'
+    },
+    points: {
+        balance: 'Seu saldo de pontos',
+        credited: 'Acúmulo',
+        debited: 'Resgate',
+        points: 'pts'
     }
 }

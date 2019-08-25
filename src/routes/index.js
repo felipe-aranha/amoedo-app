@@ -31,6 +31,7 @@ import CustomerProjects from '../view/customer/CustomerProjects';
 import CustomerCart from '../view/customer/CustomerCart';
 import CustomerCheckout from '../view/customer/CustomerCheckout';
 import { Order } from '../view/customer/Order';
+import { Points } from '../view/professional';
 
 export class Routes extends React.PureComponent{
 
@@ -111,8 +112,9 @@ export class Routes extends React.PureComponent{
                             <Scene hideNavBar key='professionalMain' component={Professional} />
                             <Scene hideNavBar key='clients' component={Clients} /> 
                             <Scene hideNavBar key='addClient' component={AddClient} />
-                            <Scene initial hideNavBar key='projects' component={Projects} />
+                            <Scene hideNavBar key='projects' component={Projects} />
                             <Scene hideNavBar key='addProject' component={AddProject} />
+                            <Scene initial hideNavBar key='points' component={Points} />
                         </Drawer>   
                         <Drawer drawerWidth={drawerWidth} contentComponent={CustomerDrawer} hideNavBar key='customer'>
                             <Stack hideNavBar key='customerStack'>
