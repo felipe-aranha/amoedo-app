@@ -235,8 +235,8 @@ export default class Register extends MainView{
     }
 
     processApiReturn(response){
-        if(response.message){
-            Alert.alert(I18n.t('common.error'),response.message);
+        if(response.message || response.messages){
+            Alert.alert(I18n.t('common.error'),response.message || I18n.t('account.errorMessage.registerError'));
             this.closeModalLoading();
             this.setState({
                 loading: false

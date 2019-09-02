@@ -73,7 +73,7 @@ export default class CustomerRegister extends Register {
         const group = this.context.app.groups.find(g => g.customer);
         customer = {
             ...customer,
-            dob: Utils.parseDate(personalData.dob),
+            dob: Utils.parseDate(personalData.dob) || null,
             taxvat: personalData.cpf,
             firstname,
             lastname,
@@ -139,7 +139,7 @@ export default class CustomerRegister extends Register {
                 rg: personalData.rg,
                 telephone: personalData.phone
             }
-            response = await UserService.insertOrUpdateCustomerAsync(customer);
+            const response = await UserService.insertOrUpdateCustomerAsync(customer);
             this.context.message(I18n.t(`${response != false ? 'account.register.success' : 'account.errorMessage.registerError'}`))
             if(response != false){
                 this.login(personalData.email,personalData.password);
