@@ -25,8 +25,12 @@ export default class EditProfile extends MainView{
 
     changeAvatar(media){
         if(media.cancelled) return;
+        this.openModalLoading();
         this.setState({
             avatar: media.uri
+        },() => {
+            w
+            this.closeModalLoading();
         })
     }
 
@@ -71,27 +75,26 @@ export default class EditProfile extends MainView{
                         }}
                     >
                         <MediaSelect onMediaSelected={this.changeAvatar.bind(this)}>
-                            {avatar == null && avatar != '' ?
+                            {avatar != null && avatar != '' ?
                                 <Avatar 
                                     rounded
                                     size={'large'}
                                     source={{uri: this.state.avatar}}
                                 /> :
-                                <ImageBackground
-                                    source={require('../../assets/images/icons/avatar-bg.png')}
-                                    style={{
-                                        width: 140,
-                                        height: 140,
-                                        shadowColor: '#000',
-                                        shadowOpacity: 0.5,
-                                        shadowOffset: {
-                                            width: 140,
-                                            height: 140
+                                <Avatar 
+                                    rounded
+                                    size={'large'}
+                                    source={require('../../assets/images/icons/personal-data-x2.png')}
+                                    imageProps={{
+                                        resizeMode: 'contain',
+                                        tintColor: 'rgb(71,71,71)',
+                                        style:{
+                                            width: 30,
+                                            height: 30,
+                                            alignSelf: 'center',
                                         }
                                     }}
-                                >
-
-                                </ImageBackground>
+                                />
                             }
                             <Text 
                                 weight={'medium'} 

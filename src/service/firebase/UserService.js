@@ -31,7 +31,23 @@ export class UserService{
         if(avatar!= '' && avatar != null)
             avatarUrl = await UserService.uploadImageAsync(avatar);
         user.avatar = avatarUrl ? avatarUrl : null;
-        console.log(user);
+        user = Object.assign({},user);
+        const doc = user.
+        FirebaseDB.getFirestore().runTransaction(transaction => {
+            return transaction.get(professionalDoc).then(doc => {
+                clients = doc.data().clients || [];
+                found = clients.find(client => client.email == customer.email);
+                if(!found){
+                    clients.push({
+                        email: customer.email,
+                        approved: true,
+                        dateAdded: new Date()
+                    })
+                }
+                user.clients = clients;
+                transaction.update(professionalDoc,{clients})
+            })
+        })
     }
 
     static async uploadDocuments(documents){
