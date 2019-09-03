@@ -315,7 +315,10 @@ export default {
         email: 'Email',
         telephone: 'Telefone',
         password: 'Senha',
-        deleteAccount: 'Excluir minha conta'
+        deleteAccount: 'Excluir minha conta',
+        deleteAccountText: 'Tem certeza que deseja desativar sua conta?',
+        yes: 'Desativar',
+        no: 'Cancelar'
     },
     points: {
         balance: 'Seu saldo de pontos',

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MainView } from './MainView';
 import { MainContext } from '../reducer';
-import { View, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Header, MediaSelect, Text } from '../components';
 import { AntDesign } from '@expo/vector-icons';
 import I18n from '../i18n';
@@ -34,6 +34,25 @@ export default class EditProfile extends MainView{
             this.context.user.firebase.avatar = this.state.avatar;
             this.closeModalLoading();
         })
+    }
+
+    handlePhoneChange(){
+
+    }
+
+    handlePasswordChange(){
+
+    }
+
+    handleDeleteAccount(){
+        Alert.alert(
+            I18n.t('editProfile.deleteAccount'),
+            I18n.t('editProfile.deleteAccountText'),
+            [
+                { text: I18n.t('editProfile.no'), style: 'cancel' },
+                { text: I18n.t('editProfile.yes'), onPress: this.logout.bind(this) }
+            ]
+        )
     }
 
     renderCenter(){
@@ -75,7 +94,8 @@ export default class EditProfile extends MainView{
                     <View
                         style={{
                             justifyContent: 'center',
-                            alignItems: 'center'
+                            alignItems: 'center',
+                            marginBottom: 30
                         }}
                     >
                         <MediaSelect onMediaSelected={this.changeAvatar.bind(this)}>
@@ -106,7 +126,7 @@ export default class EditProfile extends MainView{
                                 color={'rgb(121,121,121)'} 
                                 style={{
                                     textAlign: 'center',
-                                    marginVertical: 10
+                                    marginTop: 10
                                 }}
                             >
                                 {I18n.t('editProfile.changeProfilePicture')}
@@ -145,6 +165,7 @@ export default class EditProfile extends MainView{
                                 name: 'chevron-right',
                                 size: 20
                             }}
+                            onPress={this.handlePhoneChange.bind(this)}
                         />
                         <_Divider />
                         <_ListItem 
@@ -155,6 +176,7 @@ export default class EditProfile extends MainView{
                                 name: 'chevron-right',
                                 size: 20
                             }}
+                            onPress={this.handlePasswordChange.bind(this)}
                         />
                     </View>
                     <View 
@@ -173,6 +195,13 @@ export default class EditProfile extends MainView{
                         
                         <_ListItem 
                             title={I18n.t('editProfile.deleteAccount')}
+                            chevron={{
+                                color: this.isProfessional() ? secondaryColor : tertiaryColor,
+                                type: 'entypo',
+                                name: 'chevron-right',
+                                size: 20
+                            }}
+                            onPress={this.handleDeleteAccount.bind(this)}
                         />
                     </View>
                 </ScrollView>
