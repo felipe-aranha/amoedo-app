@@ -78,14 +78,18 @@ export default class ProfessionalDrawer extends MainView{
                         style={drawerStyle.avatarArea}
                     >
                         {user.firebase.avatar != "" &&
-                            <ImageBase64 
-                                data={user.firebase.avatar}
-                                style={{
-                                    width: 80,
-                                    height: 80,
-                                    borderRadius: 15
-                                }}
-                            />
+                            <MainContext.Consumer>
+                            {context => (
+                                <ImageBase64 
+                                    data={context.user.firebase.avatar}
+                                    style={{
+                                        width: 80,
+                                        height: 80,
+                                        borderRadius: 15
+                                    }}
+                                />
+                            )}
+                            </MainContext.Consumer>
                         }
                         <View style={drawerStyle.checkArea}>
                             <GradientButton 

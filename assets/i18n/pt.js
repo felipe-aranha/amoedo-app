@@ -309,7 +309,13 @@ export default {
         message: 'Estamos aguardando a confirmação de pagamento do pedido #{{order}} pela administradora do cartão.\n\nAssim que seu pedido for aprovado, você receberá um e-mail de confirmação.'
     },
     editProfile: {
-        changeProfilePicture: 'Alterar foto do perfil'
+        changeProfilePicture: 'Alterar foto do perfil',
+        personal: 'Dados ',
+        data: 'pessoais',
+        email: 'Email',
+        telephone: 'Telefone',
+        password: 'Senha',
+        deleteAccount: 'Excluir minha conta'
     },
     points: {
         balance: 'Seu saldo de pontos',

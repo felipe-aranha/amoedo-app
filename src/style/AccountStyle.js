@@ -307,5 +307,15 @@ export default StyleSheet.create({
         fontSize: 15,
         color: 'rgb(45,45,45)',
         textAlign: 'center'
+    },
+    editProfileTitle: {
+        fontFamily: 'system-bold',
+        color: 'rgb(45,45,45)',
+        fontSize: 14
+    },
+    editProfileSubtitle: {
+        fontFamily: 'system-medium',
+        fontSize: 12,
+        color: 'rgb(121,121,121)',
     }
 })

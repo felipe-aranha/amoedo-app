@@ -5,8 +5,9 @@ import { View, TouchableOpacity, ScrollView, ImageBackground } from 'react-nativ
 import { Header, MediaSelect, Text } from '../components';
 import { AntDesign } from '@expo/vector-icons';
 import I18n from '../i18n';
-import { secondaryColor, tertiaryColor } from '../style';
-import { Avatar } from 'react-native-elements';
+import { secondaryColor, tertiaryColor, accountStyle } from '../style';
+import { Avatar, ListItem, Divider } from 'react-native-elements';
+import { UserService } from '../service/firebase/UserService';
 
 export default class EditProfile extends MainView{
 
@@ -28,14 +29,17 @@ export default class EditProfile extends MainView{
         this.openModalLoading();
         this.setState({
             avatar: media.uri
-        },() => {
-            w
+        },async () => {
+            await UserService.updateAvatar(this.context.user.firebase, this.state.avatar, this.isProfessional());
+            this.context.user.firebase.avatar = this.state.avatar;
             this.closeModalLoading();
         })
     }
 
     renderCenter(){
         const { avatar } = this.state;
+        const { user } = this.context;
+        const { magento, firebase } = user;
         return(
             <View style={{backgroundColor: 'rgb(238,238,238)', flex: 1}}>
                 <Header
@@ -101,12 +105,75 @@ export default class EditProfile extends MainView{
                                 size={14} 
                                 color={'rgb(121,121,121)'} 
                                 style={{
-                                    textAlign: 'center'
+                                    textAlign: 'center',
+                                    marginVertical: 10
                                 }}
                             >
                                 {I18n.t('editProfile.changeProfilePicture')}
                             </Text>
                         </MediaSelect>
+                    </View>
+                    <View 
+                        style={{
+                            backgroundColor: '#fff',
+                            paddingHorizontal: 20
+                        }}
+                    >
+                        <_ListItem 
+                            title={(
+                                <Text style={accountStyle.editProfileTitle}>
+                                    {I18n.t('editProfile.personal')}
+                                    <Text style={[accountStyle.editProfileTitle, { color: this.isProfessional() ? secondaryColor : tertiaryColor}]}>
+                                        {I18n.t('editProfile.data')}
+                                    </Text>
+                                </Text>
+                            )}
+                            subtitle={`${magento.firstname} ${magento.lastname}`}
+                        />
+                        <_Divider />
+                        <_ListItem 
+                            title={I18n.t('editProfile.email')}
+                            subtitle={magento.email}
+                        />
+                        <_Divider />
+                        <_ListItem 
+                            title={I18n.t('editProfile.telephone')}
+                            subtitle={firebase.cellphone}
+                            chevron={{
+                                color: this.isProfessional() ? secondaryColor : tertiaryColor,
+                                type: 'entypo',
+                                name: 'chevron-right',
+                                size: 20
+                            }}
+                        />
+                        <_Divider />
+                        <_ListItem 
+                            title={I18n.t('editProfile.password')}
+                            chevron={{
+                                color: this.isProfessional() ? secondaryColor : tertiaryColor,
+                                type: 'entypo',
+                                name: 'chevron-right',
+                                size: 20
+                            }}
+                        />
+                    </View>
+                    <View 
+                        style={{
+                            backgroundColor: 'rgb(238,238,238)',
+                            height: 10,
+                            width: '100%'
+                        }}
+                    />
+                    <View 
+                        style={{
+                            backgroundColor: '#fff',
+                            paddingHorizontal: 20
+                        }}
+                    >
+                        
+                        <_ListItem 
+                            title={I18n.t('editProfile.deleteAccount')}
+                        />
                     </View>
                 </ScrollView>
             </View>
@@ -115,12 +182,29 @@ export default class EditProfile extends MainView{
 
 }
 
-{/* <Avatar 
-                                    rounded
-                                    size={'large'}
-                                    source={require('../../assets/images/icons/personal-data-x2.png')}
-                                    imageProps={{
-                                        resizeMode: 'contain',
-                                        tintColor: 'rgb(71,71,71)',
-                                    }}
-                                /> */}
+class _ListItem extends React.PureComponent{
+    render(){
+        return(
+            <ListItem 
+                {...this.props}
+                titleStyle={accountStyle.editProfileTitle}
+                subtitleStyle={accountStyle.editProfileSubtitle}
+            />
+        )
+    }
+}
+
+class _Divider extends React.Component{
+
+    shouldComponentUpdate(){
+        return false;
+    }
+
+    render(){
+        return <Divider 
+        style={{
+            marginHorizontal: 20
+        }}
+        />
+    }
+}
