@@ -37,30 +37,61 @@ export default class Clients extends Professional{
 
     async handleClientsSnapshot(data){
         const { clients } = data;
+        this.addClientsToContext(clients);
         const p = new Promise((resolve,reject) => {
+            /*
             clients.map( async (client,i) => {
-                this.addClientToContext(client.email);
+                await this.addClientToContext(client.email);
                 if(i == clients.length -1){
                     resolve();
                 }
-            })
+            }) */
         })
         return Promise.all([p])
         
     }
 
-    async addClientToContext(email){
+    async addClientsToContext(clients){
         items = this.context.user.clients.slice(0) || [];
-        found = items.find(c => c.email == email);
-        if(!found){
-            newClient = await UserService.getClient(email);
-            currClients = items.slice(0);
-            currClients.push(newClient);
-            this.setState({
-                items: currClients
+        const users = await new Promise(async resolve => {
+            const fullClients = [];
+            clients.forEach( async (c,i) => {
+                const found = items.find(_c => _c.email == c.email);
+                if(!found){
+                    const newClient = await UserService.getClient(c.email);
+                    fullClients.push(newClient);
+                } else {
+                    fullClients.push(found);
+                }
+                if(i == clients.length - 1)
+                    resolve(fullClients);
             })
-            this.context.user.clients = currClients;
-        }
+        });
+        this.setState({
+            items: users
+        },() => {
+            this.context.user.clients = users;
+        })
+    }
+
+    async addClientToContext(email){
+        const p = new Promise( async resolve => {
+            items = this.context.user.clients.slice(0) || [];
+            found = items.find(c => c.email == email);
+            if(!found){
+                newClient = await UserService.getClient(email);
+                currClients = items.slice(0);
+                currClients.push(newClient);
+                this.setState({
+                    items: currClients
+                },() => {
+                    this.context.user.clients = currClients;
+                    resolve(true);
+                })
+                
+            } else resolve(true);
+        })
+        return Promise.all([p])
     }
 
     getProfessionalDoc(){

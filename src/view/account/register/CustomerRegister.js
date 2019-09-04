@@ -10,6 +10,7 @@ import { accountStyle, tertiaryColor } from '../../../style';
 import Form from '../../Form';
 import { Button } from 'react-native-elements';
 import { Customer, Address, CustomerRegister as CR } from '../../../model/magento';
+import { Customer as FCustomer} from '../../../model/firebase';
 import { UserService } from '../../../service/firebase/UserService';
 import { Actions } from 'react-native-router-flux';
 
@@ -126,7 +127,7 @@ export default class CustomerRegister extends Register {
                 state: personalData.state,
                 zipCode: personalData.zipCode
             }
-            let customer = new Customer(Object.assign({},address));
+            let customer = new FCustomer(Object.assign({},address));
             customer = {
                 ...customer,
                 avatar: personalData.avatar,
@@ -137,7 +138,9 @@ export default class CustomerRegister extends Register {
                 instagram: personalData.instagram,
                 name: loggedIn ? `${magento.firstname} ${magento.lastname}` :personalData.name,
                 rg: personalData.rg,
-                telephone: personalData.phone
+                telephone: personalData.phone,
+                createdAt: new Date(),
+                magento_id: customerId != null ? customerId : magento.id || null
             }
             const response = await UserService.insertOrUpdateCustomerAsync(customer);
             this.context.message(I18n.t(`${response != false ? 'account.register.success' : 'account.errorMessage.registerError'}`))

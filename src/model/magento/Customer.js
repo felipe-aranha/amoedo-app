@@ -7,7 +7,6 @@ export class Customer {
         this.lastname = "";
         this.taxvat = "";
         this.group_id = 0;
-        this.created_in = "app";
         if(address && Object.keys(address).length > 0)
             this.addresses = [
                 Object.assign({}, address)

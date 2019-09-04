@@ -21,8 +21,9 @@ export class MainView extends React.Component{
     componentDidMount(){}
 
     componentWillUnmount(){
-        if(this.subscription != null)
-            this.subscription()
+        if(this.subscription && this.subscription != null){
+            this.subscription();
+        }
     }
 
     renderCenter(){}

@@ -123,6 +123,7 @@ export class UserService{
     }
 
     static async getMyClients(clients){
+        console.log(clients);
         c = [];
         if(!clients || clients.length == 0) return [];
         await new Promise((resolve,reject) => {
@@ -134,7 +135,7 @@ export class UserService{
                 if(i == clients.length - 1)
                     resolve()
             })
-        })
+        });
         return c;
     }
 
