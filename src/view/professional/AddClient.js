@@ -60,7 +60,6 @@ export default class AddClient extends Clients{
                 email: client.email,
                 name: client.name,
                 telephone: client.phone,
-                status: 'pending'
             }
             docID = this.context.user.magento.id;
             myDoc = UserService.getProfessionalDoc(docID);
