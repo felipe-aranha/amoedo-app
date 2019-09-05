@@ -56,15 +56,11 @@ export default class AddClient extends Clients{
             let customer = new Customer(Object.assign({},address));
             customer = {
                 ...customer,
-                avatar: client.avatar,
                 cellphone: client.cell,
-                document: this.state.personType == 1 ? client.cpf : client.cnpj,
-                documentType: this.state.personType == 1 ? "cpf" : "cnpj",
                 email: client.email,
-                instagram: client.instagram,
                 name: client.name,
-                rg: client.rg,
-                telephone: client.phone
+                telephone: client.phone,
+                status: 'pending'
             }
             docID = this.context.user.magento.id;
             myDoc = UserService.getProfessionalDoc(docID);
@@ -95,19 +91,6 @@ export default class AddClient extends Clients{
                     <View style={mainStyle.sectionArea}>
                         <Text style={mainStyle.sectionTitle}>{I18n.t('addClient.title')}</Text>
                         <Text style={mainStyle.sectionSubtitle}>{I18n.t('addClient.subtitle')}</Text>
-                        <View style={{
-                            flexDirection: 'row',
-                            marginVertical: 20
-                        }}>
-                            {[1,2].map( key => 
-                                <Check 
-                                    key={key.toString()}
-                                    title={I18n.t(`addClient.personType.${key}`)}
-                                    onPress={this.changePersonType.bind(this,key)}
-                                    checked={this.state.personType == key}
-                                />
-                            )}
-                        </View>
                         <View>
                             <AddClientForm
                                 key={this.state.personType.toString()} 
@@ -173,41 +156,14 @@ export class AddClientForm extends Form{
         return(
             <>
             <View style={[accountStyle.formRow,{marginBottom: 20}]}>
-                {this.renderAvatar({color:'rgb(226,0,6)'})}
                 {this.renderName()}
             </View>
             <View style={accountStyle.formRow}>
                 {this.renderEmail()}
             </View>
             <View style={accountStyle.formRow}>
-                {this.props.personType == 1 ?
-                    this.renderCpf() :
-                    this.renderCnpj()
-                }
-                {this.renderRg()}
-            </View>
-            <View style={accountStyle.formRow}>
                 {this.renderPhone()}
                 {this.renderCellPhone()}
-            </View>
-            <View style={accountStyle.formRow}>
-                {this.renderCep()}
-                <View style={{flex:1}} />
-            </View>
-            <View style={accountStyle.formRow}>
-                {this.renderAddress()}
-            </View>
-            <View style={accountStyle.formRow}>
-                {this.renderAddressNumber()}
-                {this.renderAddressComplement()}
-            </View>
-            <View style={accountStyle.formRow}>
-                {this.renderNeighborhood()}
-                {this.renderCity()}
-            </View>
-            <View style={accountStyle.formRow}>
-                {this.renderState()}
-                {this.renderInstagram()}
             </View>
             </>
         )
