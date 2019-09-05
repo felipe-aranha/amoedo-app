@@ -34,7 +34,7 @@ export class Pending extends AccountBase{
             this.doc = this.db.doc(docId);
             this.subscription = this.doc.onSnapshot( async doc => {
                 const { user, clients } = doc.data();
-                // this.context.user.clients = await UserService.getMyClients(clients);
+                this.context.user.clients = await UserService.getMyClients(clients);
                 this.context.user.firebase = user;
                 if(isProfessional){
                     switch(user.status){

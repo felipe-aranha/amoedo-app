@@ -123,20 +123,15 @@ export class UserService{
     }
 
     static async getMyClients(clients){
-        console.log(clients);
-        c = [];
-        if(!clients || clients.length == 0) return [];
-        await new Promise((resolve,reject) => {
-            clients.forEach( async (client, i) => {
-                _c = await this.getClient(client.email);
-                if(_c != null){
-                    c.push(_c);
-                }
+        return new Promise(async resolve => {
+            const fullClients = [];
+            clients.forEach( async (c,i) => {
+                const newClient = await UserService.getClient(c.email);
+                fullClients.push(newClient);
                 if(i == clients.length - 1)
-                    resolve()
+                    resolve(fullClients);
             })
         });
-        return c;
     }
 
     static async getClient(email){
