@@ -232,7 +232,7 @@ export default class Products extends React.PureComponent{
                     <Button
                         onPress={this.addToCart.bind(this,item)} 
                         containerStyle={catalogStyle.addButonContainer}
-                        buttonStyle={catalogStyle.addButton}
+                        buttonStyle={found ? catalogStyle.removeButton : catalogStyle.addButton}
                         titleProps={{
                             numberOfLines: 1,
                             style: catalogStyle.addButtonTitle

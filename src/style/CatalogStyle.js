@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { secondaryColor } from './variables';
+import { secondaryColor, primaryColor } from './variables';
 
 export default StyleSheet.create({
     categoryListTitle: {
@@ -74,6 +74,10 @@ export default StyleSheet.create({
     },
     addButton:{
         backgroundColor:'rgb(226,0,6)',
+        borderRadius: 5
+    },
+    removeButton:{
+        backgroundColor: primaryColor,
         borderRadius: 5
     },
     addButtonTitle: {
