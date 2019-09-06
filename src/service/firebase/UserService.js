@@ -123,6 +123,7 @@ export class UserService{
     }
 
     static async getMyClients(clients){
+        if(clients.length == 0) return [];
         return new Promise(async resolve => {
             const fullClients = [];
             clients.forEach( async (c,i) => {

@@ -55,6 +55,7 @@ export default class Clients extends Professional{
         items = this.context.user.clients.slice(0) || [];
         const users = await new Promise(async resolve => {
             const fullClients = [];
+            if(clients.length == 0) resolve([]);
             clients.forEach( async (c,i) => {
                 const found = items.find(_c => _c.email == c.email);
                 if(!found){
