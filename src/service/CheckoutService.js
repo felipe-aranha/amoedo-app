@@ -119,6 +119,18 @@ export class CheckoutService extends HttpClient {
                 }
             }
         }
+        console.log(data);
+        return this.postAsync(`${this.basePath}carts/mine/payment-information`,data);
+    }
+
+    orderBillet(){
+        const data = {
+            paymentMethod: {
+                method: 'mundipagg_billet',
+                additional_data: {
+                }
+            }
+        }
         return this.postAsync(`${this.basePath}carts/mine/payment-information`,data);
     }
 

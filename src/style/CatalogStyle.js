@@ -110,6 +110,17 @@ export default StyleSheet.create({
         height: 60,
         marginVertical: 20,
         paddingHorizontal: 20
+    },
+    checkoutPaymentMethodArea: {
+        backgroundColor: '#fff',
+        marginBottom: 10,
+        paddingHorizontal: 20
+    },
+    checkoutPaymentMethodText: {
+        fontSize: 12,
+        fontFamily: 'system-bold',
+        color: 'rgb(77,77,77)',
+        paddingVertical: 10
     }
 
 })

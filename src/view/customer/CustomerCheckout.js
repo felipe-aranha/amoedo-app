@@ -1,7 +1,7 @@
 import React from 'react';
 import CustomerCart from './CustomerCart';
-import { tertiaryColor, accountStyle, primaryColor, mainStyle, projectStyle } from '../../style';
-import { Button, Divider } from 'react-native-elements';
+import { tertiaryColor, accountStyle, primaryColor, mainStyle, projectStyle, catalogStyle } from '../../style';
+import { Button, Divider, ListItem } from 'react-native-elements';
 import I18n from '../../i18n';
 import { View, Modal, ScrollView, Keyboard, Alert, Platform } from 'react-native';
 import { MainContext } from '../../reducer';
@@ -23,6 +23,8 @@ export default class CustomerCheckout extends CustomerCart{
             items: [],
             cart: props.room.cart || [],
             selectedCart: [],
+            paymentMethod: null,
+            paymentMethodStep: 1,
             cartItems: props.cartItems,
             billingAddress: props.billingAddress,
             shippingAddress: props.shippingAddress,
@@ -158,12 +160,13 @@ export default class CustomerCheckout extends CustomerCart{
 
     togglePaymentModal(){
         this.setState({
-            paymentModal: !this.state.paymentModal
+            paymentModal: !this.state.paymentModal,
+            paymentMethodStep: 1
         })
     }
 
     handleFormSubmit(){
-        const { loading, shippingAddress, billingAddress, selectedCart, selectedPayment, card } = this.state;
+        const { loading, shippingAddress, billingAddress, selectedCart, selectedPayment, card, paymentMethod } = this.state;
         if(loading) return;
         if(billingAddress == null){
             this.context.message(I18n.t('checkout.error.noBillingAddress'));
@@ -177,7 +180,7 @@ export default class CustomerCheckout extends CustomerCart{
             this.context.message(I18n.t('checkout.error.noCartItems'));
             return;
         }
-        if(selectedPayment == null){
+        if(selectedPayment == null && paymentMethod != 'billet'){
             this.context.message(I18n.t('checkout.error.noPayment'));
             return;
         }
@@ -185,38 +188,56 @@ export default class CustomerCheckout extends CustomerCart{
             loading: true
         },() => {
             this.openModalLoading();
-            this.checkoutService.setCreditCardInfo(card.number,card.name,card.month,card.year,card.cvv,billingAddress).then(response => {
-                if(response.errors){
-                    this.closeModalLoading();
-                    this.context.message(I18n.t('checkout.error.generic'));
-                    this.setState({
-                        loading: false
-                    })
-                } else {
-                    this.checkoutService.order(response).then( order => {
-                        this.closeModalLoading();
-                        this.setState({
-                            loading: false
-                        })
-                        if(typeof(order) === 'object' && order.message)
-                            this.context.message(I18n.t('checkout.error.refused'),2000);
-                        else 
-                            Actions.reset('order', { order, project: this.props.project })
-                    }).catch(e => {
+            if(paymentMethod == 'billet'){
+                this.checkoutService.orderBillet().then(order => {
+                    this.handleOrderSuccess(order)
+                }).catch(e => {
+                    this.handleOrderError(e);
+                })
+            }
+            else { 
+                this.checkoutService.setCreditCardInfo(card.number,card.name,card.month,card.year,card.cvv,billingAddress).then(response => {
+                    if(response.errors){
                         this.closeModalLoading();
                         this.context.message(I18n.t('checkout.error.generic'));
                         this.setState({
                             loading: false
                         })
+                    } else {
+                        this.checkoutService.order(response).then( order => {
+                            this.handleOrderSuccess(order);
+                        }).catch(e => {
+                            this.handleOrderError(e);
+                        })
+                    }
+                }).catch(e => {
+                    this.closeModalLoading();
+                    this.context.message(I18n.t('checkout.error.generic'));
+                    this.setState({
+                        loading: false
                     })
-                }
-            }).catch(e => {
-                this.closeModalLoading();
-                this.context.message(I18n.t('checkout.error.generic'));
-                this.setState({
-                    loading: false
                 })
-            })
+            }
+        })
+    }
+
+    handleOrderSuccess(order){
+        console.log(order);
+        this.closeModalLoading();
+        this.setState({
+            loading: false
+        })
+        if(typeof(order) === 'object' && order.message)
+            this.context.message(I18n.t('checkout.error.refused'),2000);
+        else 
+            Actions.reset('order', { order, project: this.props.project })
+    }
+
+    handleOrderError(e){
+        this.closeModalLoading();
+        this.context.message(I18n.t('checkout.error.generic'));
+        this.setState({
+            loading: false
         })
     }
 
@@ -258,11 +279,13 @@ export default class CustomerCheckout extends CustomerCart{
     }
 
     renderPayment(){
-        const { selectedPayment } = this.state;
+        const { selectedPayment, paymentMethod } = this.state;
         let label = I18n.t('checkout.add')
-        if(selectedPayment != null){
-            label = 'Crédito'
+        if(selectedPayment != null && paymentMethod == 'credit'){
+            label = I18n.t('checkout.creditLabel');
         }
+        if(paymentMethod == 'billet')
+        label = I18n.t('checkout.billetLabel');
         return(
             <View style={{paddingVertical: 20}}>
                 <View style={{marginBottom:20}}>
@@ -285,12 +308,17 @@ export default class CustomerCheckout extends CustomerCart{
     }
 
     renderSubtotal(){
-        const { selectedCart } = this.state;
-        let price = 0;
-        selectedCart.forEach(i => {
-            price += i.price * i.qty;
-        });
-        return this.renderFooterItem(I18n.t('checkout.subtotal'),this.getCurrencyValue(price));
+        const { selectedCart, loading } = this.state;
+        let value = I18n.t('checkout.loading');
+        if(!loading && Array.isArray(selectedCart)){
+            let price = 0;
+            selectedCart.forEach(i => {
+                price += i.price * i.qty;
+            });
+            value = this.getCurrencyValue(price)
+        }
+        
+        return this.renderFooterItem(I18n.t('checkout.subtotal'),value);
     }
 
     renderShipping(){
@@ -312,12 +340,17 @@ export default class CustomerCheckout extends CustomerCart{
     }
 
     renderPaymentModal(){
+        const { paymentMethod, paymentMethodStep } = this.state;
         return(
             <Modal
                 visible={this.state.paymentModal}
                 animationType={'slide'}
                 transparent={false}
-                onRequestClose={() => {}}
+                onRequestClose={() => {
+                    this.setState({
+                        paymentMethodStep: 1
+                    })
+                }}
             >
                 <Header 
                     containerStyle={Platform.OS == 'android' ? {
@@ -325,59 +358,112 @@ export default class CustomerCheckout extends CustomerCart{
                         paddingTop:0,
                         height: 60
                     } : undefined}
-                    title={I18n.t('checkout.creditCardTitle')}
+                    title={paymentMethodStep == 1 ?  I18n.t('checkout.paymentMethodTitle') : paymentMethod == 'billet' ? I18n.t('checkout.billetTitle') : I18n.t('checkout.creditCardTitle')}
                     handleBack={this.togglePaymentModal.bind(this)}
                     leftIconColor={'rgb(226,0,6)'}
                     titleStyle={[accountStyle.registerHeaderText,{color: 'rgb(57,57,57)'}]}
                     backgroundColor={primaryColor}
                 />
-                <View style={[mainStyle.mainView,{padding:20}]}>
-                    <ScrollView>
-                        <View style={accountStyle.formRow}>
-                            <Input 
-                                label={I18n.t('checkout.card.number')}
-                                keyboardType={'numeric'}
-                                value={this.state.cardNumber}
-                                onChangeText={this.handleCardNumberChange.bind(this)}
-                            />
-                        </View>
-                        <View style={accountStyle.formRow}>
-                            <DatePicker 
-                                label={I18n.t('checkout.card.date')}
-                                type={'datetime'}
-                                options={{
-                                    format: 'MM/YYYY'
-                                }}
-                                value={this.state.cardDate}
-                                onChangeText={this.handleCardDateChange.bind(this)}
-                            />
-                            <Input 
-                                label={I18n.t('checkout.card.cvv')}
-                                keyboardType={'numeric'}
-                                value={this.state.cardCvv}
-                                onChangeText={this.handleCardCvvChange.bind(this)}
-                            />
-                        </View>
-                        <View style={accountStyle.formRow}>
-                            <Input 
-                                label={I18n.t('checkout.card.name')}
-                                value={this.state.cardName}
-                                onChangeText={this.handleCardNameChange.bind(this)}
-                            />
-                        </View>
-                    </ScrollView>
-                    <View style={{flex:1, justifyContent: 'flex-end',marignTop:20}}>
-                        <Button 
-                            title={I18n.t('checkout.card.save')}
-                            containerStyle={accountStyle.accountTypeButtonContainer}
-                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.submitButton, projectStyle.projectSaveButton]}
-                            titleStyle={[accountStyle.accountTypeButtonTitle,projectStyle.submitButtonTitle]}
-                            onPress={this.handleCardSubmit.bind(this)}
-                            loading={this.state.cardLoading}
+                {paymentMethodStep == 1 ?
+                    this.renderPaymentMethods() :
+                    this.renderCreditCardModal()
+                }
+            </Modal>
+        )
+    }
+
+    renderPaymentMethods(){
+        return(
+            <View style={{flex:1, backgroundColor: 'rgb(238,238,238)'}}>
+                <ListItem 
+                    title={I18n.t('checkout.billetTitle')}
+                    onPress={this.handleBillet.bind(this)}
+                    titleStyle={catalogStyle.checkoutPaymentMethodText}
+                    containerStyle={catalogStyle.checkoutPaymentMethodArea}
+                    chevron={{
+                        color: tertiaryColor,
+                        name: 'chevron-right',
+                        type: 'entypo'
+                    }}
+                />
+                <ListItem 
+                    title={I18n.t('checkout.creditCardTitle')}
+                    onPress={this.handleCreditCard.bind(this)}
+                    titleStyle={catalogStyle.checkoutPaymentMethodText}
+                    containerStyle={catalogStyle.checkoutPaymentMethodArea}
+                    chevron={{
+                        color: tertiaryColor,
+                        name: 'chevron-right',
+                        type: 'entypo'
+                    }}
+                />
+            </View>
+        )
+    }
+
+    handleBillet(){
+        this.setState({
+            paymentMethodStep: 1,
+            paymentMethod: 'billet',
+            paymentModal: false
+        })
+    }
+
+    handleCreditCard(){
+        this.setState({
+            paymentMethodStep: 2,
+            paymentMethod: 'credit'
+        })
+    }
+
+    renderCreditCardModal(){
+        return(
+            <View style={[mainStyle.mainView,{padding:20}]}>
+                <ScrollView>
+                    <View style={accountStyle.formRow}>
+                        <Input 
+                            label={I18n.t('checkout.card.number')}
+                            keyboardType={'numeric'}
+                            value={this.state.cardNumber}
+                            onChangeText={this.handleCardNumberChange.bind(this)}
                         />
                     </View>
+                    <View style={accountStyle.formRow}>
+                        <DatePicker 
+                            label={I18n.t('checkout.card.date')}
+                            type={'datetime'}
+                            options={{
+                                format: 'MM/YYYY'
+                            }}
+                            value={this.state.cardDate}
+                            onChangeText={this.handleCardDateChange.bind(this)}
+                        />
+                        <Input 
+                            label={I18n.t('checkout.card.cvv')}
+                            keyboardType={'numeric'}
+                            value={this.state.cardCvv}
+                            onChangeText={this.handleCardCvvChange.bind(this)}
+                        />
+                    </View>
+                    <View style={accountStyle.formRow}>
+                        <Input 
+                            label={I18n.t('checkout.card.name')}
+                            value={this.state.cardName}
+                            onChangeText={this.handleCardNameChange.bind(this)}
+                        />
+                    </View>
+                </ScrollView>
+                <View style={{flex:1, justifyContent: 'flex-end',marignTop:20}}>
+                    <Button 
+                        title={I18n.t('checkout.card.save')}
+                        containerStyle={accountStyle.accountTypeButtonContainer}
+                        buttonStyle={[accountStyle.accountTypeButton,accountStyle.submitButton, projectStyle.projectSaveButton]}
+                        titleStyle={[accountStyle.accountTypeButtonTitle,projectStyle.submitButtonTitle]}
+                        onPress={this.handleCardSubmit.bind(this)}
+                        loading={this.state.cardLoading}
+                    />
                 </View>
-            </Modal>
+            </View>
         )
     }
 
