@@ -310,7 +310,8 @@ export default {
     },
     order: {
         title: 'Solicitação efetuada com sucesso!',
-        message: 'Estamos aguardando a confirmação de pagamento do pedido #{{order}} pela administradora do cartão.\n\nAssim que seu pedido for aprovado, você receberá um e-mail de confirmação.'
+        messageCredit: 'Estamos aguardando a confirmação de pagamento do pedido #{{order}} pela administradora do cartão.\n\nAssim que seu pedido for aprovado, você receberá um e-mail de confirmação.',
+        messageBillet: 'Enviamos um e-mail de "Pedido confirmado" do seu pedido #{{order}} para seu e-mail.\n\nNeste e-mail existe um link (Imprimir Boleto) onde você pode imprimir o boleto.\n\nAssim que o pagamento do Boleto for confirmado pelo banco, seu pedido será processado.'
     },
     editProfile: {
         changeProfilePicture: 'Alterar foto do perfil',

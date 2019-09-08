@@ -154,6 +154,8 @@ export default class CustomerCheckout extends CustomerCart{
                     selectedCart: response
                 })
                 this.closeModalLoading();
+            }).catch(e => {
+                Actions.pop();
             })
         })
     }
@@ -230,7 +232,7 @@ export default class CustomerCheckout extends CustomerCart{
         if(typeof(order) === 'object' && order.message)
             this.context.message(I18n.t('checkout.error.refused'),2000);
         else 
-            Actions.reset('order', { order, project: this.props.project })
+            Actions.reset('order', { order, project: this.props.project, paymentMethod: this.state.paymentMethod })
     }
 
     handleOrderError(e){
@@ -310,7 +312,7 @@ export default class CustomerCheckout extends CustomerCart{
     renderSubtotal(){
         const { selectedCart, loading } = this.state;
         let value = I18n.t('checkout.loading');
-        if(!loading && Array.isArray(selectedCart)){
+        if(Array.isArray(selectedCart) && selectedCart.length > 0){
             let price = 0;
             selectedCart.forEach(i => {
                 price += i.price * i.qty;

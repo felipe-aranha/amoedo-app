@@ -74,7 +74,7 @@ export class Order extends AccountBase {
                         <Text style={accountStyle.pendingTitleText}>{I18n.t('order.title')}</Text>
                     </View> 
                     <View style={accountStyle.pendingDescriptionArea}>
-                        <Text style={accountStyle.pendingDescriptionText}>{I18n.t('order.message',{ order : this.state.orderId || this.props.order || ''})}</Text>
+                        <Text style={accountStyle.pendingDescriptionText}>{I18n.t(this.props.paymentMethod == 'credit' ? 'order.messageCredit' : 'order.messageBillet' , { order : this.state.orderId || this.props.order || ''})}</Text>
                     </View>
                 </View>
                 }
