@@ -322,7 +322,10 @@ export default {
         deleteAccount: 'Excluir minha conta',
         deleteAccountText: 'Tem certeza que deseja desativar sua conta?',
         yes: 'Desativar',
-        no: 'Cancelar'
+        no: 'Cancelar',
+        currentPassword: 'Senha atual',
+        newPassword: 'Nova senha',
+        confirmPassword: 'Confirmar senha'
     },
     points: {
         balance: 'Seu saldo de pontos',

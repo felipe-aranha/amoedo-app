@@ -49,7 +49,6 @@ export class Pending extends AccountBase{
                             break;
                     }
                 } else {
-
                     this.logout();
                 }
             })

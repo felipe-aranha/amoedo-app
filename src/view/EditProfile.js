@@ -1,13 +1,14 @@
 import React from 'react';
 import { MainView } from './MainView';
 import { MainContext } from '../reducer';
-import { View, TouchableOpacity, ScrollView, Alert } from 'react-native';
-import { Header, MediaSelect, Text } from '../components';
+import { View, TouchableOpacity, ScrollView, Alert, Platform, Modal, StyleSheet } from 'react-native';
+import { Header, MediaSelect, Text, Input } from '../components';
 import { AntDesign } from '@expo/vector-icons';
 import I18n from '../i18n';
-import { secondaryColor, tertiaryColor, accountStyle } from '../style';
+import { secondaryColor, tertiaryColor, accountStyle, mainStyle } from '../style';
 import { Avatar, ListItem, Divider } from 'react-native-elements';
 import { UserService } from '../service/firebase/UserService';
+import { TextInputMask } from 'react-native-masked-text';
 
 export default class EditProfile extends MainView{
 
@@ -15,8 +16,15 @@ export default class EditProfile extends MainView{
 
     constructor(props,context){
         super(props,context);
+        const { firebase } = context.user;
         this.state = {
-            avatar: context.user.firebase.avatar || null
+            avatar: firebase.avatar || null,
+            modal: false,
+            section: null,
+            telephone: firebase.cellphone,
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: ''
         }
     }
 
@@ -37,11 +45,19 @@ export default class EditProfile extends MainView{
     }
 
     handlePhoneChange(){
-
+        this.setState({
+            section: 'telephone'
+        },() => {
+            this.toggleModal();
+        })
     }
 
     handlePasswordChange(){
-
+        this.setState({
+            section: 'password'
+        },() => {
+            this.toggleModal();
+        })
     }
 
     handleDeleteAccount(){
@@ -55,8 +71,89 @@ export default class EditProfile extends MainView{
         )
     }
 
+    toggleModal(){
+        const { user } = this.context;
+        this.setState({
+            modal: !this.state.modal,
+            telephone: user.firebase.cellphone,
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: ''
+        })
+    }
+
+    renderTelephoneChange(){
+        return (
+            <View style={accountStyle.formRow}>
+                <_MaskInput 
+                    value={this.state.telephone}
+                    onChangeText={this.handleTelephoneChange.bind(this)}
+                />
+            </View>
+        )
+    }
+
+    handleTelephoneChange(telephone){
+        this.setState({ telephone })
+    }
+
+    renderPasswordChange(){
+        return (
+            <View>
+                <View style={accountStyle.formRow}>
+                    <Password 
+                        placeholder={I18n.t('editProfile.currentPassword')}
+                    />
+                </View>
+                <View style={accountStyle.formRow}>
+                    <Password 
+                        placeholder={I18n.t('editProfile.newPassword')}
+                    />
+                </View>
+                <View style={accountStyle.formRow}>
+                    <Password 
+                        placeholder={I18n.t('editProfile.confirmPassword')}
+                    />
+                </View>
+            </View>
+        )
+    }
+
+    renderModal(){
+        const { section } = this.state;
+        return(
+            <Modal
+                visible={this.state.modal}
+                onRequestClose={() => {}}
+                animationType={'slide'}
+                transparent={false}
+            >
+                <View style={[StyleSheet.absoluteFill, mainStyle.mainView]}>
+                    <Header 
+                        containerStyle={Platform.OS == 'android' ? {
+                            borderBottomWidth: 0,
+                            paddingTop:20,
+                            height: 60
+                        } : undefined}
+                        title={I18n.t(`editProfile.${section}`)}
+                        handleBack={this.toggleModal.bind(this)}
+                        leftIconColor={!this.isProfessional() ? tertiaryColor : secondaryColor}
+                        titleStyle={[accountStyle.registerHeaderText,{color: 'rgb(57,57,57)'}]}
+                        backgroundColor={'transparent'}
+                    />
+                    <View style={{flex:1,padding: 20}}>
+                        {section == 'telephone' ?
+                            this.renderTelephoneChange() :
+                            this.renderPasswordChange()
+                        }
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
     renderCenter(){
-        const { avatar } = this.state;
+        const { avatar, telephone } = this.state;
         const { user } = this.context;
         const { magento, firebase } = user;
         return(
@@ -158,7 +255,7 @@ export default class EditProfile extends MainView{
                         <_Divider />
                         <_ListItem 
                             title={I18n.t('editProfile.telephone')}
-                            subtitle={firebase.cellphone}
+                            subtitle={telephone}
                             chevron={{
                                 color: this.isProfessional() ? secondaryColor : tertiaryColor,
                                 type: 'entypo',
@@ -205,6 +302,7 @@ export default class EditProfile extends MainView{
                         />
                     </View>
                 </ScrollView>
+                {this.renderModal()}
             </View>
         )
     }
@@ -236,4 +334,70 @@ class _Divider extends React.Component{
         }}
         />
     }
+}
+
+class Password extends React.PureComponent {
+
+    constructor(props,state){
+        super(props,state);
+        this.state = {
+            showPassword: false
+        }
+    }
+
+    togglePasswordField(){
+        this.setState({
+            showPassword: !this.state.showPassword
+        })
+    }
+
+    render(){
+        return(
+            <Input 
+                {...this.props}
+                secureTextEntry={!this.state.showPassword}
+                autoCapitalize={'none'}
+                rightIcon={{
+                    name: this.state.showPassword ? 'eye' : 'eye-slash',
+                    type:'font-awesome',
+                    color: 'rgb(77,77,77)',
+                    size: 18,
+                    onPress: this.togglePasswordField.bind(this)
+                }}
+            />
+        )
+    }
+
+}
+
+class _MaskInput extends React.PureComponent{
+
+    render(){
+        return(
+            <View style={accountStyle.maskedInputArea}>
+                <TextInputMask 
+                    {...this.props}
+                    autoCapitalize={'none'}
+                    placeholderTextColor={'rgb(77,77,77)'}
+                    containerStyle={{flex:1}}
+                    labelStyle={accountStyle.inputLabel}
+                    inputContainerStyle={accountStyle.inputContainter}
+                    inputStyle={accountStyle.input}
+                    errorStyle={accountStyle.inputError}
+                    errorProps={{
+                        numberOfLines: 1
+                    }}
+                    type={'cel-phone'}
+                    options={{
+                        maskType: 'BRL',
+                        withDDD: true,
+                        dddMask: '(99) '
+                    }}
+                    keyboardType={'number-pad'}
+                    placeholder={I18n.t('form.phone')}
+                />
+            </View>
+        )
+    }
+
 }

@@ -55,6 +55,11 @@ export class CustomerService extends HttpClient {
         return this.putAsync(`${this.basePath}/password`,data);
     }
 
+    changePassword(currentPassword,newPassword){
+        const data = { currentPassword, newPassword }
+        return this.putAsync(`${this.basePath}/me/password`, data);
+    }
+
     async getCustomerGroups(){
         return this.getAsync('rest/V1/customerGroups/search?searchCriteria[currentPage]=0').then(result => {
             if(!result.items) return [];
