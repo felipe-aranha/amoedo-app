@@ -31,7 +31,8 @@ export default class EditProfile extends MainView{
             loading: false,
             cpError: '',
             npError: '',
-            coError: ''
+            coError: '',
+            telephoneError: '',
         }
     }
 
@@ -96,13 +97,14 @@ export default class EditProfile extends MainView{
                 <_MaskInput 
                     value={this.state.telephone}
                     onChangeText={this.handleTelephoneChange.bind(this)}
+                    errorMessage={this.state.telephoneError}
                 />
             </View>
         )
     }
 
     handleTelephoneChange(telephone){
-        this.setState({ telephone })
+        this.setState({ telephone, telephoneError: ''})
     }
 
     handleCurrentPasswordChange(currentPassword){
@@ -155,13 +157,22 @@ export default class EditProfile extends MainView{
     changeTelephone(){
         const { telephone } = this.state;
         if(telephone == ''){
-            this.context.message(I18n.t('editProfile.error.telephone'));
+            this.setState({
+                telephoneError: I18n.t('editProfile.error.telephone')
+            })
             return;
         } else {
             this.setState({
                 loading: true
             },() => {
-                this.context.user.firebase.cellphone = telephone;
+                UserService.updateCellphone(this.context.user.firebase, telephone, this.isProfessional()).then(() => {
+                    this.context.user.firebase.cellphone = telephone;
+                    this.toggleModal();
+                    this.context.message(I18n.t('editProfile.telephoneSuccess'));
+                }).catch(e => {
+                    this.toggleModal();
+                    this.context.message(I18n.t('editProfile.telephoneSuccess'));
+                });
                 this.setState({
                     loading: false
                 })
@@ -499,6 +510,7 @@ class _MaskInput extends React.PureComponent{
                     keyboardType={'number-pad'}
                     placeholder={I18n.t('form.phone')}
                 />
+                <Text style={[accountStyle.inputError,accountStyle.maskedInputError]}>{this.props.errorMessage}</Text>
             </View>
         )
     }

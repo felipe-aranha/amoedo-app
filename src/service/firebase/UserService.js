@@ -26,6 +26,23 @@ export class UserService{
             
     }
 
+    static async updateCellphone(user, cellphone, professional){
+        const doc = professional ? UserService.getProfessionalDB().doc(user.id.toString()) : UserService.getCustomerDB().doc(user.email);
+        return FirebaseDB.getFirestore().runTransaction(transaction => {
+            return transaction.get(doc).then(d => {
+                const data = d.data();
+                if(professional){
+                    let u = data.user;
+                    u.cellphone = cellphone;
+                    return transaction.update(doc,{user: u})
+                } else {
+                    return transaction.update(doc, {cellphone})
+                }
+                
+            })
+        })
+    }
+
     static async updateAvatar(user, avatar, professional){
         let avatarUrl = false;
         if(avatar!= '' && avatar != null)
@@ -39,7 +56,7 @@ export class UserService{
                 if(professional){
                     let u = data.user;
                     u.avatar = user.avatar;
-                    return transaction.update(doc,{user})
+                    return transaction.update(doc,{user: u})
                 } else {
                     return transaction.update(doc, {
                         avatar: user.avatar

@@ -331,6 +331,7 @@ export default {
         telephoneSuccess: 'Telefone alterado com sucesso!',
         error: {
             telephone: 'Você deve inserir um número de telefone',
+            telephoneCatch: 'Ocorreu um erro. Tente novamente mais tarde',
             passwordLength: 'A senha deve conter, no mínimo, 6 caracteres',
             wrongPassword: 'A senha atual está incorreta',
             passwordConfirmation: 'As senhas não coincidem'
