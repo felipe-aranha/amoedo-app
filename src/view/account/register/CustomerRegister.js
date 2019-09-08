@@ -26,6 +26,8 @@ export default class CustomerRegister extends Register {
             activeSection: 'personal-data',
             personalData: {
                 ...customer,
+                phone: customer.telephone,
+                cell: customer.cellphone,
                 ...address
             }
         }
