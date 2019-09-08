@@ -46,4 +46,10 @@ export class AppStorage {
         ])
     }
 
+    static async setPassword(password){
+        return AsyncStorage.multiSet([
+            [AppStorage.PASSWORD, `${password}`]
+        ])
+    }
+
 }

@@ -325,7 +325,17 @@ export default {
         no: 'Cancelar',
         currentPassword: 'Senha atual',
         newPassword: 'Nova senha',
-        confirmPassword: 'Confirmar senha'
+        confirmPassword: 'Confirmar senha',
+        update: 'ALTERAR',
+        passwordSuccess: 'Senha alterada com sucesso!',
+        telephoneSuccess: 'Telefone alterado com sucesso!',
+        error: {
+            telephone: 'Você deve inserir um número de telefone',
+            passwordLength: 'A senha deve conter, no mínimo, 6 caracteres',
+            wrongPassword: 'A senha atual está incorreta',
+            passwordConfirmation: 'As senhas não coincidem'
+
+        }
     },
     points: {
         balance: 'Seu saldo de pontos',

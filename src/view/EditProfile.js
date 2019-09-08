@@ -5,10 +5,12 @@ import { View, TouchableOpacity, ScrollView, Alert, Platform, Modal, StyleSheet 
 import { Header, MediaSelect, Text, Input } from '../components';
 import { AntDesign } from '@expo/vector-icons';
 import I18n from '../i18n';
-import { secondaryColor, tertiaryColor, accountStyle, mainStyle } from '../style';
-import { Avatar, ListItem, Divider } from 'react-native-elements';
+import { secondaryColor, tertiaryColor, accountStyle, mainStyle, projectStyle } from '../style';
+import { Avatar, ListItem, Divider, Button } from 'react-native-elements';
 import { UserService } from '../service/firebase/UserService';
 import { TextInputMask } from 'react-native-masked-text';
+import { CustomerService } from '../service';
+import { AppStorage } from '../storage';
 
 export default class EditProfile extends MainView{
 
@@ -17,6 +19,7 @@ export default class EditProfile extends MainView{
     constructor(props,context){
         super(props,context);
         const { firebase } = context.user;
+        this.customerService = new CustomerService(context.user.token)
         this.state = {
             avatar: firebase.avatar || null,
             modal: false,
@@ -24,7 +27,11 @@ export default class EditProfile extends MainView{
             telephone: firebase.cellphone,
             currentPassword: '',
             newPassword: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            loading: false,
+            cpError: '',
+            npError: '',
+            coError: ''
         }
     }
 
@@ -78,7 +85,8 @@ export default class EditProfile extends MainView{
             telephone: user.firebase.cellphone,
             currentPassword: '',
             newPassword: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            loading: false
         })
     }
 
@@ -97,26 +105,111 @@ export default class EditProfile extends MainView{
         this.setState({ telephone })
     }
 
+    handleCurrentPasswordChange(currentPassword){
+        this.setState({currentPassword, cpError: ''})
+    }
+    handleNewPasswordChange(newPassword){
+        this.setState({newPassword, npError: ''})
+    }
+    handleConfirmPasswordChange(confirmPassword){
+        this.setState({confirmPassword, coError: ''})
+    }
+
     renderPasswordChange(){
         return (
             <View>
                 <View style={accountStyle.formRow}>
                     <Password 
                         placeholder={I18n.t('editProfile.currentPassword')}
+                        onChangeText={this.handleCurrentPasswordChange.bind(this)}
+                        errorMessage={this.state.cpError}
                     />
                 </View>
                 <View style={accountStyle.formRow}>
                     <Password 
                         placeholder={I18n.t('editProfile.newPassword')}
+                        onChangeText={this.handleNewPasswordChange.bind(this)}
+                        errorMessage={this.state.npError}
                     />
                 </View>
                 <View style={accountStyle.formRow}>
                     <Password 
                         placeholder={I18n.t('editProfile.confirmPassword')}
+                        onChangeText={this.handleConfirmPasswordChange.bind(this)}
+                        errorMessage={this.state.coError}
                     />
                 </View>
             </View>
         )
+    }
+
+    handleChangeSubmit(){
+        const { section, loading } = this.state; 
+        if(loading) return;
+        if(section == 'telephone')
+            this.changeTelephone()
+        else 
+            this.changePassword()
+    }
+
+    changeTelephone(){
+        const { telephone } = this.state;
+        if(telephone == ''){
+            this.context.message(I18n.t('editProfile.error.telephone'));
+            return;
+        } else {
+            this.setState({
+                loading: true
+            },() => {
+                this.context.user.firebase.cellphone = telephone;
+                this.setState({
+                    loading: false
+                })
+            })
+        }
+    }
+
+    changePassword(){
+        const { currentPassword, newPassword, confirmPassword } = this.state;
+        if(currentPassword < 6){
+            this.setState({
+                cpError: I18n.t('editProfile.error.passwordLength')
+            }) 
+            return;
+        } 
+        if(newPassword < 6){
+            this.setState({
+                npError: I18n.t('editProfile.error.passwordLength')
+            }) 
+            return;
+        } 
+        if(newPassword != confirmPassword){
+            this.setState({
+                coError: I18n.t('editProfile.error.passwordConfirmation')
+            }) 
+            return;
+        }
+        this.setState({
+            loading: true
+        },() => {
+            this.customerService.changePassword(currentPassword,newPassword).then(response => {
+                if(response == true){
+                    this.toggleModal();
+                    this.context.message(I18n.t('editProfile.passwordSuccess'));
+                    AppStorage.setPassword(newPassword);
+                } else {
+                    this.setState({
+                        loading: false,
+                        cpError: I18n.t('editProfile.error.wrongPassword')
+                    })
+                }
+            }).catch(e => {
+                console.log(e);
+                this.setState({
+                    loading: false
+                })
+            })
+        })
     }
 
     renderModal(){
@@ -146,6 +239,16 @@ export default class EditProfile extends MainView{
                             this.renderTelephoneChange() :
                             this.renderPasswordChange()
                         }
+                    </View>
+                    <View style={{margintop: 20, marginBottom: 30, marginHorizontal: 20}}>
+                        <Button 
+                            title={I18n.t('editProfile.update')}
+                            containerStyle={accountStyle.accountTypeButtonContainer}
+                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.submitButton, {backgroundColor: !this.isProfessional() ? tertiaryColor : secondaryColor}]}
+                            titleStyle={[accountStyle.accountTypeButtonTitle,projectStyle.submitButtonTitle]}
+                            onPress={this.handleChangeSubmit.bind(this)}
+                            loading={this.state.loading}
+                        />
                     </View>
                 </View>
             </Modal>
