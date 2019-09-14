@@ -6,8 +6,8 @@ export default {
             "password": "0qwe1478!!!",
             "consumerKey": "qvvykzuop4rjqy6d4lwv2hk96qvof9z8",
             "consumerSecret": "v193cvx8wzy89zcy32x5ca3ru1pc19yj",
-            "accessToken": "vsbbhwjzdqekkhj1ibi29mc3y64zvi2z",
-            "secretToken": "ryisa2yn7ugdk7ty3cxv9rn1l1u7puzi"
+            "accessToken": "oo7yxahwjlt83rzec3n15j9394c67fpp",
+            "secretToken": "1bs076sl0cajmgcfiu8lqih1zu6tvrjx"
         }
     },
     firebase: {

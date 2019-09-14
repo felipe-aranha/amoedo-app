@@ -68,7 +68,8 @@ export default {
             verifyFields: 'Verifique todos os campos antes de continuar',
             registerError: 'Ocorreu um erro ao efetuar o cadastro. Tente novamente!',
             login: 'Ocorreu um erro ao efetuar o login. Tente novamente!',
-            auth: 'E-mail e/ou senha incorretos'
+            auth: 'E-mail e/ou senha incorretos',
+            customerAgree: 'Você deve concordar com os termos para continuar!'
         },
         alert: {
             emailRegistered: 'O E-mail informado já está cadastrado na loja. Efetue o login ou altere o e-mail de cadastro.',
@@ -128,7 +129,8 @@ export default {
         state: 'uf',
         abd: 'abd*',
         crea: 'crea*',
-        proofOfAddress: 'comprovante de residência'
+        proofOfAddress: 'comprovante de residência',
+        customerAgree: 'Atesto que as informações pré-cadastradas pelo profissional tiveram o meu inteiro consentimento.'
     },
     document: {
         cpf: 'cpf',

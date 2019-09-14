@@ -37,6 +37,7 @@ export class MainView extends React.Component{
 
     async login(email,password){
         this.customerService.login(email,password).then(result => {
+            console.log(result);
             if(!result){
                 this.context.message(I18n.t('account.errorMessage.auth'));
                 this.setState({

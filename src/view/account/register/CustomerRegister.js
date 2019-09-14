@@ -213,11 +213,24 @@ export class CustomerRegisterForm extends Form {
 
     constructor(props,context){
         super(props,context);
-        this.state = this.getInitialState();
+        this.state = {
+            ...this.getInitialState(),
+            customerAgree: false,
+        }
         this.isNew = this.context.user.token != null;
     }
 
+    changeCustomerAgree(){
+        this.setState({
+            customerAgree: !this.state.customerAgree
+        })
+    }
+
     handleFormSubmit(){
+        if(!this.state.customerAgree){
+            Alert.alert('',I18n.t('account.errorMessage.customerAgree'))
+            return;
+        }
         if(this.isFormValid())
             this.props.onContinue(this.state)
         else 
@@ -308,6 +321,13 @@ export class CustomerRegisterForm extends Form {
                     {this.renderPasswordConfirmation()}
                 </View>
             }
+            <View style={[accountStyle.formRow,{ marginTop: 20, marginHorizontal: 20}]}>
+                <Check 
+                    title={I18n.t(`form.customerAgree`)}
+                    onPress={this.changeCustomerAgree.bind(this)}
+                    checked={this.state.customerAgree}
+                />
+            </View>
             </>
         )
     }
