@@ -40,6 +40,7 @@ export class Pending extends AccountBase{
                     switch(user.status){
                         case "approved":
                             this.context.openDrawer = true;
+                            this.subscription();
                             Actions.reset('professional');
                             break;
                         default:
@@ -49,10 +50,12 @@ export class Pending extends AccountBase{
                             break;
                     }
                 } else {
+                    this.subscription();
                     this.logout();
                 }
             })
         } else {
+            this.subscription();
             Actions.reset('account');
         }
     }
