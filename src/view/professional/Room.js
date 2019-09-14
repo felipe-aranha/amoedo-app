@@ -82,6 +82,7 @@ export default class Room extends React.PureComponent {
                 after: [],
                 files: []
             },
+            status: roomState.status || 'pending',
             cart: roomState.cart || []
         }
     }

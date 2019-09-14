@@ -118,8 +118,14 @@ export class UserService{
             customer.avatar = await UserService.uploadImageAsync(customer.avatar);
         }
         const exists = verify ? await UserService.userExists(customer.email,db) : false;
-        if(!exists)
+        if(!exists){
+            customer = {
+                ...customer,
+                points: 0,
+                transactions: [],
+            }
             return await db.doc(customer.email).set(customer);
+        }
     }
 
     static async insertAndAttachCustomer(customer,professionalDoc){
@@ -128,14 +134,19 @@ export class UserService{
     }
 
     static createOrUpdateProject(professionalId,customerEmail,project,id=null){
-        const data = {
+        let data = {
             professional: professionalId,
             customer: customerEmail,
             data: project
         }
         console.log(data);
-        if(id != null)
+        if(id != null){
+            data = {
+                ...data,
+                status: 'in_progress',
+            }
             return UserService.getProjectDB().doc(id).set(data)
+        }
         return UserService.getProjectDB().add(data)
     }
 
