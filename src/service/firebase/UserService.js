@@ -125,8 +125,10 @@ export class UserService{
                 points: 0,
                 transactions: [],
             }
-            const cs = new CustomerService();
-            cs.sendEmail(customer.email, 'cliente', customer.name);
+            if(verify){
+                const cs = new CustomerService();
+                cs.sendEmail(customer.email, 'cliente', customer.name);
+            }
             return await db.doc(customer.email).set(customer);
         }
     }
