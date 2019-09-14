@@ -2,11 +2,11 @@ import React from 'react';
 import { MainContext } from '../../reducer';
 import { MainView } from '../MainView';
 import I18n from '../../i18n';
-import { accountStyle, secondaryColor, catalogStyle } from '../../style';
+import { accountStyle, secondaryColor, catalogStyle, mainStyle } from '../../style';
 import { CatalogService } from '../../service/CatalogService';
 import { Header } from '../../components';
 import { View, FlatList } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem, Input, Divider } from 'react-native-elements';
 import Products from './Products';
 
 export default class Catalog extends MainView{
@@ -22,7 +22,9 @@ export default class Catalog extends MainView{
             loading: false,
             categoryTree: [2],
             categories: context.app.categories,
-            cart: this.props.cart || []
+            cart: this.props.cart || [],
+            term: '',
+            searching: false
         }
     }
 
@@ -36,6 +38,13 @@ export default class Catalog extends MainView{
 
     handleBack(){
         const { categoryTree, cart } = this.state;
+        if(this.state.searching){
+            this.setState({
+                searching: false,
+                term: ''
+            })
+            return;
+        }
         if(categoryTree.length == 1)
             this.props.onBack(cart);
         else {
@@ -130,6 +139,13 @@ export default class Catalog extends MainView{
         />
     }
 
+    search(){
+        if(this.state.term != '')
+            this.setState({
+                searching: true
+            })
+    }
+
     renderCenter(){
         const category = this.getCurrentCategory() || {};
         return(
@@ -144,8 +160,24 @@ export default class Catalog extends MainView{
                     titleStyle={accountStyle.registerHeaderText}
                     backgroundColor={'rgb(103,4,28)'}
                 />
+                <Input
+                    leftIcon={{
+                        type: 'material-community',
+                        name: 'magnify',
+                        color: 'rgb(226,0,6)'
+                    }}
+                    value={this.state.term || ''}
+                    onChangeText={term => { this.setState({ term })}}
+                    onSubmitEditing={this.search.bind(this)}
+                    inputStyle={mainStyle.searchInput}
+                    inputContainerStyle={mainStyle.searchInputContainer}
+                    containerStyle={{
+                        paddingHorizontal: 0
+                    }}
+                />
+                <Divider />
                 <View style={{flex:1, backgroundColor:'#fff'}}>
-                    {category.children != '' ? 
+                    {category.children != '' && !this.state.searching ? 
                         <FlatList
                             style={catalogStyle.list}
                             onRefresh={this.loadCategories.bind(this)}
@@ -156,6 +188,8 @@ export default class Catalog extends MainView{
                         /> :
                         <Products 
                             category={category}
+                            key={this.state.term}
+                            term={this.state.term != '' ? this.state.term : undefined}
                             cart={this.state.cart}
                             onCartChange={this.handleCartChange.bind(this)}
                             onBack={this.exit.bind(this)}

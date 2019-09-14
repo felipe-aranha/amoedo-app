@@ -55,6 +55,12 @@ export default StyleSheet.create({
         height:50,
         borderBottomWidth:0
     },
+    searchInput: {
+        paddingHorizontal: 10,
+        fontFamily: 'system-semibold',
+        fontSize: 16,
+        color: 'rgb(77,77,77)'
+    },
     emptyListTitle: {
         fontFamily: 'system-bold',
         fontSize: 16,

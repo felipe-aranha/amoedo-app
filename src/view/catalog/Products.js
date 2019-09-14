@@ -19,6 +19,7 @@ export default class Products extends React.PureComponent{
         this.baseUrl = `${variables.magento.baseURL}/pub/media/catalog/product`;
         this.state = {
             category: this.props.category || {id: 13},
+            term: props.term || null,
             loading: false,
             refreshing: true,
             finished: false,
@@ -50,14 +51,21 @@ export default class Products extends React.PureComponent{
         }
     }
 
+    getProducts(){
+        const { pageIndex, pageSize,  category, term } = this.state;
+        if(term != null){
+            return this.catalogService.searchForProducts(term, pageSize, pageIndex);
+        }
+        return this.catalogService.getProductsByCategory(category.id, pageSize, pageIndex);
+    }
+
     loadProducts(){
-        const { loading, refreshing, products, pageIndex, pageSize, finished, category } = this.state;
+        const { loading, refreshing, products, pageIndex, pageSize, finished } = this.state;
         if(loading || finished) return;
         this.setState({
             loading: !refreshing
         },() => {
-            this.catalogService.getProductsByCategory(category.id, pageSize, pageIndex).then(response => {
-                
+            this.getProducts().then(response => { 
                 let items = response.items || [];
                 items = items.map(item => {
                     return {
