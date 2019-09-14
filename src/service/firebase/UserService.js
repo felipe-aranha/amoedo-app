@@ -1,5 +1,6 @@
 import { FirebaseDB } from "./Firebase";
 import uuid from 'uuid';
+import { CustomerService } from "../CustomerService";
 
 export class UserService{
 
@@ -124,6 +125,8 @@ export class UserService{
                 points: 0,
                 transactions: [],
             }
+            const cs = new CustomerService();
+            cs.sendEmail(customer.email, 'cliente', customer.name);
             return await db.doc(customer.email).set(customer);
         }
     }

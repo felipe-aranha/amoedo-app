@@ -17,6 +17,7 @@ export class Pending extends AccountBase{
         }
         this.db = UserService.getProfessionalDB();
         this.doc = null;
+        this.subscription = () => {}
     }
 
     static contextType = MainContext;
