@@ -103,7 +103,7 @@ export default class Product extends ProductBase{
                             size={12}
                         >{item.name}</Text>
                         {this.renderPrice(item)}
-                        {this.renderQty(item,true)}
+                        {!this.state.loading && this.renderQty(item,true)}
                     </View>
                     <View style={{marginVertical:20}}>
                         <HTML html={description} tagsStyles={tagsStyles} />

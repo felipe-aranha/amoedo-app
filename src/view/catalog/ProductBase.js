@@ -85,11 +85,11 @@ export default class ProductBase extends React.PureComponent{
     }
 
     getStock(item){
-        let stock = this.getAttributeValue(item,'quantity_and_stock_status') || 0;
+        let stock = this.getAttributeValue(item,'quantity_and_stock_status');
         if(Array.isArray(stock) && stock[0]){
-            stock = stock[1] || 1
+            return stock[1] || -1
         }
-        return stock;
+        return -1;
     }
 
     getProductImage(item){
@@ -143,8 +143,21 @@ export default class ProductBase extends React.PureComponent{
         this.setQty(item,item.qty - 1)
     }
 
-    increase(item){
+    async increase(item){
         let stock = this.getStock(item);
+        if(stock == -1){
+            const response = await this.catalogService.getProductBySku(item.sku);
+            stock = this.getStock(response);
+            response.qty = item.qty;
+            const products = this.state.products.map(p => {
+                if(p.sku == response.sku)
+                    return response;
+                return p;
+            });
+            await new Promise(resolve => {
+                this.setState({ products }, () => { resolve() })
+            })
+        }
         if(Array.isArray(stock) && stock[0]){
             stock = stock[1] || 1
         }   
@@ -154,7 +167,7 @@ export default class ProductBase extends React.PureComponent{
         else if(item.qty == stock){
             this.context.message('limite',1000)
         }
-        else {
+        else if(stock != -1){
             this.setQty(item,stock)
         }
     }
@@ -173,13 +186,13 @@ export default class ProductBase extends React.PureComponent{
     }
 
     renderQty(item,big=false){
-        const stock = this.getStock(item);
+        const stock = this.getStock(item) || 1;
         return(
             <View style={catalogStyle.qtyArea}>
                 <Text style={catalogStyle.qtdLabel}>{I18n.t('catalog.qty')}</Text>
                 <AntDesign onPress={this.decrease.bind(this,item)} name={'minuscircleo'} size={big? 20 : 16} color={'rgb(77,77,77)'} />
                 <Text style={catalogStyle.qtyValue}>{item.qty}</Text>
-                <AntDesign style={{opacity: item.qty < stock ? 1 : 0.5}} onPress={this.increase.bind(this,item)} name={'pluscircleo'} size={big? 20 : 16} color={'rgb(77,77,77)'} />
+                <AntDesign onPress={this.increase.bind(this,item)} name={'pluscircleo'} size={big? 20 : 16} color={'rgb(77,77,77)'} />
             </View>
         )
     }
