@@ -299,7 +299,8 @@ export default {
             noCartItems: 'Nenhum item selecionado!',
             noPayment: 'Nenum método de pagamento foi selecionado!',
             generic: 'Ocorreu um erro ao processar o pagamento. Tente novamente!',
-            refused: 'Pagamento não autorizado. Revise os dados do cartão'
+            refused: 'Pagamento não autorizado. Revise os dados!',
+            address: 'No momento estamos aceitando apenas pedidos para o estado do Rio de Janeiro.'
         },
         card: {
             number: 'NÚMERO DO CARTÃO',

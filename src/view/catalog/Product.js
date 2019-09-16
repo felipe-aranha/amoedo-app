@@ -1,5 +1,4 @@
 import React from 'react';
-import Products from './Products';
 import { accountStyle, tagsStyles, catalogStyle, projectStyle } from '../../style';
 import { View, ActivityIndicator, ScrollView } from 'react-native';
 import { Header, Text } from '../../components';
@@ -7,8 +6,9 @@ import I18n from '../../i18n';
 import { MainContext } from '../../reducer';
 import { Image, Button } from 'react-native-elements';
 import HTML from 'react-native-render-html';
+import ProductBase from './ProductBase';
 
-export default class Product extends Products{
+export default class Product extends ProductBase{
 
     static contextType = MainContext;
 
@@ -75,9 +75,11 @@ export default class Product extends Products{
     }
 
     renderProduct(){
+        const { cart } = this.props;
         const item = this.state.product;
         const image = this.getProductImage(item);
         const description = this.getAttributeValue(item,'description');
+        const found = cart ? cart.find(c => c.sku == item.sku) : true;
         return(
             <View style={{flex:1}}>
                 <ScrollView style={{paddingHorizontal:20}}>
@@ -108,6 +110,7 @@ export default class Product extends Products{
                     </View>
                 </ScrollView>
                 <View style={{padding:20}}>
+                    {found &&
                     <Button 
                         type={'outline'}
                         containerStyle={catalogStyle.accountTypeButtonContainer}
@@ -116,8 +119,9 @@ export default class Product extends Products{
                         title={I18n.t('catalog.delete')}
                         onPress={this.handleDelete.bind(this)}
                     />
+                    }
                     <Button 
-                        title={I18n.t('room.save')}
+                        title={I18n.t(cart? 'catalog.add' : 'room.save')}
                         containerStyle={accountStyle.accountTypeButtonContainer}
                         buttonStyle={[accountStyle.accountTypeButton,projectStyle.projectSaveButton]}
                         titleStyle={[accountStyle.accountTypeButtonTitle,projectStyle.submitButtonTitle]}
@@ -142,7 +146,9 @@ export default class Product extends Products{
                 <Header 
                     containerStyle={{
                         borderBottomWidth: 0
-                    }}
+                    }, this.props.cart ? {
+                        paddingTop: 0
+                    } :{}}
                     title={I18n.t('section.room')}
                     handleBack={this.handleBack.bind(this)}
                     leftIconColor={'rgb(226,0,6)'}

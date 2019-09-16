@@ -101,6 +101,10 @@ export class CheckoutService extends HttpClient {
         }
     }
 
+    getInstallments(value){
+        return fetch(`https://www.amoedo.com.br/rest/default/V1/mundipagg/installments/brandbyamount/Visa/${value}/`);
+    }
+
     order(request){
         const card = request.card || {};
         const data = {
