@@ -127,7 +127,7 @@ export class UserService{
             }
             if(verify){
                 const cs = new CustomerService();
-                cs.sendEmail(customer.email, 'cliente', customer.name);
+                cs.sendRegisterEmail(customer.email, 'cliente', customer.name);
             }
             return await db.doc(customer.email).set(customer);
         }
