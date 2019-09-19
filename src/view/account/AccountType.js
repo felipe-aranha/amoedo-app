@@ -70,6 +70,7 @@ export default class AccountType extends AccountBase{
                             onPress={this.handleAssistanceButtonPress.bind(this)}
                         />
                     </View>
+                    <Text style={{color: '#fff', fontSize: 8,textAlign: 'center'}}>0.1</Text>
                 </View>
             </>
         )

@@ -152,6 +152,8 @@ export default class CustomerCheckout extends CustomerCart{
             this.openModalLoading();
             this.checkoutService.getCartItems().then(response => {
                 let error = false;
+                if(response.length == 0) 
+                    error = true;
                 response.forEach(item => {
                     if(item.price == 0)
                         error = true;
