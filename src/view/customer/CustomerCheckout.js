@@ -3,7 +3,7 @@ import CustomerCart from './CustomerCart';
 import { tertiaryColor, accountStyle, primaryColor, mainStyle, projectStyle, catalogStyle } from '../../style';
 import { Button, Divider, ListItem } from 'react-native-elements';
 import I18n from '../../i18n';
-import { View, Modal, ScrollView, Keyboard, Alert, Platform } from 'react-native';
+import { View, Modal, ScrollView, Keyboard, Alert, Platform, Picker } from 'react-native';
 import { MainContext } from '../../reducer';
 import { Header, Text, Input, DatePicker, KeyboardSpacer } from '../../components';
 import { Actions } from 'react-native-router-flux';
@@ -39,6 +39,8 @@ export default class CustomerCheckout extends CustomerCart{
             cardDate: '',
             cardCvv: '',
             cardName: '',
+            installments: 1,
+            installmentsAvailable: [],
             card: {
                 number: '',
                 month: '',
@@ -168,8 +170,13 @@ export default class CustomerCheckout extends CustomerCart{
     }
 
     handleFormSubmit(){
-        const { loading, shippingAddress, billingAddress, selectedCart, selectedPayment, card, paymentMethod } = this.state;
+        const { loading, shippingAddress, billingAddress, selectedCart, selectedPayment, card, paymentMethod, selectedShipping, installments } = this.state;
         if(loading) return;
+        if(selectedShipping.amount == 'indisponível'){
+            console.log(selectedShipping);
+            this.context.message(I18n.t('checkout.error.addressNotAvailable'));
+            return;
+        }
         if(billingAddress == null){
             this.context.message(I18n.t('checkout.error.noBillingAddress'));
             return;
@@ -206,7 +213,7 @@ export default class CustomerCheckout extends CustomerCart{
                             loading: false
                         })
                     } else {
-                        this.checkoutService.order(response).then( order => {
+                        this.checkoutService.order(response, installments).then( order => {
                             this.handleOrderSuccess(order);
                         }).catch(e => {
                             this.handleOrderError(e);
@@ -224,7 +231,6 @@ export default class CustomerCheckout extends CustomerCart{
     }
 
     handleOrderSuccess(order){
-        console.log(order);
         this.closeModalLoading();
         this.setState({
             loading: false
@@ -281,10 +287,10 @@ export default class CustomerCheckout extends CustomerCart{
     }
 
     renderPayment(){
-        const { selectedPayment, paymentMethod } = this.state;
+        const { selectedPayment, paymentMethod, installments } = this.state;
         let label = I18n.t('checkout.add')
         if(selectedPayment != null && paymentMethod == 'credit'){
-            label = I18n.t('checkout.creditLabel');
+            label = `${I18n.t('checkout.creditLabel')} - ${installments}x`;
         }
         if(paymentMethod == 'billet')
         label = I18n.t('checkout.billetLabel');
@@ -342,7 +348,7 @@ export default class CustomerCheckout extends CustomerCart{
     }
 
     renderPaymentModal(){
-        const { paymentMethod, paymentMethodStep } = this.state;
+        const { paymentMethod, paymentMethodStep, installments } = this.state;
         return(
             <Modal
                 visible={this.state.paymentModal}
@@ -414,8 +420,30 @@ export default class CustomerCheckout extends CustomerCart{
     handleCreditCard(){
         this.setState({
             paymentMethodStep: 2,
-            paymentMethod: 'credit'
+            paymentMethod: 'credit',
+            installments: 1,
+            installmentsAvailable: []
+        },() => {
+            this.getInstallments();
         })
+    }
+
+    getInstallments(){
+        const { selectedCart, selectedShipping } = this.state;
+        let price = 0;
+        selectedCart.forEach(i => {
+            price += i.price * i.qty;
+        });
+        if(selectedShipping != null) 
+            price += selectedShipping.amount;
+        this.checkoutService.getInstallments(price).then( result => {
+            if(Array.isArray(result)){
+                this.setState({
+                    installmentsAvailable: result
+                })
+            }
+        })
+        
     }
 
     renderCreditCardModal(){
@@ -453,6 +481,20 @@ export default class CustomerCheckout extends CustomerCart{
                             value={this.state.cardName}
                             onChangeText={this.handleCardNameChange.bind(this)}
                         />
+                    </View>
+                    <View style={accountStyle.formRow}>
+                        {Array.isArray(this.state.installmentsAvailable) &&
+                        <Picker
+                            selectedValue={this.state.installments}
+                            style={[{height: 60, flex: 1}, mainStyle.inputLabel, { fontSize: 10 }]}
+                            onValueChange={(itemValue, itemIndex) => { this.setState({ installments: itemValue }) }}
+
+                        >
+                            {this.state.installmentsAvailable.map(i => {
+                                return <Picker.Item style={mainStyle.inputLabel} key={i.id.toString()} label={i.label} value={i.id} />
+                            })}
+                        </Picker>
+                        }
                     </View>
                 </ScrollView>
                 <View style={{flex:1, justifyContent: 'flex-end',marignTop:20}}>

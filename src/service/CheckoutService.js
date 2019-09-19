@@ -1,5 +1,6 @@
 import { HttpClient } from './HttpClient';
 import variables from '../utils';
+import * as XML2JS from 'react-native-xml2js';
 
 export class CheckoutService extends HttpClient {
 
@@ -102,10 +103,20 @@ export class CheckoutService extends HttpClient {
     }
 
     getInstallments(value){
-        return fetch(`https://www.amoedo.com.br/rest/default/V1/mundipagg/installments/brandbyamount/Visa/${value}/`);
+        return fetch(`https://www.amoedo.com.br/rest/default/V1/mundipagg/installments/brandbyamount/Visa/${value}/`)
+                    .then(response => {
+                        return response.text();
+                    })
+                    .then(async response => {
+                        let r = null;
+                        await XML2JS.parseString( response , (err, result) => {
+                            r = response;
+                        })
+                        return JSON.parse(r);
+                    })
     }
 
-    order(request){
+    order(request,installments=1){
         const card = request.card || {};
         const data = {
             paymentMethod: {
@@ -118,7 +129,7 @@ export class CheckoutService extends HttpClient {
                     cc_exp_year: card.exp_year,
                     cc_exp_month: card.exp_month,
                     cc_owner: card.holder_name,
-                    cc_installments: 1,
+                    cc_installments: installments,
                     cc_token_credit_card: request.id
                 }
             }
