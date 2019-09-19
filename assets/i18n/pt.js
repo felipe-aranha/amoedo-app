@@ -301,7 +301,8 @@ export default {
             generic: 'Ocorreu um erro ao processar o pagamento. Tente novamente!',
             refused: 'Pagamento não autorizado. Revise os dados!',
             address: 'No momento estamos aceitando apenas pedidos para o estado do Rio de Janeiro.',
-            addressNotAvailable: 'Endereço fora da área de cobertura. Verifique os dados e tente novamente.'
+            addressNotAvailable: 'Endereço fora da área de cobertura. Verifique os dados e tente novamente.',
+            items: 'Ocorreu um erro ao recuperar os dados do carrinho. Tente novamente!'
         },
         card: {
             number: 'NÚMERO DO CARTÃO',

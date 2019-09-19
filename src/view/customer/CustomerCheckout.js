@@ -151,6 +151,16 @@ export default class CustomerCheckout extends CustomerCart{
         },() => {
             this.openModalLoading();
             this.checkoutService.getCartItems().then(response => {
+                let error = false;
+                response.forEach(item => {
+                    if(item.price == 0)
+                        error = true;
+                });
+                if(error){
+                    this.context.message(I18n.t('checkout.error.items'), 3000);
+                    Actions.pop();
+                    return;
+                }
                 this.setState({
                     loading: false,
                     selectedCart: response
@@ -317,8 +327,9 @@ export default class CustomerCheckout extends CustomerCart{
 
     renderSubtotal(){
         const { selectedCart, loading } = this.state;
+        console.log(selectedCart);
         let value = I18n.t('checkout.loading');
-        if(Array.isArray(selectedCart) && selectedCart.length > 0){
+        if(selectedCart && selectedCart.length && selectedCart.length > 0){
             let price = 0;
             selectedCart.forEach(i => {
                 price += i.price * i.qty;
