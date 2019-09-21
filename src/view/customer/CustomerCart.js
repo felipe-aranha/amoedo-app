@@ -11,6 +11,7 @@ import { Check, Text } from '../../components';
 import variables from '../../utils';
 import { CheckoutService } from '../../service/CheckoutService';
 import { Actions } from 'react-native-router-flux';
+import { UserService } from '../../service/firebase/UserService';
 
 export default class CustomerCart extends Customer{
 

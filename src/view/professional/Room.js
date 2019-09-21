@@ -8,6 +8,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { Button, ButtonGroup, ListItem } from 'react-native-elements';
 import Catalog from '../catalog/Catalog';
 import Product from '../catalog/Product';
+import uuid from 'uuid';
 
 export default class Room extends React.PureComponent {
 
@@ -83,7 +84,8 @@ export default class Room extends React.PureComponent {
                 files: []
             },
             status: roomState.status || 'pending',
-            cart: roomState.cart || []
+            cart: roomState.cart || [],
+            id: roomState.id || uuid.v4()
         }
     }
 
@@ -150,9 +152,9 @@ export default class Room extends React.PureComponent {
     }
 
     handleFormSubmit(){
-        const { width, height, depth, description, room, files, cart } = this.state;
+        const { width, height, depth, description, room, files, cart, id } = this.state;
         const data = {
-            width, height, depth, description, room, files, cart
+            width, height, depth, description, room, files, cart, id
         }
         this.props.onSave(data);
     }

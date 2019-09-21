@@ -7,6 +7,7 @@ import { Feather } from '@expo/vector-icons';
 import { Text } from '../../components';
 import { AccountBase } from '../account/AccountBase';
 import { CheckoutService } from '../../service/CheckoutService';
+import { UserService } from '../../service/firebase/UserService';
 
 export class Order extends AccountBase {
 
@@ -26,7 +27,7 @@ export class Order extends AccountBase {
     }
 
     componentDidMount(){
-        const { project, order } = this.props;
+        const { project, order, room } = this.props;
         const checkoutService = new CheckoutService();
         checkoutService.setOrderComment(order, project).then(response => {
             checkoutService.getOrder(order).then(r => {
@@ -40,6 +41,8 @@ export class Order extends AccountBase {
                     orderId: undefined
                 })
             })
+        }).then(() => {
+            UserService.setQuoteStatus(project.id, room, 'pending').then(console.log).catch(console.log)
         }).catch(e => {
             console.log(e);
             this.setState({

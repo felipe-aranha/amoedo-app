@@ -214,6 +214,23 @@ export class UserService{
         return db.where('customer','==',customer);
     }
 
+    static setQuoteStatus(projectId, room, status){
+        const doc = UserService.getProjectDB().doc(projectId);
+        return FirebaseDB.getFirestore().runTransaction(transaction => {
+            return transaction.get(doc).then(d => {
+                let data = d.data().data || { rooms: [] };
+                let rooms = data.rooms.slice() || [];
+                rooms.forEach(r => { 
+                    if(r.id == room.id){
+                        r.status = status;
+                    }
+                });
+                data.rooms = rooms;
+                return transaction.update(doc,{data})
+            })
+        })
+    }
+
     static getProfessionalDoc(docID){
         return UserService.getProfessionalDB().doc(docID.toString());
     }
