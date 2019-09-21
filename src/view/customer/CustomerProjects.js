@@ -50,7 +50,7 @@ export default class CustomerProjects extends Customer {
             return(
                 <>
                    {item.data.rooms.map((room,i) => {
-
+                       const status = room.status || 'available';
                        return(
                            <AppListItem 
                                 leftIcon={leftIcon}
@@ -58,8 +58,12 @@ export default class CustomerProjects extends Customer {
                                 title={`${room.room.label} - ${item.data.name}`}
                                 chevronColor={tertiaryColor}
                                 icon1={'check-warning'}
-                                subtitle1={I18n.t('list.project.inProgress')}
+                                subtitle1={I18n.t(`list.quote.${status}`)}
                                 onPress={() => {
+                                    if(status != 'available'){
+                                        this.context.message(I18n.t('checkout.error.quoteNotAvailable'))
+                                        return;
+                                    }
                                     Actions.push('cart',{project: item, room})
                                 }}
                            />

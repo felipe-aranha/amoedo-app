@@ -204,6 +204,10 @@ export default {
             inProgress: 'Em andamento',
             send: 'Orçamento enviado',
             delayed: 'Atrasado'
+        },
+        quote: {
+            available: 'Disponível',
+            pending: 'Pagamento enviado'
         }
     },
     project: {
@@ -303,7 +307,8 @@ export default {
             refused: 'Pagamento não autorizado. Revise os dados!',
             address: 'No momento estamos aceitando apenas pedidos para o estado do Rio de Janeiro.',
             addressNotAvailable: 'Endereço fora da área de cobertura. Verifique os dados e tente novamente.',
-            items: 'Ocorreu um erro ao recuperar os dados do carrinho. Tente novamente!'
+            items: 'Ocorreu um erro ao recuperar os dados do carrinho. Tente novamente!',
+            quoteNotAvailable: 'Orçamento não disponível para pagamento'
         },
         card: {
             number: 'NÚMERO DO CARTÃO',
