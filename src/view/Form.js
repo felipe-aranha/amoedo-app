@@ -281,7 +281,19 @@ export default class Form extends React.PureComponent{
         fetch(`https://viacep.com.br/ws/${this.state.zipCode}/json/`).then( result => {
             return result.json();
         }).then(result => {
-            if(result.error){
+            if(result.error) return;
+            if(result.uf && result.uf.toLowerCase() != 'rj'){
+                Alert.alert(
+                    I18n.t('account.errorMessage.error'),
+                    I18n.t('account.errorMessage.invalidZipCopde')
+                )
+                this.setState({
+                    zipCode: '',
+                    address: '',
+                    neighborhood: '',
+                    city: '',
+                    state: ''
+                })
                 return;
             }
             this.setState({
@@ -595,7 +607,8 @@ export default class Form extends React.PureComponent{
             <Input 
                 label={I18n.t('form.city')}
                 value={this.state.city}
-                onChangeText={this.handleCityChange.bind(this)}
+                // onChangeText={this.handleCityChange.bind(this)}
+                disabled
             />
         )
     }
@@ -605,7 +618,7 @@ export default class Form extends React.PureComponent{
             <Input 
                 label={I18n.t('form.state')}
                 value={this.state.state}
-                onChangeText={this.handleStateChange.bind(this)}
+                // onChangeText={this.handleStateChange.bind(this)}
             />
         )
     }

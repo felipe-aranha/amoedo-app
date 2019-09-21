@@ -69,7 +69,8 @@ export default {
             registerError: 'Ocorreu um erro ao efetuar o cadastro. Tente novamente!',
             login: 'Ocorreu um erro ao efetuar o login. Tente novamente!',
             auth: 'E-mail e/ou senha incorretos',
-            customerAgree: 'Você deve concordar com os termos para continuar!'
+            customerAgree: 'Você deve concordar com os termos para continuar!',
+            invalidZipCopde: 'No momento não estamos aceitando cep de fora do estado do Rio de Janeiro'
         },
         alert: {
             emailRegistered: 'O E-mail informado já está cadastrado na loja. Efetue o login ou altere o e-mail de cadastro.',

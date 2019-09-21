@@ -11,6 +11,7 @@ import { Button } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 import { MainContext } from '../../reducer';
 import * as WebBrowser from 'expo-web-browser';
+import Constants from 'expo-constants';
 
 export default class AccountType extends AccountBase{
 
@@ -70,7 +71,7 @@ export default class AccountType extends AccountBase{
                             onPress={this.handleAssistanceButtonPress.bind(this)}
                         />
                     </View>
-                    <Text style={{color: '#fff', fontSize: 8,textAlign: 'center'}}>0.1</Text>
+                    <Text style={{color: '#fff', fontSize: 8,textAlign: 'center'}}>{Constants.manifest.version}</Text>
                 </View>
             </>
         )

@@ -87,7 +87,7 @@ export class CustomerService extends HttpClient {
         })
     }
 
-    sendRegisterEmail(email, type='client', additional=''){
+    sendEmail(email, type='client', additional=''){
         const data = {
             email,
             type,
