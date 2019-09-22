@@ -114,6 +114,7 @@ export class UserService{
     
     static async insertOrUpdateCustomerAsync(customer,verify){
         customer = Object.assign({},customer);
+        customer.email = customer.email.toLowerCase();
         const db = UserService.getCustomerDB();
         if(customer.avatar && customer.avatar != '' && customer.avatar != null){
             customer.avatar = await UserService.uploadImageAsync(customer.avatar);
@@ -141,7 +142,7 @@ export class UserService{
     static createOrUpdateProject(professionalId,customerEmail,project,id=null){
         let data = {
             professional: professionalId,
-            customer: customerEmail,
+            customer: customerEmail.toLowerCase(),
             data: project
         }
         console.log(data);
@@ -160,7 +161,7 @@ export class UserService{
         return new Promise(async resolve => {
             const fullClients = [];
             clients.forEach( async (c,i) => {
-                const newClient = await UserService.getClient(c.email);
+                const newClient = await UserService.getClient(c.email.toLowerCase());
                 fullClients.push(newClient);
                 if(i == clients.length - 1)
                     resolve(fullClients);
@@ -169,7 +170,7 @@ export class UserService{
     }
 
     static async getClient(email){
-        doc = await UserService.getCustomerDB().doc(email).get();
+        doc = await UserService.getCustomerDB().doc(email.toLowerCase()).get();
         if(doc.exists){
             return doc.data();
         } else {
@@ -178,6 +179,7 @@ export class UserService{
     }
 
     static addCustomerToProfessional(customer,professionalDoc){
+        customer.email = customer.email.toLowerCase();
         FirebaseDB.getFirestore().runTransaction(transaction => {
             return transaction.get(professionalDoc).then(doc => {
                 clients = doc.data().clients || [];
@@ -196,7 +198,7 @@ export class UserService{
     }
 
     static async userExists(id,db){
-        const response = await db.doc(id.toString()).get();
+        const response = await db.doc(id.toString().toLowerCase()).get();
         if(response.exists){
             return true;
         } else {
@@ -211,7 +213,7 @@ export class UserService{
 
     static getCustomerProjects(customer){
         const db = UserService.getProjectDB();
-        return db.where('customer','==',customer);
+        return db.where('customer','==',customer.toLowerCase());
     }
 
     static setQuoteStatus(projectId, room, status){
