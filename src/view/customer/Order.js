@@ -42,7 +42,7 @@ export class Order extends AccountBase {
                 })
             })
         }).then(() => {
-            UserService.setQuoteStatus(project.id, room, 'pending').then(console.log).catch(console.log)
+            UserService.setQuoteStatus(project.id, room, 'pending');
         }).catch(e => {
             console.log(e);
             this.setState({

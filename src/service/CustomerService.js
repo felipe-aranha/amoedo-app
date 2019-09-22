@@ -57,7 +57,6 @@ export class CustomerService extends HttpClient {
 
     changePassword(currentPassword,newPassword){
         const data = { currentPassword, newPassword }
-        console.log(data);
         return this.putAsync(`${this.basePath}/me/password`, data);
     }
 

@@ -52,55 +52,16 @@ export default class CustomerCheckout extends CustomerCart{
     }
 
     handleBack(){
-        Actions.reset('customer',{index:1})
+        // Actions.reset('customer',{index:1})
+        const { navigation, onBack } = this.props;
+        Actions.pop();
+        onBack();
+        // navigation.state.params.onBack ? navigation.state.params.onBack() : void(0);
     }
 
     componentDidMount(){
         this.loadCartItems();
         this.loadShipping();
-    }
-
-    loadShipping(){
-        this.checkoutService.getShippingMethods(this.state.shippingAddress, this.context.user.magento.email).then(response => {
-            if(Array.isArray(response) && response.length > 0){
-                let selectedShipping = null;
-                if(response.length > 1) {
-                    response.forEach( item => {
-                        if(selectedShipping == null || selectedShipping.amount > item.amount){
-                            selectedShipping = item;
-                        }
-                    })
-                }
-                else selectedShipping = response[0];
-                if(selectedShipping != null){
-                    this.setShippingMethod(selectedShipping)
-                }
-                this.setState({
-                    shippingMethods: response,
-                })
-            }
-        }).catch(e => {
-            this.setState({
-                loadingShipping: false
-            })
-        })
-    }
-
-    setShippingMethod(method){
-        const { shippingAddress, billingAddress } = this.state;
-        this.setState({loadingShipping: true})
-        this.checkoutService.setShippingMethod(shippingAddress,billingAddress,this.context.user.magento.email,method).then(response => {
-            this.setState({
-                selectedShipping: method,
-                loadingShipping: false
-            })
-
-        }).catch(e => {
-            this.setState({
-                selectedShipping: null,
-                loadingShipping: false
-            })
-        });
     }
 
     handleCardSubmit(){
@@ -160,7 +121,7 @@ export default class CustomerCheckout extends CustomerCart{
                 });
                 if(error){
                     this.context.message(I18n.t('checkout.error.items'), 3000);
-                    Actions.pop();
+                    this.handleBack();
                     return;
                 }
                 this.setState({
@@ -169,7 +130,7 @@ export default class CustomerCheckout extends CustomerCart{
                 })
                 this.closeModalLoading();
             }).catch(e => {
-                Actions.pop();
+                this.handleBack();
             })
         })
     }
@@ -329,7 +290,6 @@ export default class CustomerCheckout extends CustomerCart{
 
     renderSubtotal(){
         const { selectedCart, loading } = this.state;
-        console.log(selectedCart);
         let value = I18n.t('checkout.loading');
         if(selectedCart && selectedCart.length && selectedCart.length > 0){
             let price = 0;

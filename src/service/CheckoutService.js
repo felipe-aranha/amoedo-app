@@ -57,6 +57,7 @@ export class CheckoutService extends HttpClient {
                 shipping_method_code: method.method_code
             }
         }
+        await this.postAsync(`${this.basePath}carts/mine/billing-address`,{ address: ba });
         return this.postAsync(`${this.basePath}carts/mine/shipping-information`,data)
     }
 
@@ -134,7 +135,6 @@ export class CheckoutService extends HttpClient {
                 }
             }
         }
-        console.log(data);
         return this.postAsync(`${this.basePath}carts/mine/payment-information`,data);
     }
 

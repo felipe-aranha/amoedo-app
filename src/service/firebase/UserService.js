@@ -145,7 +145,6 @@ export class UserService{
             customer: customerEmail.toLowerCase(),
             data: project
         }
-        console.log(data);
         if(id != null){
             data = {
                 ...data,

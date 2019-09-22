@@ -56,13 +56,68 @@ export default class CustomerCart extends Customer{
         if(this.state.cart.length > this.state.cartItems.length){
             this.loadCartItems();
         }
+        this.cleanCart();
+    }
+
+    async loadShipping(){
+        return this.checkoutService.getShippingMethods(this.state.shippingAddress, this.context.user.magento.email).then(response => {
+            if(Array.isArray(response) && response.length > 0){
+                let selectedShipping = null;
+                if(response.length > 1) {
+                    response.forEach( item => {
+                        if(selectedShipping == null || selectedShipping.amount > item.amount){
+                            selectedShipping = item;
+                        }
+                    })
+                }
+                else selectedShipping = response[0];
+                if(selectedShipping != null){
+                    this.setShippingMethod(selectedShipping)
+                }
+                this.setState({
+                    shippingMethods: response,
+                })
+                return true;
+            } return false;
+        }).catch(e => {
+            this.setState({
+                loadingShipping: false
+            })
+            return false;
+        })
+    }
+
+    cleanCart(){
+        this.openModalLoading();
         this.checkoutService.getCartItems().then(response =>{
             if(response.length > 0){
-                response.forEach(item => {
-                    this.checkoutService.deleteCartItem(item.item_id);
-                })
+                response.forEach( async item => {
+                    await this.checkoutService.deleteCartItem(item.item_id);
+                });
+                this.closeModalLoading();
+            } else {
+                this.closeModalLoading();
             }
+        }).catch(() => {
+            this.closeModalLoading();
         })
+    }
+
+    setShippingMethod(method){
+        const { shippingAddress, billingAddress } = this.state;
+        this.setState({loadingShipping: true})
+        this.checkoutService.setShippingMethod(shippingAddress,billingAddress,this.context.user.magento.email,method).then(response => {
+            this.setState({
+                selectedShipping: method,
+                loadingShipping: false
+            })
+
+        }).catch(e => {
+            this.setState({
+                selectedShipping: null,
+                loadingShipping: false
+            })
+        });
     }
 
     loadCartItems(){
@@ -275,6 +330,10 @@ export default class CustomerCart extends Customer{
         )
     }
 
+    onBack(){
+        this.cleanCart();
+    }
+
     handleFormSubmit(){
         if(this.state.loading) return;
         if(this.state.billingAddress == null){
@@ -291,9 +350,10 @@ export default class CustomerCart extends Customer{
         }
         this.setState({
             loading: true
-        }, () => {
+        }, async () => {
             this.checkoutService.getCart().then(response => {
-                this.checkoutService.addToCart(this.state.selectedCart,response).then(r => {
+                this.checkoutService.addToCart(this.state.selectedCart,response).then( async r => {
+                    await this.loadShipping();
                     this.setState({
                         loading: false
                     },() => {
@@ -302,7 +362,8 @@ export default class CustomerCart extends Customer{
                             cartItems: this.state.cartItems,
                             selectedCart: this.state.selectedCart,
                             billingAddress: this.state.billingAddress,
-                            shippingAddress: this.state.shippingAddress
+                            shippingAddress: this.state.shippingAddress,
+                            onBack: this.onBack.bind(this)
                         })
                     })
                 })
