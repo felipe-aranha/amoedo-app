@@ -182,7 +182,7 @@ export default class CustomerCart extends Customer{
 
     getProductPrices(item){
         let prices = {
-            regular: `${I18n.t('catalog.currency')}${parseFloat(item.price).toFixed(2)}`,
+            regular: this.value2Currency(item.price),
             regularPrice: item.price,
             special: null,
             specialPrice: null
@@ -190,11 +190,15 @@ export default class CustomerCart extends Customer{
         const specialPrice = this.getAttributeValue(item,'special_price');
         if(specialPrice){
             if(Number(specialPrice) < Number(item.price)){
-                prices.special = `${I18n.t('catalog.currency')}${parseFloat(specialPrice).toFixed(2)}`
+                prices.special = this.value2Currency(specialPrice)
                 prices.specialPrice = specialPrice
             }
         }
         return prices;
+    }
+
+    value2Currency(value){
+        return `${I18n.t('catalog.currency')}${parseFloat(value).toFixed(2)}`;
     }
 
     toggleItem(item){
@@ -256,7 +260,7 @@ export default class CustomerCart extends Customer{
                     <Text weight={'medium'} size={10}>{item.name}</Text>
                 </View>
                 <View style={{alignSelf:'flex-end'}}>
-                    <Text size={10} weight={'semibold'}>{prices.special || prices.regular}</Text>
+                    <Text size={10} weight={'semibold'}>{this.value2Currency((prices.specialPrice || prices.regularPrice) * checked.qty)}</Text>
                 </View>
                 <Divider />
             </View>
@@ -296,10 +300,6 @@ export default class CustomerCart extends Customer{
         );
     }
 
-    getCurrencyValue(value){
-        return `R$ ${value.toFixed(2)}`;
-    }
-
     renderSubtotal(){
         const { cartItems, selectedCart } = this.state;
         let price = 0;
@@ -310,7 +310,7 @@ export default class CustomerCart extends Customer{
                 price += (prices.specialPrice || prices.regularPrice) * found.qty;
             }
         })
-        return this.renderFooterItem(I18n.t('checkout.subtotal'),this.getCurrencyValue(price));
+        return this.renderFooterItem(I18n.t('checkout.subtotal'),this.value2Currency(price));
     }
 
     renderFooterItem(label,value){

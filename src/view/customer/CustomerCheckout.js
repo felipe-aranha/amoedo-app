@@ -296,7 +296,7 @@ export default class CustomerCheckout extends CustomerCart{
             selectedCart.forEach(i => {
                 price += i.price * i.qty;
             });
-            value = this.getCurrencyValue(price)
+            value = this.value2Currency(price)
         }
         
         return this.renderFooterItem(I18n.t('checkout.subtotal'),value);
@@ -305,7 +305,7 @@ export default class CustomerCheckout extends CustomerCart{
     renderShipping(){
         const { selectedShipping, loadingShipping } = this.state;
         value = loadingShipping ? I18n.t('checkout.loading') : 
-            selectedShipping != null ? this.getCurrencyValue(selectedShipping.amount) : I18n.t('checkout.unavailableShipping')
+            selectedShipping != null ? this.value2Currency(selectedShipping.amount) : I18n.t('checkout.unavailableShipping')
         return this.renderFooterItem(I18n.t('checkout.shipping'),value);
     }
 
@@ -317,7 +317,7 @@ export default class CustomerCheckout extends CustomerCart{
         });
         if(selectedShipping != null) 
             price += selectedShipping.amount;
-        return this.renderFooterItem(I18n.t('checkout.total'),this.getCurrencyValue(price));
+        return this.renderFooterItem(I18n.t('checkout.total'),this.value2Currency(price));
     }
 
     renderPaymentModal(){
