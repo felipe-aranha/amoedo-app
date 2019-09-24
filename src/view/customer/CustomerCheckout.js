@@ -456,7 +456,7 @@ export default class CustomerCheckout extends CustomerCart{
                         />
                     </View>
                     <View style={accountStyle.formRow}>
-                        {Array.isArray(this.state.installmentsAvailable) &&
+                        {Array.isArray(this.state.installmentsAvailable) && this.state.installmentsAvailable.length > 0 && 
                         <Picker
                             selectedValue={this.state.installments}
                             style={[{height: 60, flex: 1}, mainStyle.inputLabel, { fontSize: 10 }]}
