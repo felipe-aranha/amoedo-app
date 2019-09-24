@@ -170,6 +170,76 @@ export default class CustomerCart extends Customer{
         )
     }
 
+    getQtyMultiplier(item){
+        const value = this.getAttributeValue(item,'revestimento_m2_caixa');
+        if(!value)
+            return {
+                unity: '',
+                x: 1
+            }
+        else 
+            return {
+                unity: 'm²',
+                x: Number(value)
+            }
+    }
+
+    decrease(item){
+        const multiplier = this.getQtyMultiplier(item);
+        if(item.qty > multiplier.x){
+            let newQty = 0;
+            if(!Number.isInteger(multiplier.x))
+                newQty = Number(Number(item.qty) - Number(multiplier.x)).toFixed(2);
+            else 
+                newQty = Number(item.qty) + Number(multiplier.x)
+            this.setQty(item, newQty)
+        }
+    }
+
+    async increase(item){
+        let stock = this.getStock(item);
+        const multiplier = this.getQtyMultiplier(item);
+        if(stock == -1){
+            const response = await this.catalogService.getProductBySku(item.sku);
+            stock = this.getStock(response);
+            response.qty = item.qty;
+            const products = this.state.products.map(p => {
+                if(p.sku == response.sku)
+                    return response;
+                return p;
+            });
+            await new Promise(resolve => {
+                this.setState({ products }, () => { resolve() })
+            })
+        }
+        if(Array.isArray(stock) && stock[0]){
+            stock = stock[1] || 1
+        }   
+        if(item.qty < (stock * multiplier.x)){
+            let newQty = 0;
+            if(!Number.isInteger(multiplier.x))
+                newQty = Number(Number(item.qty) + Number(multiplier.x)).toFixed(2);
+            else 
+                newQty = Number(item.qty) + Number(multiplier.x)
+            this.setQty(item, newQty)
+        }
+        else if(item.qty == (stock * multiplier.x)){
+            this.context.message('limite',1000)
+        }
+        else if(stock != -1){
+            this.setQty(item,multiplier.x)
+        }
+    }
+
+    setQty(item,qty){
+        const products = this.state.products.map(i => {
+            if(i.id == item.id)
+                i.qty = qty;
+            return i;
+        });
+        this.setState({products})
+    }
+
     getAttributeValue(item,attribute){
         const attr = item.custom_attributes.find(attr => attr.attribute_code == attribute);
         return attr ? attr.value : undefined;
@@ -225,6 +295,12 @@ export default class CustomerCart extends Customer{
         if(this.isCheckout && !checked) return <></>;
         const image = this.getProductImage(item);
         const prices = this.getProductPrices(item);
+        const multiplier = this.getQtyMultiplier(item);
+        const divider = Number.isInteger(multiplier.x) ? 
+                            Math.ceil(Number(checked.qty) / multiplier.x) : 
+                            Number(Number(checked.qty) / multiplier.x).toFixed(2);
+        console.log(checked.qty, multiplier.x);
+        const value = checked ? Number(prices.specialPrice || prices.regularPrice) * divider : (prices.specialPrice || prices.regularPrice);
         return(
             <View
                 style={{
@@ -260,7 +336,7 @@ export default class CustomerCart extends Customer{
                     <Text weight={'medium'} size={10}>{item.name}</Text>
                 </View>
                 <View style={{alignSelf:'flex-end'}}>
-                    <Text size={10} weight={'semibold'}>{this.value2Currency((prices.specialPrice || prices.regularPrice) * checked.qty)}</Text>
+                    <Text size={10} weight={'semibold'}>{this.value2Currency(value)}</Text>
                 </View>
                 <Divider />
             </View>

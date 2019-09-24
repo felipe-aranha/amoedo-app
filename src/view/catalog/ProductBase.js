@@ -53,9 +53,10 @@ export default class ProductBase extends React.PureComponent{
             this.getProducts().then(response => { 
                 let items = response.items || [];
                 items = items.map(item => {
+                    const multiplier = this.getQtyMultiplier(item)
                     return {
                         ...item,
-                        qty: 1
+                        qty: multiplier.x
                     }
                 })
                 let p = [];
@@ -82,6 +83,20 @@ export default class ProductBase extends React.PureComponent{
     getAttributeValue(item,attribute){
         const attr = item.custom_attributes.find(attr => attr.attribute_code == attribute);
         return attr ? attr.value : undefined;
+    }
+
+    getQtyMultiplier(item){
+        const value = this.getAttributeValue(item,'revestimento_m2_caixa');
+        if(!value)
+            return {
+                unity: '',
+                x: 1
+            }
+        else 
+            return {
+                unity: 'm²',
+                x: Number(value)
+            }
     }
 
     getStock(item){
@@ -139,12 +154,20 @@ export default class ProductBase extends React.PureComponent{
     }
 
     decrease(item){
-        if(item.qty > 1)
-        this.setQty(item,item.qty - 1)
+        const multiplier = this.getQtyMultiplier(item);
+        if(item.qty > multiplier.x){
+            let newQty = 0;
+            if(!Number.isInteger(multiplier.x))
+                newQty = Number(Number(item.qty) - Number(multiplier.x)).toFixed(2);
+            else 
+                newQty = Number(item.qty) + Number(multiplier.x)
+            this.setQty(item, newQty)
+        }
     }
 
     async increase(item){
         let stock = this.getStock(item);
+        const multiplier = this.getQtyMultiplier(item);
         if(stock == -1){
             const response = await this.catalogService.getProductBySku(item.sku);
             stock = this.getStock(response);
@@ -161,14 +184,19 @@ export default class ProductBase extends React.PureComponent{
         if(Array.isArray(stock) && stock[0]){
             stock = stock[1] || 1
         }   
-        if(item.qty < stock){
-            this.setQty(item,item.qty + 1)
+        if(item.qty < (stock * multiplier.x)){
+            let newQty = 0;
+            if(!Number.isInteger(multiplier.x))
+                newQty = Number(Number(item.qty) + Number(multiplier.x)).toFixed(2);
+            else 
+                newQty = Number(item.qty) + Number(multiplier.x)
+            this.setQty(item, newQty)
         }
-        else if(item.qty == stock){
+        else if(item.qty == (stock * multiplier.x)){
             this.context.message('limite',1000)
         }
         else if(stock != -1){
-            this.setQty(item,stock)
+            this.setQty(item,multiplier.x)
         }
     }
 
@@ -186,12 +214,13 @@ export default class ProductBase extends React.PureComponent{
     }
 
     renderQty(item,big=false){
-        const stock = this.getStock(item) || 1;
+        const multiplier = this.getQtyMultiplier(item);
+        const qty = multiplier.unity == '' ? item.qty : `${item.qty} ${multiplier.unity}`;
         return(
             <View style={catalogStyle.qtyArea}>
                 <Text style={catalogStyle.qtdLabel}>{I18n.t('catalog.qty')}</Text>
                 <AntDesign onPress={this.decrease.bind(this,item)} name={'minuscircleo'} size={big? 20 : 16} color={'rgb(77,77,77)'} />
-                <Text style={catalogStyle.qtyValue}>{item.qty}</Text>
+                <Text style={catalogStyle.qtyValue}>{qty}</Text>
                 <AntDesign onPress={this.increase.bind(this,item)} name={'pluscircleo'} size={big? 20 : 16} color={'rgb(77,77,77)'} />
             </View>
         )
