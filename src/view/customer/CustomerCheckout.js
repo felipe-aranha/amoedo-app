@@ -52,16 +52,22 @@ export default class CustomerCheckout extends CustomerCart{
     }
 
     handleBack(){
-        // Actions.reset('customer',{index:1})
-        const { navigation, onBack } = this.props;
+        const { onBack } = this.props;
         Actions.pop();
         onBack();
-        // navigation.state.params.onBack ? navigation.state.params.onBack() : void(0);
     }
 
-    componentDidMount(){
+    async componentDidMount(){
         this.loadCartItems();
-        this.loadShipping();
+        this.loadShipping().then(r => {
+            if(r){
+                this.loadCartItems();
+            }
+            else {
+                this.context.message(I18n.t('checkout.error.shippingNotAvailable'))
+                this.handleBack();
+            }
+        });
     }
 
     handleCardSubmit(){

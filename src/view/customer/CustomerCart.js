@@ -80,6 +80,7 @@ export default class CustomerCart extends Customer{
                 return true;
             } return false;
         }).catch(e => {
+            console.log(e)
             this.setState({
                 loadingShipping: false
             })
@@ -299,7 +300,6 @@ export default class CustomerCart extends Customer{
         const divider = Number.isInteger(multiplier.x) ? 
                             Math.ceil(Number(checked.qty) / multiplier.x) : 
                             Number(Number(checked.qty) / multiplier.x).toFixed(2);
-        console.log(checked.qty, multiplier.x);
         const value = checked ? Number(prices.specialPrice || prices.regularPrice) * divider : (prices.specialPrice || prices.regularPrice);
         return(
             <View

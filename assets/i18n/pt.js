@@ -308,7 +308,8 @@ export default {
             address: 'No momento estamos aceitando apenas pedidos para o estado do Rio de Janeiro.',
             addressNotAvailable: 'Endereço fora da área de cobertura. Verifique os dados e tente novamente.',
             items: 'Ocorreu um erro ao recuperar os dados do carrinho. Tente novamente!',
-            quoteNotAvailable: 'Orçamento não disponível para pagamento'
+            quoteNotAvailable: 'Orçamento não disponível para pagamento',
+            shippingNotAvailable: 'Não foi possível calcular frete para este endereço!'
         },
         card: {
             number: 'NÚMERO DO CARTÃO',
