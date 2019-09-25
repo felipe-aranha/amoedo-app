@@ -280,6 +280,7 @@ export default {
     },
     checkout: {
         billingAddress: 'Endereço de cobrança',
+        addAddress: 'Adicionar endereço',
         loading: 'carregando',
         unavailableShipping: 'indisponível',
         shippingAddress: 'Endereço de entrega',

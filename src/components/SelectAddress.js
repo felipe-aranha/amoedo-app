@@ -25,14 +25,18 @@ export class SelectAddress extends React.PureComponent{
             modal: false,
             loading: false,
             selected: props.selected || null,
-            addresses
+            addresses,
+            editing: false,
+            currentAddress: null
         }
         this.customerService = new CustomerService();
     }
 
     toggleModal(){
         this.setState({
-            modal: !this.state.modal
+            modal: !this.state.modal,
+            editing: false,
+            currentAddress: null
         })
     }
 
@@ -76,6 +80,9 @@ export class SelectAddress extends React.PureComponent{
 
     selectAddress(address){
         this.props.onSelect(address);
+        this.setState({
+            selected: address
+        })
         this.toggleModal();
     }
 
@@ -105,9 +112,19 @@ export class SelectAddress extends React.PureComponent{
                         fontSize: 12
                     }}
                     title={`${address.street.filter(s => s != '').join(', ')}`}
+                    titleProps={{
+                        numberOfLines: 2
+                    }}
                     onPress={this.selectAddress.bind(this, address)}
                 />
             )
+        })
+    }
+
+    handleAddAddress(){
+        this.setState({
+            editing: true,
+            currentAddress: null
         })
     }
 
@@ -130,9 +147,9 @@ export class SelectAddress extends React.PureComponent{
                     backgroundColor={primaryColor}
                     leftIconColor={tertiaryColor}
                 />
-                <View style={{flex:1, padding: 30}}>
+                <View style={{flex:1, backgroundColor: '#EFEFEF', padding: this.state.editing ? 30 : 0}}>
                     <ScrollView>
-                        {this.state.addresses.length == 0 ?
+                        {this.state.editing ?
                             <AddressForm 
                                 onContinue={this.handleFormSubmit.bind(this)}
                                 initialState={{}}
@@ -140,6 +157,25 @@ export class SelectAddress extends React.PureComponent{
                             /> :
                             <View style={{margin: 10}}>
                                 {this.listAddresses()}
+                                <ListItem
+                                    containerStyle={{
+                                        marginBottom: 5,
+                                        backgroundColor: '#fff'
+                                    }}
+                                    leftIcon={{
+                                        name: 'add',
+                                        color: 'rgb(226,0,6)',
+                                        type: 'material-icons',
+                                        size: 20
+                                    }}
+                                    titleStyle={{
+                                        color: 'rgb(77,77,77)',
+                                        fontFamily: 'system-bold',
+                                        fontSize: 12
+                                    }}
+                                    title={I18n.t('checkout.addAddress')}
+                                    onPress={this.handleAddAddress.bind(this)}
+                                />
                             </View>
                         }
                         
