@@ -60,11 +60,12 @@ export class SelectAddress extends React.PureComponent{
             }
             magento.addresses.push(address);
             this.customerService.updateCustomer(magento.id,magento).then(r => {
+                magento.addresses = r.addresses;
                 this.context.user.magento = magento;
                 this.setState({
                     addresses: magento.addresses,
-                    selected: address,
-                    loading: false
+                    loading: false,
+                    editing: false
                 },() => {
                     if(this.props.onSelect)
                         this.props.onSelect(address)

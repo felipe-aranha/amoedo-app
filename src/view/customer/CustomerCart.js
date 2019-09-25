@@ -298,9 +298,6 @@ export default class CustomerCart extends Customer{
         const image = this.getProductImage(item);
         const prices = this.getProductPrices(item);
         const multiplier = this.getQtyMultiplier(item);
-        if(item.sku == '1612614'){
-            console.log(checked, multiplier, prices);
-        }
         const divider = Number.isInteger(multiplier.x) ? 
                             Math.ceil(Number(checked.qty) / multiplier.x) : 
                             Number(Number(checked.qty) / multiplier.x).toFixed(2);
