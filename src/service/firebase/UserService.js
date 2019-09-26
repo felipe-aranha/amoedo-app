@@ -139,20 +139,41 @@ export class UserService{
         return UserService.addCustomerToProfessional(customer,professionalDoc);
     }
 
-    static createOrUpdateProject(professionalId,customerEmail,project,id=null){
+    static createOrUpdateProject(professionalId,customer,project,id=null){
         let data = {
             professional: professionalId,
-            customer: customerEmail.toLowerCase(),
+            customer: customer.email.toLowerCase(),
             data: project
         }
+        const cs = new CustomerService();
         if(id != null){
             data = {
                 ...data,
                 status: 'in_progress',
             }
-            return UserService.getProjectDB().doc(id).set(data)
+            
+            const projectDoc = UserService.getProjectDB().doc(id);
+            return FirebaseDB.getFirestore().runTransaction(transaction => {
+                return transaction.get(projectDoc).then(doc => {
+                    const rooms = doc.data().data.rooms || [];
+                    const found = data.data.rooms.filter(r => {
+                        return rooms.find( d => d.id == r.id) ? false : true;
+                    });
+                    if(found){
+                        found.forEach( r => {
+                            cs.sendEmail(customer.email.toLowerCase(), 'budget', customer.name);
+                        })
+                    }
+                    return transaction.update(projectDoc,data)
+                })
+            })
+        } else {
+            cs.sendEmail(customer.email.toLowerCase(), 'project', customer.name);
+            data.data.rooms.forEach(() => {
+                cs.sendEmail(customer.email.toLowerCase(), 'budget', customer.name);
+            });
+            return UserService.getProjectDB().add(data)
         }
-        return UserService.getProjectDB().add(data)
     }
 
     static async getMyClients(clients){

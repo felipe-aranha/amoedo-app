@@ -188,7 +188,7 @@ export default class AddProject extends MainView{
                         endDate: endDate,
                         rooms: updatedRooms
                     }
-                    UserService.createOrUpdateProject(myId,customerEmail,project,this.state.id).then(() => {
+                    UserService.createOrUpdateProject(myId,clientSelected,project,this.state.id).then(() => {
                         this.context.message(`Projeto ${this.isEditing() ? 'atualizado' : 'cadastrado'} com sucesso!`);
                         this.setState({
                             loading: false
