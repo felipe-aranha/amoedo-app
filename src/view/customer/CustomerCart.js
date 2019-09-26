@@ -193,7 +193,7 @@ export default class CustomerCart extends Customer{
             if(!Number.isInteger(multiplier.x))
                 newQty = Number(Number(item.qty) - Number(multiplier.x)).toFixed(2);
             else 
-                newQty = Number(item.qty) + Number(multiplier.x)
+                newQty = Number(item.qty) - Number(multiplier.x)
             this.setQty(item, newQty)
         }
     }
