@@ -135,16 +135,18 @@ export default class Room extends React.PureComponent {
     }
 
     toggleFilesModal(){
-        this.setState({
-            filesModal: !this.state.filesModal,
-            currentCategory: null
-        })
+        if(!this.props.customer)
+            this.setState({
+                filesModal: !this.state.filesModal,
+                currentCategory: null
+            })
     }
 
     toggleProductsModal(){
-        this.setState({
-            productsModal: !this.state.productsModal
-        })
+        if(!this.props.customer)
+            this.setState({
+                productsModal: !this.state.productsModal
+            })
     }
 
     handleBack(){
@@ -152,6 +154,7 @@ export default class Room extends React.PureComponent {
     }
 
     handleFormSubmit(){
+        if(this.props.customer) return;
         const { width, height, depth, description, room, files, cart, id } = this.state;
         const data = {
             width, height, depth, description, room, files, cart, id
@@ -160,23 +163,28 @@ export default class Room extends React.PureComponent {
     }
 
     handleWidthChange(width){
-        this.setState({width})
+        if(!this.props.customer)
+            this.setState({width})
     }
     
     handleHeightChange(height){
-        this.setState({height})
+        if(!this.props.customer)
+            this.setState({height})
     }
 
     handleDepthChange(depth){
-        this.setState({depth})
+        if(!this.props.customer)
+            this.setState({depth})
     }
 
     handleDescChange(description){
-        this.setState({description})
+        if(!this.props.customer)
+            this.setState({description})
     }
 
     handleActiveProduct(product){
-        this.setState({product})
+        if(!this.props.customer)
+            this.setState({product})
     }
 
     handleSelectMedia(media){
@@ -289,6 +297,7 @@ export default class Room extends React.PureComponent {
 
     render(){
         const { room } = this.state;
+        const { customer } = this.props;
         const files = this.getFiles();
         if(this.state.product != null)
             return(
@@ -366,12 +375,14 @@ export default class Room extends React.PureComponent {
                             <View style={{marginHorizontal: 10}}>
                                 <View style={projectStyle.clientLabelArea}>
                                     <Text style={projectStyle.projectFilesText}>{I18n.t('room.projectFiles')}</Text>
+                                    {!customer && 
                                     <View style={[projectStyle.addClientArea,{paddingRight:0}]}>
                                         <TouchableOpacity onPress={this.toggleFilesModal.bind(this)} style={projectStyle.addClientClickArea}>
                                             <AntDesign size={16} name={'pluscircleo'} color={'rgb(191,8,17)'} />                                  
                                             <Text style={projectStyle.addClientText}>{' '}{I18n.t('room.add')}</Text>
                                         </TouchableOpacity>
                                     </View>
+                                    }
                                 </View>
                                 <View style={{marginTop:10}}>
                                     <ButtonGroup 
@@ -428,6 +439,7 @@ export default class Room extends React.PureComponent {
                                                     }}
                                                     resizeMode={'contain'}
                                                 />
+                                                {!customer &&
                                                 <View
                                                     style={{
                                                         flexDirection: 'row',
@@ -456,6 +468,7 @@ export default class Room extends React.PureComponent {
                                                             </View>
                                                         </Select>
                                                 </View>
+                                                }
                                             </View> )
                                         })}
                                     </ScrollView>
@@ -464,12 +477,14 @@ export default class Room extends React.PureComponent {
                             <View style={{marginHorizontal: 10, marginVertical: 20}}>
                                 <View style={projectStyle.clientLabelArea}>
                                     <Text style={projectStyle.projectFilesText}>{I18n.t('room.products')}</Text>
+                                    {!customer &&
                                     <View style={[projectStyle.addClientArea,{paddingRight:0}]}>
                                         <TouchableOpacity onPress={this.toggleProductsModal.bind(this)} style={projectStyle.addClientClickArea}>
                                             <AntDesign size={16} name={'pluscircleo'} color={'rgb(191,8,17)'} />                                  
                                             <Text style={projectStyle.addClientText}>{' '}{I18n.t('room.add')}</Text>
                                         </TouchableOpacity>
                                     </View>
+                                    }
                                 </View>
                                 {this.state.cart.length > 0 &&
                                     <View style={{
@@ -497,6 +512,7 @@ export default class Room extends React.PureComponent {
                                 }
                             </View>
                             <View style={{marginTop: 20,marginBottom:50}}>
+                                {!customer &&
                                 <Button 
                                     title={I18n.t('room.save')}
                                     containerStyle={accountStyle.accountTypeButtonContainer}
@@ -504,6 +520,7 @@ export default class Room extends React.PureComponent {
                                     titleStyle={[accountStyle.accountTypeButtonTitle,projectStyle.submitButtonTitle]}
                                     onPress={this.handleFormSubmit.bind(this)}
                                 />
+                                }
                             </View>
                         </View>
                     </ScrollView>

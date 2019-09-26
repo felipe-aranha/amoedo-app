@@ -81,7 +81,7 @@ export default class CustomerProjects extends Customer {
             subtitle1={I18n.t('list.project.startedAt',{date:item.data.startDate})}
             subtitle2={I18n.t('list.project.inProgress')}
             onPress={() => {
-                
+                Actions.push('project', { project: item })
             }}
         />
     }

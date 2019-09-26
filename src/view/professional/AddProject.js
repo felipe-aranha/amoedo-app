@@ -20,6 +20,8 @@ export default class AddProject extends MainView{
 
     static contextType = MainContext;
 
+    customer = false;
+
     constructor(props,context){
         super(props,context);
         this.projects = getProjectTypes();
@@ -35,7 +37,7 @@ export default class AddProject extends MainView{
             projectType,
             room: null,
             clientSelected,
-            clients: context.user.clients,
+            clients: this.customer ? [] : context.user.clients,
             roomModal: false,
             projectName: data.name || '',
             summary: data.summary || '',
@@ -48,17 +50,19 @@ export default class AddProject extends MainView{
     }
 
     handleRoomSave(state){
-        const room = Object.assign({},state);
-        const rooms = this.state.rooms.slice(0);
-        if(this.state.currentRoom > -1){
-            rooms[this.state.currentRoom] = room;
+        if(!this.customer){
+            const room = Object.assign({},state);
+            const rooms = this.state.rooms.slice(0);
+            if(this.state.currentRoom > -1){
+                rooms[this.state.currentRoom] = room;
+            }
+            else rooms.push(room);
+            this.setState({
+                currentRoom: -1,
+                roomModal: false,
+                rooms
+            })
         }
-        else rooms.push(room);
-        this.setState({
-            currentRoom: -1,
-            roomModal: false,
-            rooms
-        })
     }
 
     isEditing(){
@@ -71,11 +75,13 @@ export default class AddProject extends MainView{
     }
 
     handleTypeSelect(projectType){
-        this.setState({projectType})
+        if(!this.customer)
+            this.setState({projectType})
     }
 
     handleClientSelect(clientSelected){
-        this.setState({clientSelected})
+        if(!this.customer)
+            this.setState({clientSelected})
     }
 
     toggleRoomModal(currentRoom=-1){
@@ -94,6 +100,7 @@ export default class AddProject extends MainView{
     }
 
     getClients(){
+        if(this.customer) return [];
         return this.state.clients.map( client => {
             return {
                 ...client,
@@ -104,19 +111,23 @@ export default class AddProject extends MainView{
 
 
     handleProjectNameChange(projectName){
-        this.setState({projectName})
+        if(!this.customer)
+            this.setState({projectName})
     }
 
     handleSummaryChange(summary){
-        this.setState({summary})
+        if(!this.customer)
+            this.setState({summary})
     }
 
     handleStartDateChange(startDate){
-        this.setState({startDate})
+        if(!this.customer)
+            this.setState({startDate})
     }
 
     handleEndDateChange(endDate){
-        this.setState({endDate})
+        if(!this.customer)
+            this.setState({endDate})
     }
 
     getFilesForUpload(){
@@ -167,6 +178,7 @@ export default class AddProject extends MainView{
     }
 
     handleFormSubmit(){
+        if(this.customer) return;
         const { projectType, clientSelected, projectName, summary, startDate, endDate, loading } = this.state;
         if(projectType != null && clientSelected != null && projectName != ''&& 
             summary != '' && startDate != '' && endDate != ''){
@@ -275,29 +287,31 @@ export default class AddProject extends MainView{
                         onChangeText={this.handleSummaryChange.bind(this)}
                     />
                 </View>
-                <View style={accountStyle.formRow}>
-                    <View style={accountStyle.maskedInputArea}>
-                        <View style={projectStyle.clientLabelArea}>
-                            <Text style={mainStyle.inputLabel}>{I18n.t('project.client')}</Text>
-                            {!this.isEditing() &&
-                                <View style={[projectStyle.addClientArea]}>
-                                    <TouchableOpacity onPress={() => { Actions.push('_addClient', {popTo: Actions.currentScene}) }} style={projectStyle.addClientClickArea}>
-                                        <AntDesign size={16} name={'pluscircleo'} color={'rgb(191,8,17)'} />                                  
-                                        <Text style={projectStyle.addClientText}>{' '}{I18n.t('newProject.newClient')}</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            }
+                {!this.customer && 
+                    <View style={accountStyle.formRow}>
+                        <View style={accountStyle.maskedInputArea}>
+                            <View style={projectStyle.clientLabelArea}>
+                                <Text style={mainStyle.inputLabel}>{I18n.t('project.client')}</Text>
+                                {!this.isEditing() &&
+                                    <View style={[projectStyle.addClientArea]}>
+                                        <TouchableOpacity onPress={() => { Actions.push('_addClient', {popTo: Actions.currentScene}) }} style={projectStyle.addClientClickArea}>
+                                            <AntDesign size={16} name={'pluscircleo'} color={'rgb(191,8,17)'} />                                  
+                                            <Text style={projectStyle.addClientText}>{' '}{I18n.t('newProject.newClient')}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                }
+                            </View>
+                            <Select 
+                                options={this.getClients()}
+                                onOptionSelected={this.handleClientSelect.bind(this)}
+                                arrowColor={'rgb(226,0,6)'}
+                                initial={this.state.clientSelected}
+                                fullWidth
+                                disabled={this.isEditing()}
+                            />
                         </View>
-                        <Select 
-                            options={this.getClients()}
-                            onOptionSelected={this.handleClientSelect.bind(this)}
-                            arrowColor={'rgb(226,0,6)'}
-                            initial={this.state.clientSelected}
-                            fullWidth
-                            disabled={this.isEditing()}
-                        />
                     </View>
-                </View>
+                }
                 <View style={accountStyle.formRow}>
                     <DatePicker 
                         label={I18n.t('project.startDate')}
@@ -333,35 +347,41 @@ export default class AddProject extends MainView{
                             justifyContent: 'center',
                             alignItems: 'flex-end'
                         }}>
-                            <Select
-                                options={this.state.projectType.rooms}
-                                onOptionSelected={this.handleSelectRoom.bind(this)}
-                            >
-                                <GradientButton
-                                    vertical
-                                    colors={['rgb(170,4,8)','rgb(226,0,6)']}
-                                    width={32}
-                                    height={32}
-                                    title={<AntDesign size={18} name={'plus'} />}
-                                    titleStyle={drawerStyle.editText}
-                                />
-                            </Select>
+                            {!this.customer && 
+                                <Select
+                                    options={this.state.projectType.rooms}
+                                    onOptionSelected={this.handleSelectRoom.bind(this)}
+                                >
+                                    <GradientButton
+                                        vertical
+                                        colors={['rgb(170,4,8)','rgb(226,0,6)']}
+                                        width={32}
+                                        height={32}
+                                        title={<AntDesign size={18} name={'plus'} />}
+                                        titleStyle={drawerStyle.editText}
+                                    />
+                                </Select>
+                            }
                         </View>
                     </View>
                 </View>
                 <View>
                     {this.renderRooms()}
                 </View>
-                <View style={{marginVertical: 20}}>
-                    <Button 
-                        title={I18n.t('project.save')}
-                        containerStyle={accountStyle.accountTypeButtonContainer}
-                        buttonStyle={[accountStyle.accountTypeButton,accountStyle.submitButton, projectStyle.projectSaveButton]}
-                        titleStyle={[accountStyle.accountTypeButtonTitle,projectStyle.submitButtonTitle]}
-                        onPress={this.handleFormSubmit.bind(this)}
-                        loading={this.state.loading}
-                    />
-                </View>
+                
+                    <View style={{marginVertical: 20}}>
+                    {!this.customer &&
+                        <Button 
+                            title={I18n.t('project.save')}
+                            containerStyle={accountStyle.accountTypeButtonContainer}
+                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.submitButton, projectStyle.projectSaveButton]}
+                            titleStyle={[accountStyle.accountTypeButtonTitle,projectStyle.submitButtonTitle]}
+                            onPress={this.handleFormSubmit.bind(this)}
+                            loading={this.state.loading}
+                        />
+                    }
+                    </View>
+                
             </ScrollView>
         )
     }
@@ -375,6 +395,7 @@ export default class AddProject extends MainView{
                     room={this.state.room}
                     onSave={this.handleRoomSave.bind(this)}
                     roomState={currentRoom}
+                    customer={this.customer}
                 />
             )
         }
@@ -384,7 +405,7 @@ export default class AddProject extends MainView{
                     containerStyle={{
                         borderBottomWidth: 0
                     }}
-                    title={ I18n.t( this.isEditing() ? 'section.editProject' : 'section.addProject')}
+                    title={ I18n.t( this.customer ? 'section.project' :this.isEditing() ? 'section.editProject' : 'section.addProject')}
                     handleBack={this.handleBack.bind(this)}
                     leftIconColor={'rgb(226,0,6)'}
                     titleStyle={accountStyle.registerHeaderText}
@@ -392,12 +413,27 @@ export default class AddProject extends MainView{
                 />
                 <View style={projectStyle.projectTypeArea}>
                     <Text weight={'bold'}>{I18n.t('project.projectType')}</Text>
+                    {this.customer ? 
+                        <View style={{
+                            paddingVertical: 20,
+                            width: '100%',
+                            justifyContent: 'center',
+                            borderTopColor: 'rgb(77,77,77)'
+                        }}>
+                            <Text weight={'medium'} style={{
+                                fontSize: 14,
+                                color: 'rgb(77,77,77)'
+                            }}>{this.state.projectType.label}</Text>
+                        </View>
+                        :
                     <Select 
                         options={this.projects}
                         onOptionSelected={this.handleTypeSelect.bind(this)}
                         arrowColor={'rgb(226,0,6)'}
                         initial={this.state.projectType}
                     />
+                    }
+                    
                 </View>
                 {this.state.projectType != null &&
                     <View style={{flex:1}}>

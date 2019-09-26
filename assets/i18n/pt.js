@@ -146,6 +146,7 @@ export default {
         client: 'CLIENTE',
         addClient: 'CADASTRAR CLIENTE',
         projects: 'PROJETOS',
+        project: 'PROJETO',
         addProject: 'CADASTRAR PROJETO',
         editProject: 'EDITAR PROJETO',
         room: 'AMBIENTE',
