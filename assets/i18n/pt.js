@@ -357,5 +357,9 @@ export default {
         credited: 'Acúmulo',
         debited: 'Resgate',
         points: 'pts'
+    },
+    address: {
+        remove: 'Excluir',
+        edit: 'Editar'
     }
 }

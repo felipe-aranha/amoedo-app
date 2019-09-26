@@ -9,9 +9,13 @@ import AccountStyle from '../style/AccountStyle';
 import Form from '../view/Form';
 import { Address } from '../model/magento';
 import { CustomerService } from '../service';
+import { Entypo } from '@expo/vector-icons';
+import Select from './Select';
 
 const SHIPPING = 'shipping';
 const BILLING = 'billing';
+const REMOVE = I18n.t('address.remove');
+const EDIT = I18n.t('address.edit');
 
 export class SelectAddress extends React.PureComponent{
 
@@ -40,34 +44,50 @@ export class SelectAddress extends React.PureComponent{
         })
     }
 
-    handleFormSubmit(state){
-        if(this.state.loading) return;
+    handleFormSubmit(state,del=false){
+        const { loading, currentAddress } = this.state;
+        if(loading) return;
         this.setState({
             loading: true
         }, () => {
             const { magento } = this.context.user;
-            const telephone = magento.custom_attributes.find(attr => attr.attribute_code == 'custom_telephone');
-            let address = new Address(state.address,state.number,state.complement,state.neighborhood);
-            address = {
-                ...address,
-                city: state.city,
-                firstname: magento.firstname,
-                lastname: magento.lastname,
-                postcode: state.zipCode,
-                default_billing: magento.addresses.length == 0,
-                default_shipping: magento.addresses.length == 0,
-                telephone: telephone.value || ''
+            let address = {};
+            if(!del){
+                const telephone = magento.custom_attributes.find(attr => attr.attribute_code == 'custom_telephone');
+                address = new Address(state.address,state.number,state.complement,state.neighborhood);
+                address = {
+                    ...address,
+                    city: state.city,
+                    firstname: magento.firstname,
+                    lastname: magento.lastname,
+                    postcode: state.zipCode,
+                    default_billing: magento.addresses.length == 0,
+                    default_shipping: magento.addresses.length == 0,
+                    telephone: telephone.value || ''
+                }
+                if(currentAddress == null)
+                    magento.addresses.push(address);
+                else {
+                    address.id = currentAddress.id;
+                    magento.addresses = magento.addresses.map(a => {
+                        return a.id != address.id ? a : address
+                    })
+                }
+            } else {
+                magento.addresses = magento.addresses.filter(a => a.id != currentAddress.id);
             }
-            magento.addresses.push(address);
             this.customerService.updateCustomer(magento.id,magento).then(r => {
                 magento.addresses = r.addresses;
+                const selected = this.state.selected != null ? magento.addresses.find(a => a.id == this.state.selected.id) : null;
                 this.context.user.magento = magento;
                 this.setState({
                     addresses: magento.addresses,
                     loading: false,
-                    editing: false
+                    editing: false,
+                    currentAddress: false,
+                    selected
                 },() => {
-                    if(this.props.onSelect)
+                    if(this.props.onSelect && !del)
                         this.props.onSelect(address)
                 })
 
@@ -85,6 +105,59 @@ export class SelectAddress extends React.PureComponent{
             selected: address
         })
         this.toggleModal();
+    }
+
+    getOptions(address){
+        return [
+            { label: REMOVE, value: address },
+            { label: EDIT, value: address }
+        ]
+    }
+
+    handleRemoveAddress(address){
+        let selectAddress = this.state.selected || null;
+        if(selectAddress != null && selectAddress.id == address.id){
+            selectAddress = null;
+            this.props.onSelect(null);
+        }
+        this.setState({
+            currentAddress: address,
+            editing: false,
+            selected: selectAddress
+        }, () => {
+            this.handleFormSubmit(null, true);
+        })
+    }
+
+    handleEditAddress(address){
+        this.setState({
+            currentAddress: address,
+            editing: true
+        })
+    }
+
+    handleAddressOption(item){
+        switch(item.label){
+            case REMOVE:
+                this.handleRemoveAddress(item.value);
+            case EDIT:
+                this.handleEditAddress(item.value);
+        }
+    }
+
+    renderRightIcon(address){
+        return (
+            <Select
+                options={this.getOptions(address)}
+                onOptionSelected={this.handleAddressOption.bind(this)}
+            >
+                <Entypo 
+                    name={'dots-three-vertical'}
+                    color={tertiaryColor}
+                    size={18}
+                />
+            </Select>
+        )
     }
 
     listAddresses(){
@@ -117,6 +190,7 @@ export class SelectAddress extends React.PureComponent{
                         numberOfLines: 2
                     }}
                     onPress={this.selectAddress.bind(this, address)}
+                    rightIcon={this.renderRightIcon(address)}
                 />
             )
         })
@@ -155,6 +229,7 @@ export class SelectAddress extends React.PureComponent{
                                 onContinue={this.handleFormSubmit.bind(this)}
                                 initialState={{}}
                                 loading={this.state.loading}
+                                address={this.state.currentAddress}
                             /> :
                             <View style={{margin: 10}}>
                                 {this.listAddresses()}
@@ -235,6 +310,23 @@ export class SelectAddress extends React.PureComponent{
 }
 
 class AddressForm extends Form{
+
+    constructor(props,state){
+        super(props,state);
+        const address = props.address && props.address != null ? props.address : {}
+        const street = address.street || [];
+        const region = address.region || {};
+        this.state = {
+            ...state,
+            zipCode: address.postcode || '',
+            address: street[0] || '',
+            number: street[1] || '',
+            complement: street[2] || '',
+            neighborhood: street[3] || '',
+            city: address.city || '',
+            state: region.region_code || ''
+        }
+    }
 
     handleFormSubmit(){
         this.props.onContinue(this.state)
