@@ -7,13 +7,14 @@ import { AppListItem } from '../../components';
 import { tertiaryColor, secondaryColor } from '../../style';
 import { Actions } from 'react-native-router-flux';
 import { View, FlatList } from 'react-native';
+import { getProjectStatuses } from '../../utils';
 
 export default class CustomerProjects extends Customer {
 
     updateFilesIndex(fileIndex){
         this.setState({fileIndex})
     }
-
+    statuses = getProjectStatuses();
     title = I18n.t('section.projects');
     icon = require('../../../assets/images/icons/project-add-x2.png');
     showFloatingButton = false;
@@ -82,7 +83,7 @@ export default class CustomerProjects extends Customer {
             icon1={'calendar'}
             icon2={'check-warning'}
             subtitle1={I18n.t('list.project.startedAt',{date:item.data.startDate})}
-            subtitle2={I18n.t('list.project.inProgress')}
+            subtitle2={I18n.t(`project.statuses.${item.status || this.statuses[0]}`)}
             onPress={() => {
                 Actions.push(this.isProfessional ? 'addProject' : 'project', { project: item })
             }}
