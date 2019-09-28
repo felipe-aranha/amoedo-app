@@ -7,6 +7,7 @@ import { UserService } from '../../service/firebase/UserService';
 import { MainContext } from '../../reducer';
 import { AppListItem } from '../../components';
 import { secondaryColor } from '../../style';
+import { getProjectStatuses } from '../../utils';
 
 export default class Projects extends Professional{
 
@@ -14,6 +15,7 @@ export default class Projects extends Professional{
 
     constructor(props,context){
         super(props,context);
+        this.statuses = getProjectStatuses();
         this.state = {
             items: [],
             loading: true 
@@ -34,7 +36,7 @@ export default class Projects extends Professional{
             icon1={'calendar'}
             icon2={'check-warning'}
             subtitle1={I18n.t('list.project.startedAt',{date:item.data.startDate})}
-            subtitle2={I18n.t('list.project.inProgress')}
+            subtitle2={I18n.t(`project.statuses.${item.status || this.statuses[0]}`)}
             onPress={() => {
                 Actions.push('addProject', { project: item })
             }}

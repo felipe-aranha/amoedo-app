@@ -6,7 +6,7 @@ import { Actions } from 'react-native-router-flux';
 import { MainView } from '../MainView';
 import { accountStyle, secondaryColor, projectStyle, mainStyle, drawerStyle } from '../../style';
 import { Header, Select, Text, KeyboardSpacer, GradientButton } from '../../components';
-import { getProjectTypes } from '../../utils';
+import { getProjectTypes, getProjectStatuses } from '../../utils';
 import { MainContext } from '../../reducer';
 import { Input, TextArea, DatePicker } from '../../components/input';
 import { AntDesign } from '@expo/vector-icons';
@@ -25,11 +25,13 @@ export default class AddProject extends MainView{
     constructor(props,context){
         super(props,context);
         this.projects = getProjectTypes();
+        this.statuses = getProjectStatuses();
         const project = this.props.project ||  {};
         const clientSelected = context.user.clients.find(client => client.email == project.customer);
         if(clientSelected){
             clientSelected.label = clientSelected.name
         }
+        console.log(project);
         const projectType = project.data ? this.projects.find(p => p.name == project.data.type) : null;
         const data = project.data || {};
         this.state = {
@@ -45,7 +47,8 @@ export default class AddProject extends MainView{
             endDate: data.endDate || '',
             id: project.id || null,
             rooms: data.rooms || [],
-            currentRoom: -1
+            currentRoom: -1,
+            status: project.status || this.statuses[0]
         }
     }
 
@@ -63,6 +66,29 @@ export default class AddProject extends MainView{
                 rooms
             })
         }
+    }
+
+    getCurrentStatus(){
+        const { status } = this.state;
+        const statuses = this.getStatusNames();
+        return statuses.find(s => s.value = status);
+    }
+
+    setStatus(status){
+        this.setState({
+            status: status.value
+        })
+    }
+
+    getStatusNames(){
+        if(this.statuses && this.statuses != null)
+            return Object.values(this.statuses).map( status => {
+                return {
+                    label: I18n.t(`project.statuses.${status}`),
+                    value: status
+                }
+            })
+        return {}
     }
 
     isEditing(){
@@ -179,7 +205,7 @@ export default class AddProject extends MainView{
 
     handleFormSubmit(){
         if(this.customer) return;
-        const { projectType, clientSelected, projectName, summary, startDate, endDate, loading } = this.state;
+        const { projectType, clientSelected, projectName, summary, startDate, endDate, loading, status } = this.state;
         if(projectType != null && clientSelected != null && projectName != ''&& 
             summary != '' && startDate != '' && endDate != ''){
             if(loading) return;
@@ -200,7 +226,7 @@ export default class AddProject extends MainView{
                         endDate: endDate,
                         rooms: updatedRooms
                     }
-                    UserService.createOrUpdateProject(myId,clientSelected,project,this.state.id).then(() => {
+                    UserService.createOrUpdateProject(myId,clientSelected,project,this.state.id, status).then(() => {
                         this.context.message(`Projeto ${this.isEditing() ? 'atualizado' : 'cadastrado'} com sucesso!`);
                         this.setState({
                             loading: false
@@ -411,29 +437,57 @@ export default class AddProject extends MainView{
                     titleStyle={accountStyle.registerHeaderText}
                     backgroundColor={'rgb(103,4,28)'}
                 />
-                <View style={projectStyle.projectTypeArea}>
-                    <Text weight={'bold'}>{I18n.t('project.projectType')}</Text>
-                    {this.customer ? 
-                        <View style={{
-                            paddingVertical: 20,
-                            width: '100%',
-                            justifyContent: 'center',
-                            borderTopColor: 'rgb(77,77,77)'
-                        }}>
-                            <Text weight={'medium'} style={{
-                                fontSize: 14,
-                                color: 'rgb(77,77,77)'
-                            }}>{this.state.projectType.label}</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={[projectStyle.projectTypeArea,this.isEditing() ? { backgroundColor : 'transparent'} : {}]}>
+                        <Text weight={'bold'}>{I18n.t('project.projectType')}</Text>
+                        {this.customer ? 
+                            <View style={{
+                                paddingVertical: 20,
+                                width: '100%',
+                                justifyContent: 'center',
+                                borderTopColor: 'rgb(77,77,77)'
+                            }}>
+                                <Text weight={'medium'} style={{
+                                    fontSize: 14,
+                                    color: 'rgb(77,77,77)'
+                                }}>{this.state.projectType.label}</Text>
+                            </View>
+                            :
+                        <Select 
+                            options={this.projects}
+                            onOptionSelected={this.handleTypeSelect.bind(this)}
+                            arrowColor={'rgb(226,0,6)'}
+                            initial={this.state.projectType}
+                        />
+                        }
+                        
+                    </View>
+                    {this.isEditing() &&
+                        <View style={[projectStyle.projectTypeArea,this.isEditing() ? { backgroundColor : 'transparent'} : {}]}>
+                            <Text>{I18n.t('project.status')}</Text>
+                            {this.customer ? 
+                                <View style={{
+                                    paddingVertical: 20,
+                                    width: '100%',
+                                    justifyContent: 'center',
+                                    borderTopColor: 'rgb(77,77,77)'
+                                }}>
+                                    <Text weight={'medium'} style={{
+                                        fontSize: 14,
+                                        color: 'rgb(77,77,77)'
+                                    }}>{this.state.projectType.label}</Text>
+                                </View>
+                                :
+                            <Select 
+                                options={this.getStatusNames()}
+                                onOptionSelected={this.setStatus.bind(this)}
+                                arrowColor={'rgb(226,0,6)'}
+                                initial={this.getCurrentStatus()}
+                            />
+                            }
+                            
                         </View>
-                        :
-                    <Select 
-                        options={this.projects}
-                        onOptionSelected={this.handleTypeSelect.bind(this)}
-                        arrowColor={'rgb(226,0,6)'}
-                        initial={this.state.projectType}
-                    />
                     }
-                    
                 </View>
                 {this.state.projectType != null &&
                     <View style={{flex:1}}>

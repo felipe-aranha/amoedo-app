@@ -223,6 +223,11 @@ export default {
         endDate: 'PREVISÃO DE TÉRMINO',
         rooms: 'AMBIENTES',
         save: 'SALVAR PROJETO',
+        status: 'STATUS',
+        statuses: {
+            in_progress: 'Em andamento',
+            closed: 'Encerrado',
+        },
         room: {
             bathroom: 'Banheiro',
             kitchen: 'Cozinha',

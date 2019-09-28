@@ -139,18 +139,19 @@ export class UserService{
         return UserService.addCustomerToProfessional(customer,professionalDoc);
     }
 
-    static createOrUpdateProject(professionalId,customer,project,id=null){
+    static createOrUpdateProject(professionalId,customer,project,id=null, status){
         let data = {
             professional: professionalId,
             customer: customer.email.toLowerCase(),
-            data: project
+            data: project,
+            status
         }
         const cs = new CustomerService();
         if(id != null){
-            data = {
+            /* data = {
                 ...data,
                 status: 'in_progress',
-            }
+            } */
             
             const projectDoc = UserService.getProjectDB().doc(id);
             return FirebaseDB.getFirestore().runTransaction(transaction => {

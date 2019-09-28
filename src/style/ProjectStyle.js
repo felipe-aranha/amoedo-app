@@ -6,7 +6,8 @@ export default StyleSheet.create({
         backgroundColor: '#fff',
         alignSelf:'stretch',
         paddingHorizontal: 20,
-        paddingTop: 15
+        paddingTop: 15,
+        flex: 1
     },
     formView: {
         paddingHorizontal: 20,
