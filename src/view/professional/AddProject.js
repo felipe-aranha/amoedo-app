@@ -475,7 +475,7 @@ export default class AddProject extends MainView{
                                     <Text weight={'medium'} style={{
                                         fontSize: 14,
                                         color: 'rgb(77,77,77)'
-                                    }}>{this.state.projectType.label}</Text>
+                                    }}>{I18n.t(`project.statuses.${this.state.status}`)}</Text>
                                 </View>
                                 :
                             <Select 
