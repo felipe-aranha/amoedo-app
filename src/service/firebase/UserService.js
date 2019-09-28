@@ -236,6 +236,11 @@ export class UserService{
         return db.where('customer','==',customer.toLowerCase());
     }
 
+    static getMutualProjects(professional, customer){
+        const db = UserService.getProjectDB();
+        return db.where('professional','==',professional).where('customer','==',customer.toLowerCase());
+    }
+
     static setQuoteStatus(projectId, room, status){
         const doc = UserService.getProjectDB().doc(projectId);
         return FirebaseDB.getFirestore().runTransaction(transaction => {

@@ -23,15 +23,15 @@ export default class ProfessionalDrawer extends MainView{
     renderItems(){
         return(
             <View style={drawerStyle.menuArea}>
-                <TouchableOpacity onPress={() => {this.goTo('_clients')}} style={drawerStyle.menuItemArea}>
+                <TouchableOpacity onPress={() => {this.goTo('clients')}} style={drawerStyle.menuItemArea}>
                     <AppIcon large name={'clients'} style={drawerStyle.menuItemIcon} />
                     <Text style={drawerStyle.menuItemText}>{I18n.t('menu.clients')}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {this.goTo('_projects')}} style={drawerStyle.menuItemArea}>
+                <TouchableOpacity onPress={() => {this.goTo('projects')}} style={drawerStyle.menuItemArea}>
                     <AppIcon large name={'list'} style={drawerStyle.menuItemIcon} />
                     <Text style={drawerStyle.menuItemText}>{I18n.t('menu.projects')}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {this.goTo('_points')}} style={drawerStyle.menuItemArea}>
+                <TouchableOpacity onPress={() => {this.goTo('points')}} style={drawerStyle.menuItemArea}>
                     <AppIcon large name={'points'} style={drawerStyle.menuItemIcon} />
                     <Text style={drawerStyle.menuItemText}>{I18n.t('menu.points')}</Text>
                 </TouchableOpacity>

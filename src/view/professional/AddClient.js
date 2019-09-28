@@ -22,7 +22,7 @@ export default class AddClient extends Clients{
     }
 
     onFloatButtonPress(){
-        Actions.reset('_clients');
+        Actions.reset('clients');
     }
 
     componentDidMount(){}
@@ -69,11 +69,12 @@ export default class AddClient extends Clients{
                 if(this.props.popTo){
                     this.getProfessionalDoc().get().then(async doc => {
                         await this.addClientToContext(customer.email);
-                        Actions.reset(this.props.popTo);
+                        Actions.pop();
+                        // Actions.reset(this.props.popTo);
                     })
                     return;
                 }
-                Actions.reset('_clients');
+                Actions.push('clients');
             }
             else 
                 this.setState({

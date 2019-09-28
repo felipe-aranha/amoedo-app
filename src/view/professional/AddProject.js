@@ -205,7 +205,7 @@ export default class AddProject extends MainView{
                         this.setState({
                             loading: false
                         },() => {
-                            Actions.reset('_projects');
+                            Actions.push('projects');
                         })
                     }).catch(e => {
                         this.context.message('Erro ao cadastrar projeto. Tente novamente');
@@ -294,7 +294,7 @@ export default class AddProject extends MainView{
                                 <Text style={mainStyle.inputLabel}>{I18n.t('project.client')}</Text>
                                 {!this.isEditing() &&
                                     <View style={[projectStyle.addClientArea]}>
-                                        <TouchableOpacity onPress={() => { Actions.push('_addClient', {popTo: Actions.currentScene}) }} style={projectStyle.addClientClickArea}>
+                                        <TouchableOpacity onPress={() => { Actions.push('addClient', {popTo: Actions.currentScene}) }} style={projectStyle.addClientClickArea}>
                                             <AntDesign size={16} name={'pluscircleo'} color={'rgb(191,8,17)'} />                                  
                                             <Text style={projectStyle.addClientText}>{' '}{I18n.t('newProject.newClient')}</Text>
                                         </TouchableOpacity>

@@ -148,7 +148,6 @@ export default class CustomerCart extends Customer{
     }
 
     handleShippingAddressChange(shippingAddress){
-        console.log(shippingAddress);
         this.setState({shippingAddress})
     }
     handleBillingAddressChange(billingAddress){

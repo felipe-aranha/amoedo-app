@@ -32,7 +32,7 @@ export default class Clients extends Professional{
     icon = require('../../../assets/images/icons/user-add-x2.png');
 
     onFloatButtonPress(){
-        Actions.reset('_addClient');
+        Actions.push('addClient');
     }
 
     async handleClientsSnapshot(data){
@@ -113,7 +113,7 @@ export default class Clients extends Professional{
     }
 
     renderItem({item}){
-        leftIcon = item.avatar != null ? 
+        leftIcon = item.avatar != null && item.avatar.trim() != '' ? 
                     <ImageBase64 avatar style={{width:50,height:50}}  data={item.avatar} /> :
                     <Image style={{width:50,height:50}} source={require('../../../assets/images/icons/list-user-x2.png')} />
         return <AppListItem 
@@ -124,6 +124,9 @@ export default class Clients extends Professional{
             icon2={'check'}
             subtitle1={I18n.t('list.client.currentProjects',{qty:0})}
             subtitle2={I18n.t('list.client.doneProjects',{qty:0})}
+            onPress={() => {
+                Actions.push('clientProjects', {client: item})
+            }}
         />
     }
 

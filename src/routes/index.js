@@ -33,6 +33,7 @@ import CustomerCheckout from '../view/customer/CustomerCheckout';
 import { Order } from '../view/customer/Order';
 import { Points } from '../view/professional';
 import CustomerProject from '../view/customer/CustomerProject';
+import { ClientProjects } from '../view/professional';
 
 export class Routes extends React.PureComponent{
 
@@ -110,12 +111,15 @@ export class Routes extends React.PureComponent{
                             <Scene hideNavBar key='pendingAccount' component={Pending} />
                         </Stack>
                         <Drawer drawerWidth={drawerWidth} contentComponent={ProfessionalDrawer} hideNavBar key='professional'>
-                            <Scene hideNavBar key='professionalMain' component={Professional} />
-                            <Scene hideNavBar key='clients' component={Clients} /> 
-                            <Scene hideNavBar key='addClient' component={AddClient} />
-                            <Scene initial hideNavBar key='projects' component={Projects} />
-                            <Scene hideNavBar key='addProject' component={AddProject} />
-                            <Scene hideNavBar key='points' component={Points} />
+                            <Stack hideNavBar key='professionalStack'>
+                                <Scene hideNavBar key='professionalMain' component={Professional} />
+                                <Scene hideNavBar key='clients' component={Clients} /> 
+                                <Scene hideNavBar key='clientProjects' component={ClientProjects} /> 
+                                <Scene hideNavBar key='addClient' component={AddClient} />
+                                <Scene initial hideNavBar key='projects' component={Projects} />
+                                <Scene hideNavBar key='addProject' component={AddProject} />
+                                <Scene hideNavBar key='points' component={Points} />
+                            </Stack>
                         </Drawer>   
                         <Drawer drawerWidth={drawerWidth} contentComponent={CustomerDrawer} hideNavBar key='customer'>
                             <Stack hideNavBar key='customerStack'>

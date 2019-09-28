@@ -17,6 +17,8 @@ export default class CustomerProjects extends Customer {
     title = I18n.t('section.projects');
     icon = require('../../../assets/images/icons/project-add-x2.png');
     showFloatingButton = false;
+    sectionColor = secondaryColor;
+    isProfessional = false;
 
     componentDidMount(){
         if(this.context.openDrawer){
@@ -57,6 +59,7 @@ export default class CustomerProjects extends Customer {
                                 key={`${item.id}${i}`}     
                                 title={`${room.room.label} - ${item.data.name}`}
                                 chevronColor={tertiaryColor}
+                                hideChevron={this.isProfessional}
                                 icon1={'check-warning'}
                                 subtitle1={I18n.t(`list.quote.${status}`)}
                                 onPress={() => {
@@ -81,7 +84,7 @@ export default class CustomerProjects extends Customer {
             subtitle1={I18n.t('list.project.startedAt',{date:item.data.startDate})}
             subtitle2={I18n.t('list.project.inProgress')}
             onPress={() => {
-                Actions.push('project', { project: item })
+                Actions.push(this.isProfessional ? 'addProject' : 'project', { project: item })
             }}
         />
     }
@@ -101,7 +104,7 @@ export default class CustomerProjects extends Customer {
 
     renderSearch(){
         return(
-            <View style={{marginHorizontal:30}}>
+            <View style={{marginHorizontal:40, marginTop: 20}}>
                 <ButtonGroup 
                     onPress={this.updateFilesIndex.bind(this)}
                     selectedIndex={this.getFileIndex()}
@@ -110,7 +113,7 @@ export default class CustomerProjects extends Customer {
                         borderRadius: 10
                     }}
                     selectedButtonStyle={{
-                        backgroundColor: secondaryColor
+                        backgroundColor: this.sectionColor
                     }}
                     selectedTextStyle={{
                         color: '#fff',
@@ -118,7 +121,7 @@ export default class CustomerProjects extends Customer {
                         fontFamily: 'system-medium'
                     }}
                     textStyle={{
-                        color: secondaryColor,
+                        color: this.sectionColor,
                         fontSize: 12,
                         fontFamily: 'system-medium'
                     }}
@@ -129,9 +132,9 @@ export default class CustomerProjects extends Customer {
 
     renderContent(){
         return(
+            <>
+            {this.renderSearch()}
             <View style={{flex:1,margin:20}}>
-                {this.renderSearch()}
-               
                     {this.state.items.length > 0 || this.state.loading ? 
                      <View style={{flex:1}}>
                         <FlatList 
@@ -146,6 +149,7 @@ export default class CustomerProjects extends Customer {
                     }
                 
             </View>
+            </>
         )
     }
 

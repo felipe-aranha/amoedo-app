@@ -5,7 +5,7 @@ import { AppIcon, Text } from '.';
 
 export class AppListItem extends React.PureComponent{
     render(){ 
-        const {icon1, icon2, subtitle1, subtitle2, chevronColor } = this.props;
+        const {icon1, icon2, subtitle1, subtitle2, chevronColor, hideChevron } = this.props;
         return <ListItem
             titleProps={{
                 style: {
@@ -15,7 +15,7 @@ export class AppListItem extends React.PureComponent{
                 },
                 numberOfLines: 1
             }}
-            chevron={{
+            chevron={hideChevron ? undefined : {
                 color: chevronColor,
                 type: 'entypo',
                 name: 'chevron-right',

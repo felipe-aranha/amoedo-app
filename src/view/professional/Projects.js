@@ -36,7 +36,7 @@ export default class Projects extends Professional{
             subtitle1={I18n.t('list.project.startedAt',{date:item.data.startDate})}
             subtitle2={I18n.t('list.project.inProgress')}
             onPress={() => {
-                Actions.reset('_addProject', { project: item })
+                Actions.push('addProject', { project: item })
             }}
         />
     }
@@ -68,8 +68,8 @@ export default class Projects extends Professional{
     }
 
     onFloatButtonPress(){
-        if(Actions.currentScene == '_projects')
-            Actions.reset('_addProject');
+        // if(Actions.currentScene == 'projects')
+            Actions.push('addProject');
     }
 
     renderEmptyList(){

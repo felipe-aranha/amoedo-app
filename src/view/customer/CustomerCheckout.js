@@ -152,7 +152,6 @@ export default class CustomerCheckout extends CustomerCart{
         const { loading, shippingAddress, billingAddress, selectedCart, selectedPayment, card, paymentMethod, selectedShipping, installments } = this.state;
         if(loading) return;
         if(selectedShipping.amount == 'indisponível'){
-            console.log(selectedShipping);
             this.context.message(I18n.t('checkout.error.addressNotAvailable'));
             return;
         }
