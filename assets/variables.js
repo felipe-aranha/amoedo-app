@@ -37,7 +37,8 @@ export default {
                     'kitchen',
                     'bedroom',
                     'livinRoom',
-                    'balcony'
+                    'balcony',
+                    'other'
                 ]
             }
         } 

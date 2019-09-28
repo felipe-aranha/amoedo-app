@@ -228,7 +228,8 @@ export default {
             kitchen: 'Cozinha',
             bedroom: 'Quarto',
             livinRoom: 'Sala',
-            balcony: 'Varanda'
+            balcony: 'Varanda',
+            other: 'Outro'
         },
         type: {
             all: 'Todos',
