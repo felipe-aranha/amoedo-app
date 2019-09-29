@@ -153,10 +153,10 @@ export class CheckoutService extends HttpClient {
         return this.getAsync(`${this.basePath}orders/${orderId}`);
     }
 
-    setOrderComment(orderId,project){
+    setOrderComment(orderId,project,quoteId){
         data = {
             statusHistory: {
-                comment: `{"Origin":"AppAmoedo","customer_id":"${project.customer}","professional_id":"${project.professional}","project_id":"${project.id}"}`
+                comment: `{"Origin":"AppAmoedo","customer_id":"${project.customer}","professional_id":"${project.professional}","project_id":"${project.id}","quote_id":"${quoteId}"}`
             }
         }
         return this.postAsync(`${this.basePath}orders/${orderId}/comments`, data);

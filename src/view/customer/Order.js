@@ -29,7 +29,7 @@ export class Order extends AccountBase {
     componentDidMount(){
         const { project, order, room } = this.props;
         const checkoutService = new CheckoutService();
-        checkoutService.setOrderComment(order, project).then(response => {
+        checkoutService.setOrderComment(order, project, room.id).then(response => {
             checkoutService.getOrder(order).then(r => {
                 this.setState({
                     loading: false,

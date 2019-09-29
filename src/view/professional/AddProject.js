@@ -31,7 +31,6 @@ export default class AddProject extends MainView{
         if(clientSelected){
             clientSelected.label = clientSelected.name
         }
-        console.log(project);
         const projectType = project.data ? this.projects.find(p => p.name == project.data.type) : null;
         const data = project.data || {};
         this.state = {
