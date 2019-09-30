@@ -295,24 +295,32 @@ export default class Login extends AccountBase{
                     style={[accountStyle.loginNavBarBackground,{tintColor: this.isCustomer() ? tertiaryColor : secondaryColor}]}
                 >
                     <View style={{flex:1}}>
-                        <View style={accountStyle.loginHeaderBackArea}>
+                        <TouchableOpacity style={accountStyle.loginHeaderBackArea} onPress={this.handleBack.bind(this)}>
                             <TouchableOpacity
                                 style={{
-                                    width: 60,
-                                    height: 60,
+                                    width: 80,
+                                    height: 80,
                                     zIndex: 999,
                                     justifyContent: 'center',
                                     alignItems: 'flex-start'
                                 }}
+                                hitSlop={{
+                                    top: 20,
+                                    bottom: 20,
+                                    left: 20,
+                                    right: 20
+                                }}
+
                                 onPress={this.handleBack.bind(this)}
                             >
                                 <Ionicons 
                                     name={'ios-arrow-round-back'}
                                     color={'#fff'}
                                     size={40}
+                                    onPress={this.handleBack.bind(this)}
                                 />
                             </TouchableOpacity>
-                        </View>
+                        </TouchableOpacity>
                         <View style={accountStyle.loginLogoArea}>
                             <Image 
                                 source={require('../../../assets/images/brand-logo-x2.png')}
