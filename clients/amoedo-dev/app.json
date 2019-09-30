@@ -1,35 +1,50 @@
 {
-    "expo": {
-      "name": "Amoedo Arquiteto Homolog",
-      "slug": "amoedo-arquiteto-homolog",
-      "privacy": "private",
-      "sdkVersion": "33.0.0",
-      "platforms": [
-        "ios",
-        "android"
-      ],
-      "version": "0.1.0",
-      "orientation": "portrait",
-      "icon": "./assets/icon.png",
+  "expo": {
+    "name": "Amoedo Arquiteto Homolog",
+    "slug": "amoedo-arquiteto-homolog",
+    "privacy": "unlisted",
+    "sdkVersion": "33.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "0.11.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/images/splash/splashhdpi.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#F1CE00"
+    },
+    "scheme": "amoedoapp",
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "br.com.amoedo.amoedoapp",
+      "supportsTablet": true,
       "splash": {
-        "image": "./assets/splash.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#ffffff"
-      },
-      "scheme": "amoedoapp-homolog",
-      "updates": {
-        "fallbackToCacheTimeout": 0
-      },
-      "assetBundlePatterns": [
-        "**/*"
-      ],
-      "ios": {
-        "bundleIdentifier": "br.com.amoedo.amoedoapp.homolog",
-        "supportsTablet": true
-      },
-      "android": {
-        "package": "br.com.amoedo.amoedoapp.homolog",
-        "versionCode": 1
+        "backgroundColor": "#F1CE00",
+        "resizeMode": "cover",
+        "image": "./assets/images/splash/splashhdpi.png",
+        "tabletImage": "./assets/images/splash/splashxxhdpi.png"
+      }
+    },
+    "android": {
+      "package": "br.com.amoedo.amoedoapp",
+      "versionCode": 1,
+      "splash": {
+        "backgroundColor": "#F1CE00",
+        "resizeMode": "cover",
+        "mdpi": "./assets/images/splash/splashmdpi.png",
+        "hdpi": "./assets/images/splash/splashhdpi.png",
+        "xhdpi": "./assets/images/splash/splashhdpi.png",
+        "xxhdpi": "./assets/images/splash/splashxxhdpi.png",
+        "xxxhdpi": "./assets/images/splash/splashxxxhdpi.png"
       }
     }
   }
+}
