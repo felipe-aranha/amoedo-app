@@ -1,6 +1,6 @@
 import React from 'react';
 import { accountStyle, tagsStyles, catalogStyle, projectStyle } from '../../style';
-import { View, ActivityIndicator, ScrollView } from 'react-native';
+import { View, ActivityIndicator, ScrollView, Platform } from 'react-native';
 import { Header, Text } from '../../components';
 import I18n from '../../i18n';
 import { MainContext } from '../../reducer';
@@ -146,11 +146,11 @@ export default class Product extends ProductBase{
         return(
             <View style={{flex:1}}>
                 <Header 
-                    containerStyle={{
-                        borderBottomWidth: 0
-                    }, this.props.cart ? {
-                        paddingTop: 0
-                    } :{}}
+                    containerStyle={Platform.OS == 'android' &&  this.props.cart ? {
+                        borderBottomWidth: 0,
+                        paddingTop:0,
+                        height: 60
+                    } : { borderBottomWidth: 0 }}
                     title={I18n.t('section.room')}
                     handleBack={this.handleBack.bind(this)}
                     leftIconColor={'rgb(226,0,6)'}
