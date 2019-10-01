@@ -60,7 +60,7 @@ export default class CustomerCart extends Customer{
     }
 
     async loadShipping(){
-        return this.checkoutService.getShippingMethods(this.state.shippingAddress, this.context.user.magento.email).then(response => {
+        return this.checkoutService.getShippingMethods(this.state.shippingAddress, this.context.user.magento.email, this.state.billingAddress).then(response => {
             if(Array.isArray(response) && response.length > 0){
                 let selectedShipping = null;
                 if(response.length > 1) {

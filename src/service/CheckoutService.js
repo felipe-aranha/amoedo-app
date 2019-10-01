@@ -35,14 +35,21 @@ export class CheckoutService extends HttpClient {
         });
     }
 
-    async getShippingMethods(a,email){
+    async getShippingMethods(a,email,billingAddress){
         const address = this.parseAddress(a,email);
+        const ba = this.parseAddress(billingAddress,email);
         data = {
             address: {
                 ...address,
                 same_as_billing: 1
             }
         }
+        await this.postAsync(`${this.basePath}carts/mine/billing-address`,{ address: ba });
+        await this.putAsync(`${this.basePath}carts/mine/collect-totals`, {
+            paymentMethod: {
+                method: 'mundipagg_billet'
+            }
+        });
         return this.postAsync(`${this.basePath}carts/mine/estimate-shipping-methods`,data)
     }
 
@@ -57,7 +64,6 @@ export class CheckoutService extends HttpClient {
                 shipping_method_code: method.method_code
             }
         }
-        await this.postAsync(`${this.basePath}carts/mine/billing-address`,{ address: ba });
         return this.postAsync(`${this.basePath}carts/mine/shipping-information`,data)
     }
 

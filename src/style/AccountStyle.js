@@ -110,7 +110,8 @@ export default StyleSheet.create({
     },
     loginHeaderBackArea: {
         marginTop: 35,
-        marginLeft: 20
+        marginLeft: 20,
+        overflow: 'visible'
     },
     loginLogoArea: {
         justifyContent: 'flex-start',
