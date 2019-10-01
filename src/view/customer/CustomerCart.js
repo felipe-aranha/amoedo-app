@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Modal, TouchableOpacity, ScrollView } from 'react-native';
 import Customer from "../Customer";
 import { primaryColor, accountStyle, catalogStyle } from '../../style';
 import I18n from '../../i18n';
@@ -12,6 +12,7 @@ import variables from '../../utils';
 import { CheckoutService } from '../../service/CheckoutService';
 import { Actions } from 'react-native-router-flux';
 import { UserService } from '../../service/firebase/UserService';
+import Product from '../catalog/Product';
 
 export default class CustomerCart extends Customer{
 
@@ -39,7 +40,9 @@ export default class CustomerCart extends Customer{
             cartItems: props.cartItems || [],
             selectedCart: props.selectedCart || this.isCheckout ? [] : props.room.cart || [],
             loading: false,
-            project: props.project
+            project: props.project,
+            activeProduct: null,
+            updateList: new Date().getTime()
         }
     }
 
@@ -204,13 +207,13 @@ export default class CustomerCart extends Customer{
             const response = await this.catalogService.getProductBySku(item.sku);
             stock = this.getStock(response);
             response.qty = item.qty;
-            const products = this.state.products.map(p => {
+            const selectedCart = this.state.selectedCart.map(p => {
                 if(p.sku == response.sku)
                     return response;
                 return p;
             });
             await new Promise(resolve => {
-                this.setState({ products }, () => { resolve() })
+                this.setState({ selectedCart }, () => { resolve() })
             })
         }
         if(Array.isArray(stock) && stock[0]){
@@ -233,12 +236,19 @@ export default class CustomerCart extends Customer{
     }
 
     setQty(item,qty){
-        const products = this.state.products.map(i => {
-            if(i.id == item.id)
+        let found = false;
+        const selectedCart = this.state.selectedCart.map(i => {
+            if(i.sku == item.sku){
+                found = i.qty != qty
                 i.qty = qty;
+            }
             return i;
         });
-        this.setState({products})
+        if(found)
+            this.setState({
+                selectedCart,
+                updateList: new Date().getTime()
+            })
     }
 
     getAttributeValue(item,attribute){
@@ -284,10 +294,19 @@ export default class CustomerCart extends Customer{
                 selectedCart.push(i);
         }
         this.setState({
-            selectedCart
+            selectedCart,
+            updateList: new Date().getTime()
         },() => {
             // console.log(this.state.selectedCart);
         })
+    }
+
+    handleProductDetails(item){
+        if(item && !this.isCheckout){
+            this.setState({
+                activeProduct: item
+            })
+        }
     }
 
     renderCartItem({item}){
@@ -302,44 +321,46 @@ export default class CustomerCart extends Customer{
                             Number(Number(checked.qty) / multiplier.x).toFixed(2);
         const value = checked ? Number(prices.specialPrice || prices.regularPrice) * divider : (prices.specialPrice || prices.regularPrice);
         return(
-            <View
-                style={{
-                    flexDirection: 'row',
-                    backgroundColor: '#fff',
-                    paddingHorizontal:20,
-                    paddingVertical: 10,
-                }}
-            >
-                <View style={{
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Check 
-                        checked={checked != false}
-                        onPress={this.toggleItem.bind(this,item)}
-                    />
+            <TouchableOpacity onPress={this.handleProductDetails.bind(this,checked)}>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        backgroundColor: '#fff',
+                        paddingHorizontal:20,
+                        paddingVertical: 10,
+                    }}
+                >
+                    <View style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Check 
+                            checked={checked != false}
+                            onPress={this.toggleItem.bind(this,item)}
+                        />
+                    </View>
+                    <View>
+                        <Image 
+                            source={{uri: image}}
+                            resizeMode={'contain'}
+                            style={{
+                                width: 80,
+                                height: 50
+                            }}
+                        />
+                    </View>
+                    <View>
+                        <Text weight={'medium'} size={10}>{checked.qty}</Text>
+                    </View>
+                    <View style={{flex:1, paddingHorizontal: 10}}>
+                        <Text weight={'medium'} size={10}>{item.name}</Text>
+                    </View>
+                    <View style={{alignSelf:'flex-end'}}>
+                        <Text size={10} weight={'semibold'}>{this.value2Currency(value)}</Text>
+                    </View>
+                    <Divider />
                 </View>
-                <View>
-                    <Image 
-                        source={{uri: image}}
-                        resizeMode={'contain'}
-                        style={{
-                            width: 80,
-                            height: 50
-                        }}
-                    />
-                </View>
-                <View>
-                    <Text weight={'medium'} size={10}>{checked.qty}</Text>
-                </View>
-                <View style={{flex:1, paddingHorizontal: 10}}>
-                    <Text weight={'medium'} size={10}>{item.name}</Text>
-                </View>
-                <View style={{alignSelf:'flex-end'}}>
-                    <Text size={10} weight={'semibold'}>{this.value2Currency(value)}</Text>
-                </View>
-                <Divider />
-            </View>
+            </TouchableOpacity>
         )
     }
 
@@ -348,7 +369,7 @@ export default class CustomerCart extends Customer{
             <View style={{flex:1}}>
                 {this.renderCartHeader()}
                 <FlatList
-                    key={this.state.selectedCart.length}
+                    key={`${this.state.updateList}${this.state.selectedCart.length}`}
                     data={this.state.cartItems}
                     renderItem={this.renderCartItem.bind(this)}
                     keyExtractor={(i,k) => k.toString()}
@@ -410,6 +431,16 @@ export default class CustomerCart extends Customer{
         this.cleanCart();
     }
 
+    handleDetailsBack(item){
+        const { selectedCart } = this.state;
+        if(item && selectedCart){
+            const found = selectedCart ? selectedCart.find(c => c.sku == item.sku) : false;
+            if(found) 
+                this.setQty(item, item.qty);
+        }
+        this.setState({ activeProduct: null })
+    }
+
     handleFormSubmit(){
         if(this.state.loading) return;
         if(this.state.billingAddress == null){
@@ -466,12 +497,32 @@ export default class CustomerCart extends Customer{
         )
     }
 
+    renderProductModal(){
+        return(
+            <Modal
+                visible={this.state.activeProduct != null}
+                animationType={'slide'}
+                onRequestClose={() => {}}
+            >
+                <Product 
+                    item={this.state.activeProduct}
+                    onBack={this.handleDetailsBack.bind(this)}
+                    checkout
+                />
+            </Modal>
+        )
+    }
+
     renderContent(){
         return(
             <>
-                {this.renderAddresses()}
-                {this.renderCartItems()}
+                <ScrollView>
+                    {this.renderAddresses()}
+                    {this.renderCartItems()}
+                
                 {this.renderSubmit()}
+                </ScrollView>
+                {this.renderProductModal()}
             </>
         )
     }

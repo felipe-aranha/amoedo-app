@@ -1,5 +1,5 @@
 import React from 'react';
-import { accountStyle, tagsStyles, catalogStyle, projectStyle } from '../../style';
+import { accountStyle, tagsStyles, catalogStyle, projectStyle, tertiaryColor, primaryColor } from '../../style';
 import { View, ActivityIndicator, ScrollView, Platform } from 'react-native';
 import { Header, Text } from '../../components';
 import I18n from '../../i18n';
@@ -75,7 +75,7 @@ export default class Product extends ProductBase{
     }
 
     renderProduct(){
-        const { cart } = this.props;
+        const { cart, checkout } = this.props;
         const item = this.state.product;
         const image = this.getProductImage(item);
         const description = this.getAttributeValue(item,'description') || '';
@@ -112,7 +112,7 @@ export default class Product extends ProductBase{
                     </View>
                 </ScrollView>
                 <View style={{padding:20}}>
-                    {found &&
+                    {found && !checkout && 
                     <Button 
                         type={'outline'}
                         containerStyle={catalogStyle.accountTypeButtonContainer}
@@ -143,19 +143,20 @@ export default class Product extends ProductBase{
     }
 
     render(){
+        const { cart, checkout } = this.props;
         return(
             <View style={{flex:1}}>
                 <Header 
-                    containerStyle={Platform.OS == 'android' &&  this.props.cart ? {
+                    containerStyle={Platform.OS == 'android' &&  ( cart || checkout ) ? {
                         borderBottomWidth: 0,
                         paddingTop:0,
                         height: 60
                     } : { borderBottomWidth: 0 }}
-                    title={I18n.t('section.room')}
+                    title={I18n.t(checkout ? 'section.quote' : 'section.room')}
                     handleBack={this.handleBack.bind(this)}
                     leftIconColor={'rgb(226,0,6)'}
-                    titleStyle={accountStyle.registerHeaderText}
-                    backgroundColor={'rgb(103,4,28)'}
+                    titleStyle={[accountStyle.registerHeaderText, checkout ? { color: 'rgb(57,57,57)' } : { }]}
+                    backgroundColor={checkout ? primaryColor : 'rgb(103,4,28)'}
                 />
                 {(this.state.loading || this.state.product == null) ?
                     this.renderLoading() :
