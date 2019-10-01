@@ -78,7 +78,7 @@ export default class Product extends ProductBase{
         const { cart } = this.props;
         const item = this.state.product;
         const image = this.getProductImage(item);
-        const description = this.getAttributeValue(item,'description');
+        const description = this.getAttributeValue(item,'description') || '';
         const found = cart ? cart.find(c => c.sku == item.sku) : true;
         return(
             <View style={{flex:1}}>
@@ -106,7 +106,9 @@ export default class Product extends ProductBase{
                         {!this.state.loading && this.renderQty(item,true)}
                     </View>
                     <View style={{marginVertical:20}}>
-                        <HTML html={description} tagsStyles={tagsStyles} />
+                        {description != '' &&
+                            <HTML html={description} tagsStyles={tagsStyles} />
+                        }
                     </View>
                 </ScrollView>
                 <View style={{padding:20}}>
