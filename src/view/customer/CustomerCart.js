@@ -344,8 +344,9 @@ export default class CustomerCart extends Customer{
                             source={{uri: image}}
                             resizeMode={'contain'}
                             style={{
-                                width: 80,
-                                height: 50
+                                width: 70,
+                                height: 50,
+                                marginHorizontal: 5
                             }}
                         />
                     </View>

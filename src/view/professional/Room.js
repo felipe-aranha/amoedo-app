@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Text, KeyboardSpacer, SizeInput, TextArea, Select, MediaSelect } from '../../components';
+import { Header, Text, KeyboardSpacer, SizeInput, TextArea, Select, MediaSelect, Input } from '../../components';
 import { View, ScrollView, TouchableOpacity, Modal, StyleSheet, Image, Share, Platform } from 'react-native';
 import { accountStyle, secondaryColor, mainStyle, projectStyle } from '../../style';
 import { Actions } from 'react-native-router-flux';
@@ -72,12 +72,19 @@ export default class Room extends React.PureComponent {
 
     getInitialState(){
         const roomState = this.props.roomState || {};
+        let sequential = this.props.sequential || 1;
+        let zeros = '';
+        for(let i=0; i < (4 - sequential.toString().length); i++){
+            zeros = `0${zeros}`;
+        }
+        const label = roomState.room ? roomState.room.label : this.props.room ? this.props.room.label : ''
         return {
+            name: roomState.name || `${label} - ${zeros}${sequential}` || '',
             width: roomState.width || '',
             height: roomState.height || '',
             depth: roomState.depth || '',
             description: roomState.description || '',
-            room: this.props.room || roomState.room || {},
+            room: roomState.room || this.props.room || {},
             files: roomState.files || {
                 before: [],
                 after: [],
@@ -155,9 +162,9 @@ export default class Room extends React.PureComponent {
 
     handleFormSubmit(){
         if(this.props.customer) return;
-        const { width, height, depth, description, room, files, cart, id } = this.state;
+        const { width, height, depth, description, room, files, cart, id, name } = this.state;
         const data = {
-            width, height, depth, description, room, files, cart, id
+            width, height, depth, description, room, files, cart, id, name
         }
         this.props.onSave(data);
     }
@@ -170,6 +177,11 @@ export default class Room extends React.PureComponent {
     handleHeightChange(height){
         if(!this.props.customer)
             this.setState({height})
+    }
+
+    handleNameChange(name){
+        if(!this.props.customer)
+            this.setState({name})
     }
 
     handleDepthChange(depth){
@@ -344,6 +356,13 @@ export default class Room extends React.PureComponent {
                         paddingHorizontal: 10
                     }}>
                         <View>
+                            <View style={accountStyle.formRow}>
+                                <Input 
+                                    label={I18n.t('room.name')}
+                                    value={this.state.name}
+                                    onChangeText={this.handleNameChange.bind(this)}
+                                />
+                            </View>
                             <View style={projectStyle.roomInputArea}>
                                 <Text style={mainStyle.inputLabel}>{I18n.t('room.width')}</Text>
                                 <SizeInput 

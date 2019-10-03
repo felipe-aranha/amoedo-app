@@ -58,7 +58,7 @@ export default class CustomerProjects extends Customer {
                            <AppListItem 
                                 leftIcon={leftIcon}
                                 key={`${item.id}${i}`}     
-                                title={`${room.room.label} - ${item.data.name}`}
+                                title={room.name || `${room.room.label} - ${item.data.name}`}
                                 chevronColor={tertiaryColor}
                                 hideChevron={this.isProfessional}
                                 icon1={'check-warning'}

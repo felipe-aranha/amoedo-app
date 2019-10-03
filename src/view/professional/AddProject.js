@@ -414,6 +414,13 @@ export default class AddProject extends MainView{
     renderCenter(){
         if(this.state.roomModal){
             const currentRoom = this.state.currentRoom != -1 ? this.state.rooms[this.state.currentRoom] : null;
+            let sequential = this.state.rooms.length + 1;
+            if(currentRoom != null){
+                this.state.rooms.forEach((r,i) => {
+                    if(r.id == currentRoom.id)
+                        sequential = i
+                })
+            }
             return(
                 <Room 
                     onBack={this.toggleRoomModal.bind(this)}
@@ -421,6 +428,7 @@ export default class AddProject extends MainView{
                     onSave={this.handleRoomSave.bind(this)}
                     roomState={currentRoom}
                     customer={this.customer}
+                    sequential={sequential}
                 />
             )
         }

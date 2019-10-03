@@ -247,6 +247,7 @@ export default {
         newClient: 'NOVO CLIENTE'
     },
     room: {
+        name: 'NOME DO ORÇAMENTO',
         width: 'LARGURA',
         height: 'ALTURA',
         depth: 'PROFUNDIDADE',
