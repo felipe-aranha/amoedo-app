@@ -2,10 +2,10 @@ import React from 'react';
 import { MainContext } from '../../reducer';
 import { MainView } from '../MainView';
 import I18n from '../../i18n';
-import { accountStyle, secondaryColor, catalogStyle, mainStyle } from '../../style';
+import { accountStyle, secondaryColor, catalogStyle, mainStyle, primaryColor } from '../../style';
 import { CatalogService } from '../../service/CatalogService';
 import { Header } from '../../components';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Platform } from 'react-native';
 import { ListItem, Input, Divider } from 'react-native-elements';
 import Products from './Products';
 
@@ -148,17 +148,20 @@ export default class Catalog extends MainView{
 
     renderCenter(){
         const category = this.getCurrentCategory() || {};
+        const { modal } = this.props;
         return(
             <View style={{flex:1}}>
                 <Header 
-                    containerStyle={{
-                        borderBottomWidth: 0
-                    }}
+                    containerStyle={Platform.OS == 'android' &&  ( modal ) ? {
+                        borderBottomWidth: 0,
+                        paddingTop:0,
+                        height: 60
+                    } : { borderBottomWidth: 0 }}
                     title={this.getCurrentCategoryId() != 2 ? this.getCurrentTitle().toUpperCase() : I18n.t('section.products')}
                     handleBack={this.handleBack.bind(this)}
                     leftIconColor={'rgb(226,0,6)'}
-                    titleStyle={accountStyle.registerHeaderText}
-                    backgroundColor={'rgb(103,4,28)'}
+                    titleStyle={[accountStyle.registerHeaderText, modal ? { color: 'rgb(57,57,57)' } : { }]}
+                    backgroundColor={modal ? primaryColor : 'rgb(103,4,28)'}
                 />
                 <Input
                     leftIcon={{

@@ -23,6 +23,7 @@ export default class CustomerCheckout extends CustomerCart{
             items: [],
             cart: props.room.cart || [],
             selectedCart: [],
+            showCatalog: false,
             paymentMethod: null,
             paymentMethodStep: 1,
             cartItems: props.cartItems,

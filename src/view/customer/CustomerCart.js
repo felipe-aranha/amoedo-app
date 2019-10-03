@@ -1,18 +1,20 @@
 import React from 'react';
 import { View, FlatList, Modal, TouchableOpacity, ScrollView } from 'react-native';
 import Customer from "../Customer";
-import { primaryColor, accountStyle, catalogStyle } from '../../style';
+import { primaryColor, accountStyle, catalogStyle, drawerStyle } from '../../style';
 import I18n from '../../i18n';
 import { MainContext } from '../../reducer';
 import { ListItem, Button, Image, Divider } from 'react-native-elements';
 import { SelectAddress } from '../../components/SelectAddress';
 import { CatalogService } from '../../service/CatalogService';
-import { Check, Text } from '../../components';
+import { Check, Text, GradientButton } from '../../components';
 import variables from '../../utils';
 import { CheckoutService } from '../../service/CheckoutService';
 import { Actions } from 'react-native-router-flux';
 import { UserService } from '../../service/firebase/UserService';
 import Product from '../catalog/Product';
+import { AntDesign } from '@expo/vector-icons';
+import Catalog from '../catalog/Catalog';
 
 export default class CustomerCart extends Customer{
 
@@ -42,7 +44,8 @@ export default class CustomerCart extends Customer{
             loading: false,
             project: props.project,
             activeProduct: null,
-            updateList: new Date().getTime()
+            updateList: new Date().getTime(),
+            showCatalog: false,
         }
     }
 
@@ -127,7 +130,8 @@ export default class CustomerCart extends Customer{
     loadCartItems(){
         if(this.state.loading) return;
         this.setState({
-            loading: true
+            loading: true,
+            cartItems: []
         },() => {
             this.openModalLoading();
             this.state.cart.forEach((item,i) => {
@@ -301,6 +305,12 @@ export default class CustomerCart extends Customer{
         })
     }
 
+    toggleCatalog(){
+        this.setState({
+            showCatalog: !this.state.showCatalog
+        })
+    }
+
     handleProductDetails(item){
         if(item && !this.isCheckout){
             this.setState({
@@ -384,8 +394,23 @@ export default class CustomerCart extends Customer{
     renderCartHeader(){
         const { room, project } = this.props;
         return(
-            <View style={{backgroundColor:'#fff',padding:20}}>
-                <Text weight={'bold'} size={12} >{`${room.room.label} - ${project.data.name}`}</Text>
+            <View style={{backgroundColor:'#fff',padding:20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{flex:1, alignItems: 'flex-start'}}>
+                    <Text numberOfLines={1} style={{textAlign: 'left'}} weight={'bold'} size={12} >{room.name || `${room.room.label} - ${project.data.name}`}</Text>
+                </View>
+                {!this.isCheckout &&
+                <View style={{flex:1, alignItems: 'flex-end'}}>
+                    <GradientButton
+                        vertical
+                        colors={['rgb(170,4,8)','rgb(226,0,6)']}
+                        width={26}
+                        height={26}
+                        title={<AntDesign size={18} name={'plus'} />}
+                        titleStyle={drawerStyle.editText}
+                        onPress={this.toggleCatalog.bind(this)}
+                    />
+                </View>
+                }
             </View>
         );
     }
@@ -514,6 +539,45 @@ export default class CustomerCart extends Customer{
         )
     }
 
+    handleCatalogChange(_cart){
+        this.toggleCatalog();
+        let changed = false;
+        const selectedCart = this.state.selectedCart.slice();
+        const cart = this.state.cart.slice();
+        _cart.forEach(c => {
+            const found = this.state.cart.find(cc => cc.sku == c.sku);
+            if(!found){
+                changed = true;
+                selectedCart.push(c);
+                cart.push(c);
+            } 
+        })
+        if(changed){
+            this.setState({
+                cart,
+                selectedCart
+            }, () => {
+                this.loadCartItems();
+            })
+        }
+    }
+
+    renderCatalog(){
+        return(
+            <Modal
+                animationType={'slide'}
+                visible={this.state.showCatalog}
+                onRequestClose={() => {}}
+            >
+                <Catalog 
+                    cart={this.state.selectedCart}
+                    onBack={this.handleCatalogChange.bind(this)}
+                    modal
+                />
+            </Modal>
+        )
+    }
+
     renderContent(){
         return(
             <>
@@ -523,7 +587,10 @@ export default class CustomerCart extends Customer{
                 
                 {this.renderSubmit()}
                 </ScrollView>
-                {this.renderProductModal()}
+                {!this.isCheckout &&
+                    this.renderProductModal()
+                }
+                {this.renderCatalog()}
             </>
         )
     }
