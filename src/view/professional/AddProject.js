@@ -70,7 +70,7 @@ export default class AddProject extends MainView{
     getCurrentStatus(){
         const { status } = this.state;
         const statuses = this.getStatusNames();
-        return statuses.find(s => s.value = status);
+        return statuses.find(s => s.value == status);
     }
 
     setStatus(status){

@@ -8,6 +8,7 @@ import { Actions } from 'react-native-router-flux';
 import { MainContext } from '../../reducer';
 import { Text, ImageBase64, AppListItem } from '../../components';
 import { UserService } from '../../service/firebase/UserService';
+import { getProjectStatuses } from '../../utils';
 
 export default class Clients extends Professional{
 
@@ -16,7 +17,8 @@ export default class Clients extends Professional{
     constructor(props,context){
         super(props,context);
         this.state = {
-            items:  context.user.clients || []
+            items:  context.user.clients || [],
+            qty: {}
         }   
     }
 
@@ -76,6 +78,7 @@ export default class Clients extends Professional{
     }
 
     async addClientToContext(email){
+        const myId = this.context.user.magento.id;
         const p = new Promise( async resolve => {
             items = this.context.user.clients.slice(0) || [];
             found = items.find(c => c.email == email);
@@ -101,8 +104,29 @@ export default class Clients extends Professional{
 
     componentDidMount(){
         this.subscription = this.getProfessionalDoc().onSnapshot(doc => {
-            this.handleClientsSnapshot(doc.data())
+            this.handleClientsSnapshot(doc.data());
         })
+        this.getProjectsQty();
+    }
+
+    getProjectsQty(){
+        const myId = this.context.user.magento.id;
+        UserService.getProjects(myId).get().then(snapshot => {
+            let customers = {}
+            snapshot.docs.forEach(doc => {
+                const s = doc.data().status;
+                const customer = doc.data().customer;
+                if(!customers[customer]){
+                    customers[customer] = {}
+                }
+                const obj = customers[customer][s];
+                customers[customer][s] = obj ? obj + 1 : 1;
+            });
+            this.setState({
+                qty: customers,
+                refreshList: new Date().getTime()
+            })
+        });
     }
 
     renderEmptyList(){
@@ -113,6 +137,8 @@ export default class Clients extends Professional{
     }
 
     renderItem({item}){
+        const { qty } = this.state;
+        const statuses = getProjectStatuses();
         leftIcon = item.avatar != null && item.avatar.trim() != '' ? 
                     <ImageBase64 avatar style={{width:50,height:50}}  data={item.avatar} /> :
                     <Image style={{width:50,height:50}} source={require('../../../assets/images/icons/list-user-x2.png')} />
@@ -122,8 +148,8 @@ export default class Clients extends Professional{
             chevronColor={'rgb(226,0,6)'}
             icon1={'calendar'}
             icon2={'check'}
-            subtitle1={I18n.t('list.client.currentProjects',{qty:0})}
-            subtitle2={I18n.t('list.client.doneProjects',{qty:0})}
+            subtitle1={I18n.t('list.client.currentProjects',{ qty: qty[item.email] ? qty[item.email][statuses[0]] ? qty[item.email][statuses[0]] : 0 : 0 })}
+            subtitle2={I18n.t('list.client.doneProjects',{ qty: qty[item.email] ? qty[item.email][statuses[1]] ? qty[item.email][statuses[1]] : 0 : 0 })}
             onPress={() => {
                 Actions.push('clientProjects', {client: item})
             }}

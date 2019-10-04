@@ -11,7 +11,8 @@ export default class Professional extends MainView{
     constructor(props,context){
         super(props,context);
         this.state = {
-            items:  []
+            items:  [],
+            refreshList: 0,
         }   
     }
 
@@ -115,6 +116,7 @@ export default class Professional extends MainView{
                             keyStractor={this.keyStractor}
                             refreshing={this.state.loading}
                             style={this.listStyle}
+                            key={this.state.refreshList || 0}
                         />
                     </View> :
                     this.renderEmptyList()

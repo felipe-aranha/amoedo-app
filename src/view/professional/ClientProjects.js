@@ -41,9 +41,6 @@ export default class ClientProjects extends CustomerProjects{
                         <Text size={14}>{client.email}</Text>
                     </View>
                 </View>
-                <View>
-                    {super.renderSearch()}
-                </View>
             </>
         )
 

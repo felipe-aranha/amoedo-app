@@ -177,7 +177,7 @@ export class UserService{
         }
     }
 
-    static async getMyClients(clients){
+    static async getMyClients(professional, clients){
         if(clients.length == 0) return [];
         return new Promise(async resolve => {
             const fullClients = [];
@@ -240,6 +240,19 @@ export class UserService{
     static getMutualProjects(professional, customer){
         const db = UserService.getProjectDB();
         return db.where('professional','==',professional).where('customer','==',customer.toLowerCase());
+    }
+
+    static getProfessionalProjectsQty(professional){        
+        return UserService.getProjects(professional).get().then(snapshot => {
+            let customers = {}
+            snapshot.docs.forEach(doc => {
+                const s = doc.data().status;
+                const customer = doc.data().customer;
+                const obj = customers[customer][s];
+                customers[customer][s] = obj ? obj + 1 : 1;
+            });
+            return status;
+        });
     }
 
     static setQuoteStatus(projectId, room, status){
