@@ -260,11 +260,14 @@ export default class AddProject extends MainView{
     renderRoomListItem({item, index}){
         return(
             <ListItem 
-                title={item.room.label}
+                title={item.name || item.room.label}
                 titleStyle={{
                     fontFamily: 'system-medium',
                     color: 'rgb(77,77,77)',
                     fontSize: 14
+                }}
+                titleProps={{
+                    numberOfLines: 1
                 }}
                 chevron={{
                     color: 'rgb(201,2,7)',
