@@ -40,7 +40,7 @@ export default class Points extends Professional{
     }
 
     renderItem({item}){
-        const points = `${item.points >= 0 ? '+' : '-' } ${Math.abs(item.points || 0)}`;
+        const points = `${item.points >= 0 ? '+' : '-' } ${Math.abs(Number(item.points).toFixed(2) || 0)}`;
         const textColor = item.points >= 0 ? 'rgb(61,123,186)' : 'rgb(226,0,6)';
         const formatedDate = moment(item.createdAt,'YYYY-MM-DD HH:mm:ss').format('DD/MMM');
         return(
@@ -71,6 +71,7 @@ export default class Points extends Professional{
 
     renderSearch(){
         const { points } = this.state;
+        const pointsText = Number.isInteger(points) ? Number(points) : Number(points).toFixed(2);
         return(
             <View style={{
                 backgroundColor: 'rgb(103,4,28)',
@@ -78,7 +79,7 @@ export default class Points extends Professional{
                 alignItems: 'center',
                 paddingBottom: 20
             }}>
-                <Text weight={'medium'} color={'#fff'} size={40}>{points}</Text>
+                <Text weight={'medium'} color={'#fff'} size={40}>{points == '-' ? points : pointsText}</Text>
                 <Text weight={'medium'} color={'rgb(226,0,6)'} size={12}>{I18n.t('points.balance')}</Text>
             </View>
         )
