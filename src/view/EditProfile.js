@@ -11,6 +11,7 @@ import { UserService } from '../service/firebase/UserService';
 import { TextInputMask } from 'react-native-masked-text';
 import { CustomerService } from '../service';
 import { AppStorage } from '../storage';
+import { SelectAddress } from '../components/SelectAddress';
 
 export default class EditProfile extends MainView{
 
@@ -152,6 +153,10 @@ export default class EditProfile extends MainView{
             this.changeTelephone()
         else 
             this.changePassword()
+    }
+
+    handleAddressChange(){
+
     }
 
     changeTelephone(){
@@ -377,6 +382,11 @@ export default class EditProfile extends MainView{
                                 size: 20
                             }}
                             onPress={this.handlePhoneChange.bind(this)}
+                        />
+                        <_Divider />
+                        <SelectAddress 
+                            profile
+                            professional={this.isProfessional()}
                         />
                         <_Divider />
                         <_ListItem 

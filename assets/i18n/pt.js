@@ -288,6 +288,7 @@ export default {
     },
     checkout: {
         billingAddress: 'Endereço de cobrança',
+        defaultAddress: 'Endereços',
         addAddress: 'Adicionar endereço',
         loading: 'carregando',
         unavailableShipping: 'indisponível',
@@ -339,6 +340,7 @@ export default {
         personal: 'Dados ',
         data: 'pessoais',
         email: 'Email',
+        address: 'Endereços',
         telephone: 'Telefone',
         password: 'Senha',
         deleteAccount: 'Excluir minha conta',

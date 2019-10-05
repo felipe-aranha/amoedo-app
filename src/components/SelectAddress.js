@@ -3,7 +3,7 @@ import { Image, Modal, ScrollView, View, Platform } from 'react-native';
 import { MainContext } from '../reducer';
 import { ListItem, Button } from 'react-native-elements';
 import I18n from '../i18n';
-import { tertiaryColor, primaryColor, accountStyle } from '../style';
+import { tertiaryColor, primaryColor, accountStyle, secondaryColor } from '../style';
 import { Header, Text } from '.';
 import AccountStyle from '../style/AccountStyle';
 import Form from '../view/Form';
@@ -14,6 +14,7 @@ import Select from './Select';
 
 const SHIPPING = 'shipping';
 const BILLING = 'billing';
+const DEFAULT = 'default';
 const REMOVE = I18n.t('address.remove');
 const EDIT = I18n.t('address.edit');
 
@@ -25,7 +26,7 @@ export class SelectAddress extends React.PureComponent{
         super(props,context);
         const addresses = context.user.magento.addresses || [];
         this.state = {
-            type: props.type == BILLING ? BILLING : SHIPPING,
+            type: props.profile ? DEFAULT : props.type == BILLING ? BILLING : SHIPPING,
             modal: false,
             loading: false,
             selected: props.selected || null,
@@ -273,6 +274,27 @@ export class SelectAddress extends React.PureComponent{
 
     render(){
         const { type, selected } = this.state;
+        const { profile, professional } = this.props;
+        if(profile){
+            return (
+                <>
+                    {this.renderModal()}
+                    <ListItem 
+                        {...this.props}
+                        titleStyle={accountStyle.editProfileTitle}
+                        subtitleStyle={accountStyle.editProfileSubtitle}
+                        title={I18n.t('editProfile.address')}
+                        chevron={{
+                            color: professional ? secondaryColor : tertiaryColor,
+                            type: 'entypo',
+                            name: 'chevron-right',
+                            size: 20
+                        }}
+                        onPress={this.toggleModal.bind(this)}
+                    />
+                </>
+            )
+        }
         return(
             <>
                 {this.renderModal()}
