@@ -149,6 +149,7 @@ export default class CustomerCart extends Customer{
                     }
                 }).catch(e => {
                     console.log(e);
+                    this.closeModalLoading();
                 })
             })
         })
