@@ -26,6 +26,7 @@ export default class EditProfile extends MainView{
             modal: false,
             section: null,
             telephone: firebase.cellphone,
+            instagram: firebase.instagram,
             currentPassword: '',
             newPassword: '',
             confirmPassword: '',
@@ -61,6 +62,14 @@ export default class EditProfile extends MainView{
         })
     }
 
+    handleInstagramChange(){
+        this.setState({
+            section: 'instagram'
+        },() => {
+            this.toggleModal();
+        })
+    }
+
     handlePasswordChange(){
         this.setState({
             section: 'password'
@@ -85,6 +94,7 @@ export default class EditProfile extends MainView{
         this.setState({
             modal: !this.state.modal,
             telephone: user.firebase.cellphone,
+            instagram: user.firebase.instagram,
             currentPassword: '',
             newPassword: '',
             confirmPassword: '',
@@ -102,6 +112,22 @@ export default class EditProfile extends MainView{
                 />
             </View>
         )
+    }
+
+    renderInstagramChange(){
+        return (
+            <View style={accountStyle.formRow}>
+                <Input 
+                    autoCapitalize={'none'}
+                    value={this.state.instagram}
+                    onChangeText={this.handleInstagramTextChange.bind(this)}
+                />
+            </View>
+        )
+    }
+
+    handleInstagramTextChange(instagram){
+        this.setState({ instagram })
     }
 
     handleTelephoneChange(telephone){
@@ -149,14 +175,40 @@ export default class EditProfile extends MainView{
     handleChangeSubmit(){
         const { section, loading } = this.state; 
         if(loading) return;
-        if(section == 'telephone')
-            this.changeTelephone()
-        else 
-            this.changePassword()
+        switch(section){
+            case 'instagram':
+                this.changeInstagram();
+                return;
+            case 'telephone':
+                this.changeTelephone();
+                return;
+            default:
+                this.changePassword();
+                return;
+        }
     }
 
     handleAddressChange(){
 
+    }
+
+    changeInstagram(){
+        const { instagram } = this.state;
+        this.setState({
+            loading: true
+        },() => {
+            UserService.updateInstagram(this.context.user.firebase, instagram, this.isProfessional()).then(() => {
+                this.context.user.firebase.instagram = instagram;
+                this.toggleModal();
+                this.context.message(I18n.t('editProfile.instagramSuccess'));
+            }).catch(e => {
+                this.toggleModal();
+                this.context.message(I18n.t('editProfile.instagramSuccess'));
+            });
+            this.setState({
+                loading: false
+            })
+        })
     }
 
     changeTelephone(){
@@ -253,7 +305,9 @@ export default class EditProfile extends MainView{
                     <View style={{flex:1,padding: 20}}>
                         {section == 'telephone' ?
                             this.renderTelephoneChange() :
-                            this.renderPasswordChange()
+                            section == 'instagram' ? 
+                                this.renderInstagramChange() :
+                                    this.renderPasswordChange()
                         }
                     </View>
                     <View style={{margintop: 20, marginBottom: 30, marginHorizontal: 20}}>
@@ -272,7 +326,7 @@ export default class EditProfile extends MainView{
     }
 
     renderCenter(){
-        const { avatar, telephone } = this.state;
+        const { avatar, telephone, instagram } = this.state;
         const { user } = this.context;
         const { magento, firebase } = user;
         return(
@@ -382,6 +436,18 @@ export default class EditProfile extends MainView{
                                 size: 20
                             }}
                             onPress={this.handlePhoneChange.bind(this)}
+                        />
+                        <_Divider />
+                        <_ListItem 
+                            title={I18n.t('editProfile.instagram')}
+                            subtitle={instagram}
+                            chevron={{
+                                color: this.isProfessional() ? secondaryColor : tertiaryColor,
+                                type: 'entypo',
+                                name: 'chevron-right',
+                                size: 20
+                            }}
+                            onPress={this.handleInstagramChange.bind(this)}
                         />
                         <_Divider />
                         <SelectAddress 

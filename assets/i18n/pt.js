@@ -342,6 +342,7 @@ export default {
         email: 'Email',
         address: 'Endereços',
         telephone: 'Telefone',
+        instagram: 'Instagram',
         password: 'Senha',
         deleteAccount: 'Excluir minha conta',
         deleteAccountText: 'Tem certeza que deseja desativar sua conta?',
@@ -353,6 +354,7 @@ export default {
         update: 'ALTERAR',
         passwordSuccess: 'Senha alterada com sucesso!',
         telephoneSuccess: 'Telefone alterado com sucesso!',
+        instagramSuccess: 'Instagram atualizado com sucesso!',
         error: {
             telephone: 'Você deve inserir um número de telefone',
             telephoneCatch: 'Ocorreu um erro. Tente novamente mais tarde',

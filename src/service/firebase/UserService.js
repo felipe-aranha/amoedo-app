@@ -44,6 +44,23 @@ export class UserService{
         })
     }
 
+    static async updateInstagram(user, instagram, professional){
+        const doc = professional ? UserService.getProfessionalDB().doc(user.id.toString()) : UserService.getCustomerDB().doc(user.email);
+        return FirebaseDB.getFirestore().runTransaction(transaction => {
+            return transaction.get(doc).then(d => {
+                const data = d.data();
+                if(professional){
+                    let u = data.user;
+                    u.instagram = instagram;
+                    return transaction.update(doc,{user: u})
+                } else {
+                    return transaction.update(doc, {instagram})
+                }
+                
+            })
+        })
+    }
+
     static async updateAvatar(user, avatar, professional){
         let avatarUrl = false;
         if(avatar!= '' && avatar != null)
