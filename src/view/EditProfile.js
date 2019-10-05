@@ -62,6 +62,14 @@ export default class EditProfile extends MainView{
         })
     }
 
+    handlePersonalDataChange(){
+        this.setState({
+            section: 'personalData'
+        },() => {
+            this.toggleModal();
+        })
+    }
+
     handleInstagramChange(){
         this.setState({
             section: 'instagram'
@@ -142,6 +150,36 @@ export default class EditProfile extends MainView{
     }
     handleConfirmPasswordChange(confirmPassword){
         this.setState({confirmPassword, coError: ''})
+    }
+
+    getAttributeValue(attribute){
+        const { magento } = this.context.user;
+        const attr = magento.custom_attributes.find(attr => attr.attribute_code == attribute);
+        return attr ? attr.value : undefined;
+    }
+
+    renderPersonalDataChange(){
+        const { magento, firebase } = this.context.user;
+        return(
+            <View>
+                <View style={accountStyle.editProfileRow}>
+                    <Text style={mainStyle.inputLabel}>{I18n.t('editProfile.form.name')}</Text>
+                    <Text style={accountStyle.input}>{`${magento.firstname} ${magento.lastname}`}</Text>
+                </View>
+                <View style={accountStyle.editProfileRow}>
+                    <Text style={mainStyle.inputLabel}>{I18n.t('editProfile.form.email')}</Text>
+                    <Text style={accountStyle.input}>{magento.email}</Text>
+                </View>
+                <View style={accountStyle.editProfileRow}>
+                    <Text style={mainStyle.inputLabel}>{I18n.t('editProfile.form.cpfCnpj')}</Text>
+                    <Text style={accountStyle.input}>{magento.taxvat || firebase.cpf || firebase.cnpj}</Text>
+                </View>
+                <View style={accountStyle.editProfileRow}>
+                    <Text style={mainStyle.inputLabel}>{I18n.t('editProfile.form.dob')}</Text>
+                    <Text style={accountStyle.input}>{magento.dob ? magento.dob.split("-").reverse().join("/") : ''}</Text>
+                </View>
+            </View>
+        )
     }
 
     renderPasswordChange(){
@@ -307,9 +345,12 @@ export default class EditProfile extends MainView{
                             this.renderTelephoneChange() :
                             section == 'instagram' ? 
                                 this.renderInstagramChange() :
-                                    this.renderPasswordChange()
+                                section == 'personalData' ?
+                                    this.renderPersonalDataChange():
+                                        this.renderPasswordChange()
                         }
                     </View>
+                    {section != 'personalData' && 
                     <View style={{margintop: 20, marginBottom: 30, marginHorizontal: 20}}>
                         <Button 
                             title={I18n.t('editProfile.update')}
@@ -320,6 +361,7 @@ export default class EditProfile extends MainView{
                             loading={this.state.loading}
                         />
                     </View>
+                    }
                 </View>
             </Modal>
         )
@@ -419,6 +461,7 @@ export default class EditProfile extends MainView{
                                 </Text>
                             )}
                             subtitle={`${magento.firstname} ${magento.lastname}`}
+                            onPress={this.handlePersonalDataChange.bind(this)}
                         />
                         <_Divider />
                         <_ListItem 

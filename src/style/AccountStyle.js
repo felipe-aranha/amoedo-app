@@ -146,6 +146,12 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    editProfileRow: {
+        flexDirection: 'row',
+        marginVertical: 10,
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
     inputLabel: {
         fontFamily: 'system-medium',
         color: 'rgb(163,163,163)',

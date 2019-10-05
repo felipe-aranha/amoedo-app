@@ -341,6 +341,7 @@ export default {
         data: 'pessoais',
         email: 'Email',
         address: 'Endereços',
+        personalData: 'Dados Pessoais',
         telephone: 'Telefone',
         instagram: 'Instagram',
         password: 'Senha',
@@ -362,6 +363,12 @@ export default {
             wrongPassword: 'A senha atual está incorreta',
             passwordConfirmation: 'As senhas não coincidem'
 
+        },
+        form: {
+            name: 'Nome: ',
+            email: 'E-mail: ',
+            cpfCnpj: 'CPF/CNPJ: ',
+            dob: 'Data de Nascimento: '
         }
     },
     points: {
