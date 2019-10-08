@@ -26,6 +26,9 @@ export default class Catalog extends MainView{
             term: '',
             searching: false
         }
+        if(props.modal){
+            this.barStyle = 'dark-content'
+        }
     }
 
     componentDidMount(){

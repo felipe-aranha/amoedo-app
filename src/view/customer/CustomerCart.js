@@ -133,7 +133,6 @@ export default class CustomerCart extends Customer{
             loading: true,
             cartItems: []
         },() => {
-            this.openModalLoading();
             this.state.cart.forEach((item,i) => {
                 this.catalogService.getProductBySku(item.sku).then(response => {
                     if(response.sku){
@@ -142,14 +141,12 @@ export default class CustomerCart extends Customer{
                         this.setState({cartItems})
                     }
                     if(i == this.state.cart.length - 1){
-                        this.closeModalLoading();
                         this.setState({
                             loading: false
                         })
                     }
                 }).catch(e => {
                     console.log(e);
-                    this.closeModalLoading();
                 })
             })
         })

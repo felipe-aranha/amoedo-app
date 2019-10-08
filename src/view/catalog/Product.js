@@ -1,6 +1,6 @@
 import React from 'react';
 import { accountStyle, tagsStyles, catalogStyle, projectStyle, tertiaryColor, primaryColor } from '../../style';
-import { View, ActivityIndicator, ScrollView, Platform } from 'react-native';
+import { View, ActivityIndicator, ScrollView, Platform, StatusBar } from 'react-native';
 import { Header, Text } from '../../components';
 import I18n from '../../i18n';
 import { MainContext } from '../../reducer';
@@ -11,6 +11,8 @@ import ProductBase from './ProductBase';
 export default class Product extends ProductBase{
 
     static contextType = MainContext;
+
+    barStyle = 'light-content';
 
     constructor(props,context){
         super(props,context);
@@ -146,6 +148,7 @@ export default class Product extends ProductBase{
         const { cart, checkout } = this.props;
         return(
             <View style={{flex:1}}>
+                <StatusBar barStyle={this.barStyle} />
                 <Header 
                     containerStyle={Platform.OS == 'android' &&  ( cart || checkout ) ? {
                         borderBottomWidth: 0,

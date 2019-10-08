@@ -149,7 +149,7 @@ export default {
         project: 'PROJETO',
         addProject: 'CADASTRAR PROJETO',
         editProject: 'EDITAR PROJETO',
-        room: 'AMBIENTE',
+        room: 'ORÇAMENTO',
         products: 'PRODUTOS',
         quote: 'RESUMO DE ORÇAMENTO',
         payment: 'PAGAMENTO',
@@ -221,7 +221,7 @@ export default {
         newClient: 'NOVO CLIENTE',
         startDate: 'DATA INÍCIO',
         endDate: 'PREVISÃO DE TÉRMINO',
-        rooms: 'AMBIENTES',
+        rooms: 'ORÇAMENTOS',
         save: 'SALVAR PROJETO',
         status: 'STATUS',
         statuses: {
