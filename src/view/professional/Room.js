@@ -5,10 +5,12 @@ import { accountStyle, secondaryColor, mainStyle, projectStyle } from '../../sty
 import { Actions } from 'react-native-router-flux';
 import I18n from '../../i18n';
 import { AntDesign } from '@expo/vector-icons';
-import { Button, ButtonGroup, ListItem } from 'react-native-elements';
+import { Button, ButtonGroup, Divider } from 'react-native-elements';
 import Catalog from '../catalog/Catalog';
 import Product from '../catalog/Product';
 import uuid from 'uuid';
+import { CatalogService } from '../../service/CatalogService';
+import variables from '../../utils';
 
 export default class Room extends React.PureComponent {
 
@@ -21,12 +23,38 @@ export default class Room extends React.PureComponent {
             productsModal: false,
             product: null,
             currentCategory: null,
-            fileIndex: 0
+            fileIndex: 0,
+            cartItems: []
         }
+        this.baseUrl = `${variables.magento.baseURL}/pub/media/catalog/product`;
+        this.catalogService = new CatalogService();
+    }
+
+    componentDidMount(){
+        this.loadCartItems()
+    }
+
+    loadCartItems(){
+        if(this.state.loading) return;
+        this.setState({
+            cartItems: []
+        },() => {
+            this.state.cart.forEach((item,i) => {
+                this.catalogService.getProductBySku(item.sku).then(response => {
+                    if(response.sku){
+                        const cartItems = this.state.cartItems.slice();
+                        cartItems.push(response);
+                        this.setState({cartItems})
+                    }
+                }).catch(e => {
+                    console.log(e);
+                })
+            })
+        })
     }
 
     handleCatalogChange(cart){
-        this.setState({cart})
+        this.setState({cart}, this.loadCartItems.bind(this))
         this.toggleProductsModal();
     }
 
@@ -307,6 +335,115 @@ export default class Room extends React.PureComponent {
         )
     }
 
+    getProductImage(item){
+        const image = this.getAttributeValue(item,'image');
+        return image ? `${this.baseUrl}${image}` : null;
+    }
+
+    getProductPrices(item){
+        let prices = {
+            regular: this.value2Currency(item.price),
+            regularPrice: item.price,
+            special: null,
+            specialPrice: null
+        }
+        const specialPrice = this.getAttributeValue(item,'special_price');
+        if(specialPrice){
+            if(Number(specialPrice) < Number(item.price)){
+                prices.special = this.value2Currency(specialPrice)
+                prices.specialPrice = specialPrice
+            }
+        }
+        return prices;
+    }
+
+    value2Currency(value){
+        return `${I18n.t('catalog.currency')}${parseFloat(value).toFixed(2)}`;
+    }
+
+    getProductPrices(item){
+        let prices = {
+            regular: this.value2Currency(item.price),
+            regularPrice: item.price,
+            special: null,
+            specialPrice: null
+        }
+        const specialPrice = this.getAttributeValue(item,'special_price');
+        if(specialPrice){
+            if(Number(specialPrice) < Number(item.price)){
+                prices.special = this.value2Currency(specialPrice)
+                prices.specialPrice = specialPrice
+            }
+        }
+        return prices;
+    }
+
+    getAttributeValue(item,attribute){
+        const attr = item.custom_attributes.find(attr => attr.attribute_code == attribute);
+        return attr ? attr.value : undefined;
+    }
+
+    getQtyMultiplier(item){
+        const value = this.getAttributeValue(item,'revestimento_m2_caixa');
+        if(!value)
+            return {
+                unity: '',
+                x: 1
+            }
+        else 
+            return {
+                unity: 'm²',
+                x: Number(value) > 0 ? Number(value) : 1
+            }
+    }
+
+    renderCartItem(item){
+        const { cart } = this.state;
+        const checked = cart.find(i => i.sku == item.sku) || false;
+        if(!checked) return(<></>);
+        const image = this.getProductImage(item);
+        const prices = this.getProductPrices(item);
+        const multiplier = this.getQtyMultiplier(item);
+        const divider = Number.isInteger(multiplier.x) ? 
+                            Math.ceil(Number(checked.qty) / multiplier.x) : 
+                            Number(Number(checked.qty) / multiplier.x).toFixed(2);
+        const value = checked ? Number(prices.specialPrice || prices.regularPrice) * divider : (prices.specialPrice || prices.regularPrice);
+        return(
+            <TouchableOpacity key={`${item.sku}`} onPress={this.handleActiveProduct.bind(this,checked)}>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        backgroundColor: '#fff',
+                        paddingHorizontal:20,
+                        paddingVertical: 10,
+                    }}
+                >
+                    <View>
+                        <Image 
+                            source={{uri: image}}
+                            resizeMode={'contain'}
+                            style={{
+                                width: 70,
+                                height: 50,
+                                marginHorizontal: 5
+                            }}
+                        />
+                    </View>
+                    <View>
+                        <Text weight={'medium'} size={10}>{checked.qty}</Text>
+                    </View>
+                    <View style={{flex:1, paddingHorizontal: 10}}>
+                        <Text weight={'medium'} size={10}>{item.name}</Text>
+                    </View>
+                    <View style={{alignSelf:'flex-end'}}>
+                        <Text size={10} weight={'semibold'}>{this.value2Currency(value)}</Text>
+                    </View>
+                    <Divider />
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
     render(){
         const { room } = this.state;
         const { customer } = this.props;
@@ -509,24 +646,9 @@ export default class Room extends React.PureComponent {
                                     <View style={{
                                         marginTop: 20
                                     }}>
-                                        {this.state.cart.map(item => (
-                                            <ListItem
-                                                key={item.sku} 
-                                                title={item.name}
-                                                titleProps={{
-                                                    numberOfLines: 1,
-                                                    style: {
-                                                        fontFamily: 'system-semibold',
-                                                        color: 'rgb(77,77,77)',
-                                                        fontSize: 10,
-                                                        marginRight: 20,
-                                                    }
-                                                }}
-                                                containerStyle={{borderRadius: 4, marginBottom: 5}}
-                                                chevron
-                                                onPress={this.handleActiveProduct.bind(this,item)}
-                                            />
-                                        ))}
+                                        {this.state.cartItems.map(item => {
+                                            return this.renderCartItem(item);
+                                        })}
                                     </View>
                                 }
                             </View>
