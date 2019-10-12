@@ -208,7 +208,8 @@ export default {
         },
         quote: {
             available: 'Disponível',
-            pending: 'Pagamento enviado'
+            pending: 'Pagamento enviado',
+            paid: 'Pago'
         }
     },
     project: {
