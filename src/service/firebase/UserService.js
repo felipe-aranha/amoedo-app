@@ -7,6 +7,7 @@ export class UserService{
     static CUSTOMER = 'customer';
     static PROFESSIONAL = 'professional';
     static PROJECT = 'project';
+    static CHAT = 'chat';
 
     static async insertOrUpdateProfessionalAsync(user,documents=[],avatar=''){
         storage = FirebaseDB.getStorage().ref();
@@ -323,6 +324,10 @@ export class UserService{
 
     static getProjectDB(){
         return FirebaseDB.getCollection(UserService.PROJECT)
+    }
+
+    static getChatDB(){
+        return FirebaseDB.getCollection(UserService.CHAT)
     }
 
 }

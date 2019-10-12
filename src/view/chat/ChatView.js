@@ -7,6 +7,7 @@ import { tertiaryColor, secondaryColor, chatStyle } from '../../style';
 import { View } from 'react-native';
 import { UserService } from '../../service/firebase/UserService';
 import { CustomerService } from '../../service';
+import { Actions } from 'react-native-router-flux';
 
 export default class ChatView extends Professional {
 
@@ -59,6 +60,12 @@ export default class ChatView extends Professional {
         })
     }
 
+    goToRoom(item){
+        Actions.push('chatRoom',{
+            roommate: item,
+        })
+    }
+
     renderItem({item}){
         return(
             <View style={{marginHorizontal: 20}}>
@@ -80,8 +87,10 @@ export default class ChatView extends Professional {
                             buttonStyle={chatStyle.beginButtonArea}
                             title={I18n.t('chat.begin')}
                             titleStyle={chatStyle.beginButtonText}
+                            onPress={this.goToRoom.bind(this,item)}
                         />
                     )}
+                    onPress={this.goToRoom.bind(this,item)}
                 />
                 <Divider />
             </View>
