@@ -254,6 +254,26 @@ export class UserService{
         return db.where('customer','==',customer.toLowerCase());
     }
 
+    static getCustomerProfessionals(customer){
+        return UserService.getCustomerProjects(customer).get().then( snapshot => {
+            const professionals = [];
+            snapshot.docs.forEach(doc => {
+                const data = doc.data();
+                professionals.push(data.professional)
+            });
+            const p = new Promise((resolve) => {
+                let fullProfessionals = [];
+                professionals.forEach(async (id,i) => {
+                    const doc = await UserService.getProfessionalDoc(id).get();
+                    fullProfessionals.push(doc.data().user);
+                    if(i == professionals.length - 1)
+                        resolve(fullProfessionals);
+                })
+            });
+            return Promise.resolve(p);
+        })
+    }
+
     static getMutualProjects(professional, customer){
         const db = UserService.getProjectDB();
         return db.where('professional','==',professional).where('customer','==',customer.toLowerCase());

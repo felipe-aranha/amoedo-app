@@ -5,6 +5,8 @@ import { MainContext } from '../../reducer';
 import { ListItem, Divider, Button } from 'react-native-elements';
 import { tertiaryColor, secondaryColor, chatStyle } from '../../style';
 import { View } from 'react-native';
+import { UserService } from '../../service/firebase/UserService';
+import { CustomerService } from '../../service';
 
 export default class ChatView extends Professional {
 
@@ -17,6 +19,44 @@ export default class ChatView extends Professional {
             loading: !this.isProfessional(),
             items: this.isProfessional() ? context.user.clients : []
         }
+        this.customerService = new CustomerService();
+    }
+
+    componentDidMount(){
+        if(!this.isProfessional())
+            this.getProfessionals();
+    }
+
+    async getProfessionals(){
+        if(this.context.user.myProfessionals){
+            this.setState({
+                items: this.context.user.myProfessionals
+            })
+            return;
+        }            
+        const myId = this.context.user.magento.email;
+        const professionals = await UserService.getCustomerProfessionals(myId).then(async response => {
+            let pp = [];
+            return await Promise.all(response.map(async(p, i) => {
+                    if(pp.includes(p.id)) return undefined;
+                    pp.push(p.id);
+                    const customer = await this.customerService.getCustomer(p.id)
+                    return {
+                        ...p,
+                        name: `${customer.firstname} ${customer.lastname}`
+                    }
+                })
+            )
+        });
+        const myProfessionals = []
+        professionals.forEach(p => {
+            if(p)   
+                myProfessionals.push(p);
+        });
+        this.context.user.myProfessionals = myProfessionals;
+        this.setState({
+            items: myProfessionals
+        })
     }
 
     renderItem({item}){

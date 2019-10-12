@@ -24,6 +24,10 @@ export class CustomerService extends HttpClient {
         return this.putAsync(`${this.basePath}/${id}`, data)
     }
 
+    getCustomer(id){
+        return this.getAsync(`${this.basePath}/${id}`)
+    }
+
     getCustomerToken(username,password){
         const data = {
             username, password

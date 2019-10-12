@@ -14,7 +14,7 @@ export default class CustomerDrawer extends ProfessionalDrawer{
     renderItems(){
         return(
             <View style={drawerStyle.menuArea}>
-                <TouchableOpacity onPress={() => {this.goTo('_projects')}} style={drawerStyle.menuItemArea}>
+                <TouchableOpacity onPress={() => {this.goTo('projects')}} style={drawerStyle.menuItemArea}>
                     <AppIcon large name={'list'} style={drawerStyle.menuItemIcon} />
                     <Text style={drawerStyle.menuItemText}>{I18n.t('menu.projects')}</Text>
                 </TouchableOpacity>
@@ -22,10 +22,11 @@ export default class CustomerDrawer extends ProfessionalDrawer{
                     <AppIcon large name={'occurrence'} style={drawerStyle.menuItemIcon} />
                     <Text style={drawerStyle.menuItemText}>{I18n.t('menu.occurrences')}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={drawerStyle.menuItemArea}>
+                */ }
+                <TouchableOpacity onPress={() => {this.goTo('chat')}} style={drawerStyle.menuItemArea}>
                     <AppIcon large name={'chat'} style={drawerStyle.menuItemIcon} />
                     <Text style={drawerStyle.menuItemText}>{I18n.t('menu.chat')}</Text>
-                </TouchableOpacity> */ }
+                </TouchableOpacity> 
             </View>
         )
     }
