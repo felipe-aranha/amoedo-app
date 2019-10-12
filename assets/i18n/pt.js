@@ -155,7 +155,8 @@ export default {
         payment: 'PAGAMENTO',
         points: 'PROGRAMA DE PONTOS',
         passwordRecovery: 'Esqueceu a sua senha?',
-        myProfile: 'Meu Perfil'
+        myProfile: 'Meu Perfil',
+        chat: 'CHAT'
     },
     menu: {
         clients: 'Clientes',
@@ -381,5 +382,8 @@ export default {
     address: {
         remove: 'Excluir',
         edit: 'Editar'
+    },
+    chat: {
+        begin: 'Iniciar chat'
     }
 }

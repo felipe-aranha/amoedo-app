@@ -128,6 +128,10 @@ export default class Professional extends MainView{
 
     onFloatButtonPress(){}
 
+    isProfessional(){
+        return this.context.user.isProfessional;
+    }
+
     renderCenter(){
         return(
             <View style={{

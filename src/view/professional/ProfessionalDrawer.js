@@ -38,11 +38,11 @@ export default class ProfessionalDrawer extends MainView{
                 { /* <TouchableOpacity style={drawerStyle.menuItemArea}>
                     <AppIcon large name={'occurrence'} style={drawerStyle.menuItemIcon} />
                     <Text style={drawerStyle.menuItemText}>{I18n.t('menu.occurrences')}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={drawerStyle.menuItemArea}>
+                </TouchableOpacity> */ }
+                <TouchableOpacity onPress={() => {this.goTo('chat')}} style={drawerStyle.menuItemArea}>
                     <AppIcon large name={'chat'} style={drawerStyle.menuItemIcon} />
                     <Text style={drawerStyle.menuItemText}>{I18n.t('menu.chat')}</Text>
-                </TouchableOpacity> */ }
+                </TouchableOpacity> 
             </View>
         )
     }
