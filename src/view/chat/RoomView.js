@@ -5,9 +5,11 @@ import I18n from '../../i18n';
 import { MainContext } from '../../reducer';
 import AccountStyle from '../../style/AccountStyle';
 import { Header, Avatar } from 'react-native-elements';
-import { secondaryColor, tertiaryColor } from '../../style';
+import { secondaryColor, tertiaryColor, chatStyle } from '../../style';
 import { Ionicons } from '@expo/vector-icons';
-import { Text } from '../../components';
+import { Text, KeyboardSpacer } from '../../components';
+import { GiftedChat, Bubble, Composer, Send, InputToolbar } from 'react-native-gifted-chat';
+import * as Localization from 'expo-localization';
 
 export default class RoomView extends MainView{
 
@@ -18,7 +20,7 @@ export default class RoomView extends MainView{
     constructor(props,context){
         super(props,context);
         this.state = {
-            
+            messages: []
         }
     }
 
@@ -28,6 +30,19 @@ export default class RoomView extends MainView{
 
     renderSearch(){
         return <></>
+    }
+
+    handleSendMessage(messages){
+        messages.forEach(message => {
+            message.pending = true
+        })
+        this.setState(previousState => ({
+            messages: GiftedChat.append(previousState.messages, messages),
+        }))
+        messages.forEach( message => {
+            // this.chatDB.sendMessage(this.state.db,message, this.context);
+        })
+        
     }
 
     renderBackIcon(){
@@ -64,16 +79,11 @@ export default class RoomView extends MainView{
     renderTitle(){
         const { roommate } = this.props;
         return(
-            <View style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center'
-            }}>
+            <View style={chatStyle.roomTitle}>
                 <Avatar 
                     rounded
-                    source={{ uri: roommate.avatar }}
-                    avatarStyle={{ width: 40, height: 40, borderRadius: 20, resizeMode: 'cover' }}
+                    source={{ uri: roommate.avatar != '' ? roommate.avatar : null }}
+                    avatarStyle={{ width: 40, height: 40, borderRadius: 20 }}
                     containerStyle={{ marginHorizontal: 20 }}
                 />
                 <Text color={'#fff'} weight={'medium'} size={14} >{roommate.name}</Text>
@@ -81,8 +91,60 @@ export default class RoomView extends MainView{
         )
     }
 
+    renderBubble(props){
+        return(
+            <Bubble 
+                {...props}
+                textStyle={{
+                    right: chatStyle.rightText,
+                    left: chatStyle.leftText
+                }}
+                wrapperStyle={{
+                    left: chatStyle.leftBubble,
+                    right: chatStyle.rightBubble
+                }}
+            />
+        )
+    }
+
+    renderSend(props){
+        return(
+            <Send
+                {...props}
+                containerStyle={chatStyle.sendArea}
+                alwaysShowSend
+            >
+                <Text color={tertiaryColor} weight={'bold'} size={14} >{I18n.t('chat.send')}</Text>
+            </Send>
+        )
+    }
+
+    renderComposer(props){
+        return(
+            <Composer 
+                {...props}
+                placeholder={I18n.t('chat.placeholder')}
+                textInputStyle={[chatStyle.leftText,{ margin: 20, borderRadius: 5, overflow: 'hidden' }]}
+                
+            />
+        )
+    }
+
+    renderInputToolbar(props){
+        return(
+            <InputToolbar 
+                {...props}
+                containerStyle={{
+                    margin: 20,
+                    borderTopWidth: 0
+                }}
+            />
+        )
+    }
+
     renderCenter(){
-        const { roommate } = this.props;
+        const { user } = this.context;
+        const _id = this.isProfessional() ? user.magento.id : user.magento.email;
         return(
             <View style={{
                 flex:1
@@ -95,6 +157,25 @@ export default class RoomView extends MainView{
                     backgroundColor={secondaryColor}
                     leftComponent={this.renderBackIcon()}
                 />
+                <GiftedChat 
+                    showUserAvatar
+                    messages={this.state.messages}
+                    onSend={this.handleSendMessage.bind(this)}
+                    locale={Localization.locale}
+                    renderBubble={this.renderBubble.bind(this)}
+                    user={{
+                        _id,
+                        avatar: user.firebase.avatar,
+                        name: `${user.magento.firstname} ${user.magento.lastname}`
+                    }}
+                    renderSend={this.renderSend}
+                    renderComposer={this.renderComposer}
+                    renderInputToolbar={this.renderInputToolbar}
+                    listViewProps={{
+                        style: { marginBottom: 30 }
+                    }}
+                />
+                <KeyboardSpacer platform={'android'} />
             </View>
         )
     }

@@ -384,6 +384,8 @@ export default {
         edit: 'Editar'
     },
     chat: {
-        begin: 'Iniciar chat'
+        begin: 'Iniciar chat',
+        placeholder: 'Envie sua mensagem',
+        send: 'Enviar'
     }
 }
