@@ -111,7 +111,7 @@ export default class RoomView extends MainView{
                 flex: 1,
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
-                alignItems: 'center'
+                alignItems: 'center',
             }}>
                 <TouchableOpacity
                     hitSlop={{
@@ -146,7 +146,7 @@ export default class RoomView extends MainView{
                     // avatarStyle={{ width: 40, height: 40, borderRadius: 20 }}
                     containerStyle={{ marginHorizontal: 20 }}
                 />
-                <Text color={'#fff'} weight={'medium'} size={14} >{roommate.name}</Text>
+                <Text numberOfLines={1} color={'#fff'} weight={'medium'} size={14} >{roommate.name}</Text>
             </View>
         )
     }
@@ -226,10 +226,13 @@ export default class RoomView extends MainView{
                     containerStyle={{
                         borderBottomWidth: 0
                     }}
-                    handleBack={this.handleBack.bind(this)}
                     backgroundColor={secondaryColor}
                     leftComponent={this.renderBackIcon()}
-                />
+                    centerContainerStyle={{flex:0}}
+                    rightContainerStyle={{flex:0}}
+                >
+                    
+                </Header>
                 <GiftedChat 
                     showUserAvatar
                     messages={this.state.messages}
