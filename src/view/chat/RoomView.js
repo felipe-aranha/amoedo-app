@@ -1,6 +1,6 @@
 import React from 'react';
 import { MainView } from '../MainView';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Keyboard, Platform } from 'react-native';
 import I18n from '../../i18n';
 import { MainContext } from '../../reducer';
 import AccountStyle from '../../style/AccountStyle';
@@ -10,6 +10,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { Text, KeyboardSpacer } from '../../components';
 import { GiftedChat, Bubble, Composer, Send, InputToolbar } from 'react-native-gifted-chat';
 import * as Localization from 'expo-localization';
+import { ChatService } from '../../service/firebase/ChatService';
+import _ from 'lodash';
 
 export default class RoomView extends MainView{
 
@@ -20,8 +22,65 @@ export default class RoomView extends MainView{
     constructor(props,context){
         super(props,context);
         this.state = {
-            messages: []
+            messages: [],
+            initializing: true,
+            db: '',
+            keyboard: false
         }
+        this.listener = null;
+    }
+
+    componentDidMount(){
+        this.getDbRoom();
+        Keyboard.addListener('keyboardDidShow',this.showKeyboard.bind(this));
+        Keyboard.addListener('keyboardDidHide',this.hideKeyboard.bind(this));
+    }
+
+    showKeyboard(){
+        this.setState({
+            keyboard: true
+        })
+    }
+
+    hideKeyboard(){
+        this.setState({
+            keyboard: false
+        })
+    }
+
+    componentWillUnmount(){
+        Keyboard.removeListener('keyboardDidShow',this.showKeyboard.bind(this));
+        Keyboard.removeListener('keyboardDidHide',this.hideKeyboard.bind(this));
+        if(this.listener != null)
+            this.listener();
+    }
+
+    async getDbRoom(){
+        const { roommate } = this.props;
+        const { user } = this.context;
+        const myId = this.isProfessional() ? user.magento.id : user.magento.email;
+        const hisId = this.isProfessional() ? roommate.email : roommate.id;
+        let users = {};
+        if(this.isProfessional()){
+            users.professional = myId;
+            users.client = hisId;
+        } else {
+            users.professional = hisId;
+            users.client = myId;
+        }
+        const db = await ChatService.getRoom(users);
+        this.listener = db.onSnapshot( snapshot => {
+            const data = snapshot.data();
+            if(!_.isEqual(data.messages,this.state.messages)){
+                this.setState({
+                    messages: data.messages.reverse()
+                })
+            }
+        })
+        this.setState({
+            initializing: false,
+            db: db.id
+        })
     }
 
     isProfessional(){
@@ -33,6 +92,7 @@ export default class RoomView extends MainView{
     }
 
     handleSendMessage(messages){
+        if(this.state.initializing) return;
         messages.forEach(message => {
             message.pending = true
         })
@@ -40,7 +100,7 @@ export default class RoomView extends MainView{
             messages: GiftedChat.append(previousState.messages, messages),
         }))
         messages.forEach( message => {
-            // this.chatDB.sendMessage(this.state.db,message, this.context);
+            ChatService.sendMessage(this.state.db,message);
         })
         
     }
@@ -83,7 +143,7 @@ export default class RoomView extends MainView{
                 <Avatar 
                     rounded
                     source={{ uri: roommate.avatar != '' ? roommate.avatar : null }}
-                    avatarStyle={{ width: 40, height: 40, borderRadius: 20 }}
+                    // avatarStyle={{ width: 40, height: 40, borderRadius: 20 }}
                     containerStyle={{ marginHorizontal: 20 }}
                 />
                 <Text color={'#fff'} weight={'medium'} size={14} >{roommate.name}</Text>
@@ -135,8 +195,21 @@ export default class RoomView extends MainView{
             <InputToolbar 
                 {...props}
                 containerStyle={{
-                    margin: 20,
-                    borderTopWidth: 0
+                    marginHorizontal: 20,
+                    marginVertical: Platform.OS == 'ios' && this.state.keyboard ? 0 : 20,
+                    borderTopWidth: 0,
+                }}
+            />
+        )
+    }
+
+    renderIOSSpacer(){
+        if(Platform.OS != 'ios')
+            return <></>
+        return(
+            <View 
+                style={{
+                    height: this.state.keyboard ? 20 : 0
                 }}
             />
         )
@@ -170,7 +243,7 @@ export default class RoomView extends MainView{
                     }}
                     renderSend={this.renderSend}
                     renderComposer={this.renderComposer}
-                    renderInputToolbar={this.renderInputToolbar}
+                    renderInputToolbar={this.renderInputToolbar.bind(this)}
                     listViewProps={{
                         style: { marginBottom: 30 }
                     }}

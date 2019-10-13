@@ -118,20 +118,20 @@ export class Routes extends React.PureComponent{
                                 <Scene hideNavBar key='clients' component={Clients} /> 
                                 <Scene hideNavBar key='clientProjects' component={ClientProjects} /> 
                                 <Scene hideNavBar key='addClient' component={AddClient} />
-                                <Scene  hideNavBar key='projects' component={Projects} />
+                                <Scene initial hideNavBar key='projects' component={Projects} />
                                 <Scene hideNavBar key='addProject' component={AddProject} />
                                 <Scene hideNavBar key='points' component={Points} />
-                                <Scene initial hideNavBar key='chat' component={ChatView} />
+                                <Scene hideNavBar key='chat' component={ChatView} />
                                 <Scene hideNavBar key='chatRoom' component={RoomView} />
                             </Stack>
                         </Drawer>   
                         <Drawer drawerWidth={drawerWidth} contentComponent={CustomerDrawer} hideNavBar key='customer'>
                             <Stack hideNavBar key='customerStack'>
-                                <Scene hideNavBar key='projects' component={CustomerProjects} />
+                                <Scene initial hideNavBar key='projects' component={CustomerProjects} />
                                 <Scene hideNavBar key='cart' component={CustomerCart} />
                                 <Scene hideNavBar key='checkout' component={CustomerCheckout} />
                                 <Scene hideNavBar key='project' component={CustomerProject} />
-                                <Scene initial hideNavBar key='chat' component={ChatView} />
+                                <Scene hideNavBar key='chat' component={ChatView} />
                                 <Scene hideNavBar key='chatRoom' component={RoomView} />
                             </Stack>
                         </Drawer>
