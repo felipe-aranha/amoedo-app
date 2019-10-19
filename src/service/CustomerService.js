@@ -99,4 +99,14 @@ export class CustomerService extends HttpClient {
         return this.postAsync('rest/V1/appamoedo/send-email-notification', data);
     }
 
+    addPushToken(customer, token){
+        const data = { customer, token }
+        return this.putAsync('rest/V1/appamoedo/app-amoedo-token', data);
+    }
+
+    removePushToken(customer){
+        const data = { customer, token: '' }
+        return this.putAsync('rest/V1/appamoedo/app-amoedo-token', data);
+    }
+
 }

@@ -5,6 +5,9 @@ import { Actions } from 'react-native-router-flux';
 import { AppContext, MainContext } from '../reducer';
 import { AppStorage } from '../storage';
 import I18n from '../i18n';
+import * as Permissions from 'expo-permissions';
+import { Notifications } from 'expo';
+import { CustomerService } from '../service/CustomerService';
 
 export class MainView extends React.Component{
 
@@ -29,6 +32,12 @@ export class MainView extends React.Component{
     renderCenter(){}
 
     async logout(){
+        try{
+            const { magento } = this.context.user || {};
+            const { id } = magento || -1;
+            await this.setToken(id);
+        } catch(e) {
+        }
         await AppStorage.setUser('','');
         this.context.user = AppContext.user;
         this.context.logout();
@@ -36,7 +45,7 @@ export class MainView extends React.Component{
     }
 
     async login(email,password){
-        this.customerService.login(email,password).then(result => {
+        this.customerService.login(email,password).then( async result => {
             if(!result){
                 this.context.message(I18n.t('account.errorMessage.auth'));
                 this.setState({
@@ -50,6 +59,7 @@ export class MainView extends React.Component{
                 magento: result
             }
             this.context.login();
+            await this.setToken(result.id, true);
             Actions.reset('purgatory');
         }).catch(e => {
             this.context.message(I18n.t('account.errorMessage.login'));
@@ -57,6 +67,28 @@ export class MainView extends React.Component{
                 loading: false
             })
         })
+    }
+
+    async setToken(customerId, login=false){
+        if(!login){
+            if(this.customerService == null || !this.customerService){
+                this.customerService = new CustomerService();
+            }
+            return this.customerService.removePushToken(customerId);
+        }
+        const { status: existingStatus } = await Permissions.getAsync(
+            Permissions.NOTIFICATIONS
+        );
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            return;
+        }
+        let token = await Notifications.getExpoPushTokenAsync();
+        return this.customerService.addPushToken(customerId,token);
     }
 
     toggleModalLoading(){
