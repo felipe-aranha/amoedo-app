@@ -10,6 +10,7 @@ import { MainContext } from '../../reducer';
 import { UserService } from '../../service/firebase/UserService';
 import MainStyle from '../../style/MainStyle';
 import _ from 'lodash';
+import { Actions } from 'react-native-router-flux';
 
 export default class ProjectLog extends Professional{
 
@@ -43,7 +44,8 @@ export default class ProjectLog extends Professional{
             activeUser: null,
             activeProject: null,
             users: [],
-            projects: []
+            projects: [],
+            loading: false
         }
     }
 
@@ -194,7 +196,41 @@ export default class ProjectLog extends Professional{
     }
 
     handleFormSubmit(){
-        
+        const { dobValid, activeProject, approved, date, type, images, description, loading } = this.state;
+        if(loading) return;
+        if(!dobValid){
+            return;
+        }
+        if(activeProject == null || !activeProject.value){
+            return;
+        }
+        if(description.trim().length == 0){
+            return;
+        }
+        if(type == 2 && approved == null){
+            return;
+        }
+        const log = {
+            type,
+            typeName: this.logs[type],
+            date,
+            approved: typeof(approved) !== 'undefined' ? approved : null,
+            images,
+            description,
+            createdBy: this.isProfessional() ? 'professional' : 'client',
+            createdAt: new Date()
+        }
+        this.openModalLoading();
+        this.setState({ loading: true })
+        UserService.addProjectLog(activeProject.value.id, log).then(() => {
+            this.closeModalLoading();
+            this.setState({ loading: false })
+            Actions.pop();
+        }).catch(e => {
+            console.log(e);
+            this.setState({ loading: false })
+            this.closeModalLoading();
+        })
     }
 
     getUserOptions(){
@@ -232,7 +268,7 @@ export default class ProjectLog extends Professional{
         return(
             <View style={{flex:1}}>
                 <ScrollView 
-                    style={{margin: 20}}
+                    style={{padding: 20}}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                 >
@@ -415,6 +451,7 @@ export default class ProjectLog extends Professional{
                             buttonStyle={[accountStyle.accountTypeButton,accountStyle.submitButton, projectStyle.projectSaveButton]}
                             titleStyle={[accountStyle.accountTypeButtonTitle,projectStyle.submitButtonTitle]}
                             onPress={this.handleFormSubmit.bind(this)}
+                            loading={this.state.loading}
                         />
                         
                     </View>

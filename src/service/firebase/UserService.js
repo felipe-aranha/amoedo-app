@@ -310,6 +310,30 @@ export class UserService{
         })
     }
 
+    static async addProjectLog(projectId, log){
+        const doc = UserService.getProjectDB().doc(projectId);
+        log.id = uuid.v4();
+        if(log.images.length > 0){
+            let newImages = [];
+            await new Promise((resolve) => {
+                log.images.forEach(async (image,i) => {
+                    const uri = await UserService.uploadImageAsync(image);
+                    newImages.push(uri);
+                    if(i == log.images.length - 1)
+                        resolve()
+                })
+            })
+            log.images = newImages;
+        }
+        return FirebaseDB.getFirestore().runTransaction(transaction => {
+            return transaction.get(doc).then(d => {
+                let logs = d.data().logs || [];
+                logs.push(log);
+                return transaction.update(doc,{logs})
+            })
+        })
+    }
+
     static getProfessionalDoc(docID){
         return UserService.getProfessionalDB().doc(docID.toString());
     }
