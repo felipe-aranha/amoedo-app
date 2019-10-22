@@ -1,11 +1,11 @@
 import React from 'react';
 import Professional from '../Professional';
-import { tertiaryColor, accountStyle, projectStyle } from '../../style';
+import { tertiaryColor, accountStyle, projectStyle, secondaryColor } from '../../style';
 import { getProjectLogs } from '../../utils';
 import I18n from '../../i18n';
 import { View, ScrollView } from 'react-native';
 import { MaskedInput, Text, Select, TextArea, KeyboardSpacer, MediaSelect } from '../../components';
-import { Button, ListItem } from 'react-native-elements';
+import { Button, ListItem, CheckBox, Image } from 'react-native-elements';
 import { MainContext } from '../../reducer';
 import { UserService } from '../../service/firebase/UserService';
 import MainStyle from '../../style/MainStyle';
@@ -132,7 +132,12 @@ export default class ProjectLog extends Professional{
     }
 
     handleActiveType(type){
-        this.setState({ type: type.value })
+        if(this.state.type != type.value)
+            this.setState({ 
+                type: type.value,
+                images: [],
+                approved: null
+            })
     }
 
     handleDateChange(date){
@@ -220,13 +225,17 @@ export default class ProjectLog extends Professional{
     }
 
     renderContent(){
-        const { activeUser, projectId, type, activeProject } = this.state;
+        const { activeUser, projectId, type, activeProject, images } = this.state;
         const activeUserName = activeUser != null ? activeUser.label : I18n.t('log.form.select');
         const activeProjectName =  activeProject != null ? activeProject.label : I18n.t('log.form.select');
         const activeTypeName = type != null ? this.getLogTitle(type) : I18n.t('log.form.select');
         return(
             <View style={{flex:1}}>
-                <ScrollView style={{margin: 20}}>
+                <ScrollView 
+                    style={{margin: 20}}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                >
                     <Text weight={'bold'} size={14} style={{marginBottom: 10}}>{I18n.t('log.title')}</Text>
                     <View style={accountStyle.logFormRow}>
                         <View style={{flex:1}}>
@@ -319,7 +328,84 @@ export default class ProjectLog extends Professional{
                             }
                         </View>
                     }
+                    {type == 2 &&
+                        <View style={accountStyle.logInputArea}>
+                            <Text numberOfLines={1} style={MainStyle.inputLabel}>{I18n.t(`log.form.approvation`)}</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <CheckBox
+                                    title={I18n.t(`log.form.yes`)}
+                                    textStyle={{
+                                        fontFamily: 'system-medium',
+                                        color: 'rgb(77,77,77)'
+                                    }}
+                                    checkedIcon='dot-circle-o'
+                                    uncheckedIcon='circle-o'
+                                    checkedColor={secondaryColor}
+                                    uncheckedColor={'rgb(77,77,77)'}
+                                    checked={this.state.approved == true}
+                                    onPress={() => { this.setState({ approved: true })}}
+                                    containerStyle={{
+                                        backgroundColor: 'transparent',
+                                        marginLeft: 0,
+                                        marginRight: 0,
+                                        padding: 0
+                                    }}
+                                /> 
+                                <CheckBox
+                                    title={I18n.t(`log.form.no`)}
+                                    textStyle={{
+                                        fontFamily: 'system-medium',
+                                        color: 'rgb(77,77,77)'
+                                    }}
+                                    checkedIcon='dot-circle-o'
+                                    uncheckedIcon='circle-o'
+                                    checkedColor={secondaryColor}
+                                    uncheckedColor={'rgb(77,77,77)'}
+                                    checked={this.state.approved == false}
+                                    onPress={() => { this.setState({ approved: false })}}
+                                    containerStyle={{
+                                        backgroundColor: 'transparent',
+                                        marginLeft: 0,
+                                        marginRight: 0,
+                                        padding: 0
+                                    }}
+                                /> 
+                            </View>
+                        </View>
+                    }
                     </View>
+                    <ScrollView
+                        horizontal
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        style={{
+                            marginVertical: 10,
+                        }}
+                    >
+                        {images.map((image, i) => (
+                            <View 
+                                key={i.toString()}
+                                style={{
+                                    padding: 5,
+                                    paddingBottom: 0,
+                                    margin: 5,
+                                    backgroundColor: '#fff',
+                                    borderRadius: 5
+                                }}
+                            >
+                                <Image 
+                                    source={{
+                                        uri: image
+                                    }}
+                                    style={{
+                                        width: 110,
+                                        height: 70
+                                    }}
+                                    resizeMode={'contain'}
+                                />
+                            </View>
+                        ))}
+                    </ScrollView>
                     {!this.readOnly &&
                     <View style={{marginTop: 20,marginBottom:50, marginHorizontal: 20}}>
                         
