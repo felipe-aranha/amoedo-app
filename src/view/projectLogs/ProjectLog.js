@@ -11,6 +11,7 @@ import { UserService } from '../../service/firebase/UserService';
 import MainStyle from '../../style/MainStyle';
 import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
+import { CustomerService } from '../../service/CustomerService';
 
 export default class ProjectLog extends Professional{
 
@@ -47,6 +48,7 @@ export default class ProjectLog extends Professional{
             projects: [],
             loading: false
         }
+        this.customerService = new CustomerService();
     }
 
     componentDidMount(){
