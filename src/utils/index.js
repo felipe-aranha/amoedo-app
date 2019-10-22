@@ -41,6 +41,11 @@ export const getProjectStatuses = () => {
 	return project.statuses;
 }
 
+export const getProjectLogs = () => {
+	const { project } = variables.app;
+	return project.logs;
+}
+
 export const parseDate = (d) => {
 	o = ~d.indexOf("-") ? "-" : "/";
 	n = ~d.indexOf("-") ? "/" : "-";

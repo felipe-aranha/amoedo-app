@@ -146,6 +146,12 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    logFormRow: {
+        flexDirection: 'row',
+        marginBottom: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     editProfileRow: {
         flexDirection: 'row',
         marginVertical: 10,
@@ -264,6 +270,10 @@ export default StyleSheet.create({
         marginHorizontal: 10,
         borderBottomWidth: 1,
         borderBottomColor: 'rgba(163,163,163,0.8)'
+    },
+    logInputArea: {
+        flex:1, 
+        marginHorizontal: 10,
     },
     maskedInputLabel: {
         fontSize: 12,

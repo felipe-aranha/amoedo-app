@@ -156,12 +156,14 @@ export default {
         points: 'PROGRAMA DE PONTOS',
         passwordRecovery: 'Esqueceu a sua senha?',
         myProfile: 'Meu Perfil',
-        chat: 'CHAT'
+        chat: 'CHAT',
+        logs: 'REGISTROS DO PROJETO',
+        newLog: 'NOVO REGISTRO',
     },
     menu: {
         clients: 'Clientes',
         projects: 'Projetos',
-        occurrences: 'Ocorrências',
+        projectLogs: 'Registros do Projeto',
         chat: 'Chat',
         points: 'Programa de pontos',
         settings: 'Configurações',
@@ -171,7 +173,8 @@ export default {
         newClient: 'Novo cliente',
         clients: 'Clientes',
         newProject: 'Novo projeto',
-        projects: 'Projetos'
+        projects: 'Projetos',
+        newLog: 'Novo Registro' 
     },
     empty: {
         clients: {
@@ -181,6 +184,9 @@ export default {
         projects: {
             title: 'Nenhum projeto cadastrado',
             subtitle: 'Cadastre novos projetos e tenha as informações organizadas em um só lugar.'
+        },
+        log: {
+            title: 'Nenhum(a) {{type}} encontrado(a)'
         }
     },
     addClient: {
@@ -243,6 +249,11 @@ export default {
             commercial: 'Comercial',
             residential: 'Residencial',
             others: 'Outros'
+        },
+        logs: {
+            occurrence: 'Ocorrência',
+            scheduling: 'Agendamento',
+            agreement: 'Acordo'
         }
     },
     newProject: {
@@ -387,5 +398,23 @@ export default {
         begin: 'Iniciar chat',
         placeholder: 'Envie sua mensagem',
         send: 'Enviar'
+    },
+    log: {
+        title: 'Registre uma nova ocorrência.',
+        form: {
+            select: 'Selecione',
+            date: 'DATA', 
+            project: 'PROJETO',
+            client: 'CLIENTE',
+            professional: 'PROFISSIONAL',
+            type: 'TIPO DE REGISTRO',
+            description: 'DESCRIÇÃO',
+            approvation: 'APROVAÇÃO',
+            images: 'IMAGENS',
+            upload: 'Upload',
+            yes: 'Sim',
+            no: 'Não',
+            save: 'SALVAR'
+        }
     }
 }
