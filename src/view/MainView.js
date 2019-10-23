@@ -8,6 +8,7 @@ import I18n from '../i18n';
 import * as Permissions from 'expo-permissions';
 import { Notifications } from 'expo';
 import { CustomerService } from '../service/CustomerService';
+import Constants from 'expo-constants';
 
 export class MainView extends React.Component{
 
@@ -59,7 +60,8 @@ export class MainView extends React.Component{
                 magento: result
             }
             this.context.login();
-            await this.setToken(result.id, true);
+            if(Constants.isDevice)
+                await this.setToken(result.id, true);
             Actions.reset('purgatory');
         }).catch(e => {
             this.context.message(I18n.t('account.errorMessage.login'));

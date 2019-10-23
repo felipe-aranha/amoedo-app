@@ -401,6 +401,9 @@ export default {
     },
     log: {
         title: 'Registre uma nova ocorrência.',
+        registeredIn: 'Registrado em {{date}}',
+        client: 'Cliente: {{user}}',
+        professional: 'Profissional: {{user}}',
         form: {
             select: 'Selecione',
             date: 'DATA', 

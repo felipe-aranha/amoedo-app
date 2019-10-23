@@ -18,7 +18,6 @@ export default class ProjectLog extends Professional{
     static contextType = MainContext;
 
     leftIconColor = tertiaryColor;
-    title = I18n.t('section.newLog');
     logs = getProjectLogs();
     
 
@@ -26,6 +25,7 @@ export default class ProjectLog extends Professional{
         super(props,context);
         const log = props.log || {};
         this.readOnly = log.id ? true : false;
+        this.title = this.readOnly ? I18n.t('section.logs') : I18n.t('section.newLog');
         this.dobRef = React.createRef();
         const now = new Date();
         const month = now.getMonth() + 1 > 9 ? now.getMonth() + 1 : `0${now.getMonth() + 1}`;
@@ -264,8 +264,10 @@ export default class ProjectLog extends Professional{
 
     renderContent(){
         const { activeUser, projectId, type, activeProject, images } = this.state;
-        const activeUserName = activeUser != null ? activeUser.label : I18n.t('log.form.select');
-        const activeProjectName =  activeProject != null ? activeProject.label : I18n.t('log.form.select');
+        const { user, log } = this.props;
+        console.log(log.project.data.name);
+        const activeUserName = activeUser != null ? activeUser.label : user ? user : I18n.t('log.form.select');
+        const activeProjectName =  activeProject != null ? activeProject.label : log.project && log.project.data && log.project.data.name ? log.project.data.name : I18n.t('log.form.select');
         const activeTypeName = type != null ? this.getLogTitle(type) : I18n.t('log.form.select');
         return(
             <View style={{flex:1}}>
@@ -274,7 +276,7 @@ export default class ProjectLog extends Professional{
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                 >
-                    <Text weight={'bold'} size={14} style={{marginBottom: 10}}>{I18n.t('log.title')}</Text>
+                    {!this.readOnly &&  <Text weight={'bold'} size={14} style={{marginBottom: 10}}>{I18n.t('log.title')}</Text> }
                     <View style={accountStyle.logFormRow}>
                         <View style={{flex:1}}>
                             <MaskedInput 
@@ -301,6 +303,7 @@ export default class ProjectLog extends Professional{
                             <Select
                                 options={this.getUserOptions()}
                                 onOptionSelected={this.handleActiveUser.bind(this)}
+                                disabled={this.readOnly}
                             >
                                 <View style={{flex:1}}>
                                     <DropDown 
@@ -316,6 +319,7 @@ export default class ProjectLog extends Professional{
                             <Select
                                 options={this.getProjectOptions()}
                                 onOptionSelected={this.handleActiveProject.bind(this)}
+                                disabled={this.readOnly}
                             >
                                 <View style={{flex:1}}>
                                     <DropDown 
@@ -332,6 +336,7 @@ export default class ProjectLog extends Professional{
                             <Select
                                 options={this.getTypeOptions()}
                                 onOptionSelected={this.handleActiveType.bind(this)}
+                                disabled={this.readOnly}
                             >
                                 <View style={{flex:1}}>
                                     <DropDown 
@@ -444,19 +449,21 @@ export default class ProjectLog extends Professional{
                             </View>
                         ))}
                     </ScrollView>
-                    {!this.readOnly &&
-                    <View style={{marginTop: 20,marginBottom:50, marginHorizontal: 20}}>
-                        
-                        <Button 
-                            title={I18n.t('log.form.save')}
-                            containerStyle={accountStyle.accountTypeButtonContainer}
-                            buttonStyle={[accountStyle.accountTypeButton,accountStyle.submitButton, projectStyle.projectSaveButton]}
-                            titleStyle={[accountStyle.accountTypeButtonTitle,projectStyle.submitButtonTitle]}
-                            onPress={this.handleFormSubmit.bind(this)}
-                            loading={this.state.loading}
-                        />
-                        
-                    </View>
+                    {!this.readOnly ?
+                        <View style={{marginTop: 20,marginBottom:50, marginHorizontal: 20}}>
+                            
+                            <Button 
+                                title={I18n.t('log.form.save')}
+                                containerStyle={accountStyle.accountTypeButtonContainer}
+                                buttonStyle={[accountStyle.accountTypeButton,accountStyle.submitButton, projectStyle.projectSaveButton]}
+                                titleStyle={[accountStyle.accountTypeButtonTitle,projectStyle.submitButtonTitle]}
+                                onPress={this.handleFormSubmit.bind(this)}
+                                loading={this.state.loading}
+                            />
+                            
+                        </View>
+                        :
+                        <View style={{marginBottom:30}}></View>
                     }
                 </ScrollView>
                 <KeyboardSpacer />
