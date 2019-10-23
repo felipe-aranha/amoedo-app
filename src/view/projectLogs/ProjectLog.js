@@ -386,7 +386,7 @@ export default class ProjectLog extends Professional{
                                     checkedColor={secondaryColor}
                                     uncheckedColor={'rgb(77,77,77)'}
                                     checked={this.state.approved == true}
-                                    onPress={() => { this.setState({ approved: true })}}
+                                    onPress={() => { if(!this.readOnly) this.setState({ approved: true })}}
                                     containerStyle={{
                                         backgroundColor: 'transparent',
                                         marginLeft: 0,
@@ -405,7 +405,7 @@ export default class ProjectLog extends Professional{
                                     checkedColor={secondaryColor}
                                     uncheckedColor={'rgb(77,77,77)'}
                                     checked={this.state.approved == false}
-                                    onPress={() => { this.setState({ approved: false })}}
+                                    onPress={() => { if(!this.readOnly) this.setState({ approved: false })}}
                                     containerStyle={{
                                         backgroundColor: 'transparent',
                                         marginLeft: 0,
