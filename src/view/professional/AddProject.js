@@ -10,7 +10,7 @@ import { getProjectTypes, getProjectStatuses } from '../../utils';
 import { MainContext } from '../../reducer';
 import { Input, TextArea, DatePicker } from '../../components/input';
 import { AntDesign } from '@expo/vector-icons';
-import { Button, ListItem } from 'react-native-elements';
+import { Button, ListItem, Image } from 'react-native-elements';
 import { UserService } from '../../service/firebase/UserService';
 import Room from './Room';
 
@@ -48,7 +48,17 @@ export default class AddProject extends MainView{
             rooms: data.rooms || [],
             currentRoom: -1,
             status: project.status || this.statuses[0]
+            
         }
+    }
+
+    renderRightComponent(){
+        if(this.isEditing())
+            return(
+                <TouchableOpacity onPress={() => { Actions.push('logs', { projectId: this.props.project.id }) }}>
+                    <Image source={require('../../../assets/images/icons/log-add-x2.png')} style={{ width: 25 }} resizeMode={'contain'} />
+                </TouchableOpacity>
+            )
     }
 
     handleRoomSave(state){
@@ -446,6 +456,7 @@ export default class AddProject extends MainView{
                     leftIconColor={'rgb(226,0,6)'}
                     titleStyle={accountStyle.registerHeaderText}
                     backgroundColor={'rgb(103,4,28)'}
+                    rightComponent={this.renderRightComponent()}
                 />
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <View style={[projectStyle.projectTypeArea,this.isEditing() ? { backgroundColor : 'transparent'} : {}]}>

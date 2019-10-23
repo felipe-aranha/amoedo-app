@@ -5,7 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import { getProjectLogs } from '../../utils';
 import { View } from 'react-native';
 import { ButtonGroup, Image } from 'react-native-elements';
-import { secondaryColor } from '../../style';
+import { secondaryColor, tertiaryColor } from '../../style';
 import { MainContext } from '../../reducer';
 import { UserService } from '../../service/firebase/UserService';
 import { CustomerService } from '../../service/CustomerService';
@@ -20,6 +20,7 @@ export default class Logs extends Professional{
     showFloatingButton = true;
     floatingButtonTitle = I18n.t('floatButton.newLog');
     logs = getProjectLogs();
+    leftIconColor = tertiaryColor;
 
     constructor(props,context){
         super(props, context);
@@ -33,6 +34,10 @@ export default class Logs extends Professional{
         }
         this.subscription = null;
         this.customerService = new CustomerService();
+    }
+
+    renderLeftIcon(){
+        return this.props.projectId ? undefined : super.renderLeftIcon() ;
     }
 
     componentDidMount(){
@@ -60,6 +65,8 @@ export default class Logs extends Professional{
                 let items = [];
                 doc.docs.forEach(d => {
                     const id = d.id;
+                    if(this.props.projectId && this.props.projectId != id)
+                        return;
                     const logs = d.data().logs || [];
                     if(logs.length > 0){
                         logs.forEach( log => {
@@ -76,7 +83,7 @@ export default class Logs extends Professional{
     }
 
     onFloatButtonPress(){
-        Actions.push('projectLog', { type: this.state.activeLog });
+        Actions.push('projectLog', { type: this.state.activeLog,  projectId: this.props.projectId });
     }
 
     getLogTitle(i=-1){

@@ -132,6 +132,10 @@ export default class Professional extends MainView{
         return this.context.user.isProfessional;
     }
 
+    renderRightComponent(){
+        return <></>
+    }
+
     renderCenter(){
         return(
             <View style={{
@@ -145,6 +149,7 @@ export default class Professional extends MainView{
                         handleBack={this.handleBack.bind(this)}
                         leftIconColor={this.leftIconColor || 'rgb(242,242,242)'}
                         titleStyle={[accountStyle.registerHeaderText,this.titleStyle]}
+                        rightComponent={this.renderRightComponent()}
                         backgroundColor={this.barColor}
                         leftIcon={
                             this.renderLeftIcon()

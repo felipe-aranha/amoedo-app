@@ -38,7 +38,7 @@ export default class ProjectLog extends Professional{
             description: log.description || '',
             approved: log.approved,
             images: log.images || [],
-            projectId: log.projectId || null,
+            projectId: props.projectId || null,
             dobValid: true,
             loadingUsers: false,
             loadingProjects: false,
@@ -203,7 +203,7 @@ export default class ProjectLog extends Professional{
         if(!dobValid){
             return;
         }
-        if(activeProject == null || !activeProject.value){
+        if((activeProject == null || !activeProject.value) && !this.props.projectId){
             return;
         }
         if(description.trim().length == 0){
@@ -224,7 +224,7 @@ export default class ProjectLog extends Professional{
         }
         this.openModalLoading();
         this.setState({ loading: true })
-        UserService.addProjectLog(activeProject.value.id, log).then(() => {
+        UserService.addProjectLog(this.props.projectId || activeProject.value.id, log).then(() => {
             this.closeModalLoading();
             this.setState({ loading: false })
             Actions.pop();
@@ -265,9 +265,8 @@ export default class ProjectLog extends Professional{
     renderContent(){
         const { activeUser, projectId, type, activeProject, images } = this.state;
         const { user, log } = this.props;
-        console.log(log.project.data.name);
         const activeUserName = activeUser != null ? activeUser.label : user ? user : I18n.t('log.form.select');
-        const activeProjectName =  activeProject != null ? activeProject.label : log.project && log.project.data && log.project.data.name ? log.project.data.name : I18n.t('log.form.select');
+        const activeProjectName =  activeProject != null ? activeProject.label : log && log.project && log.project.data && log.project.data.name ? log.project.data.name : I18n.t('log.form.select');
         const activeTypeName = type != null ? this.getLogTitle(type) : I18n.t('log.form.select');
         return(
             <View style={{flex:1}}>
