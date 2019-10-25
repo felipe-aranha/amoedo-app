@@ -125,6 +125,18 @@ export default StyleSheet.create({
     },
     textAreaContainer: {
         flex:1, 
+    },
+    imageModalCloseArea: {
+        position: 'absolute', 
+        top: 50, 
+        right: 30, 
+        zIndex: 9999,
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 

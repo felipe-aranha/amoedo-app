@@ -3,9 +3,9 @@ import Professional from '../Professional';
 import { tertiaryColor, accountStyle, projectStyle, secondaryColor } from '../../style';
 import { getProjectLogs } from '../../utils';
 import I18n from '../../i18n';
-import { View, ScrollView } from 'react-native';
-import { MaskedInput, Text, Select, TextArea, KeyboardSpacer, MediaSelect } from '../../components';
-import { Button, ListItem, CheckBox, Image } from 'react-native-elements';
+import { View, ScrollView, Image } from 'react-native';
+import { MaskedInput, Text, Select, TextArea, KeyboardSpacer, MediaSelect, ImageModal } from '../../components';
+import { Button, ListItem, CheckBox } from 'react-native-elements';
 import { MainContext } from '../../reducer';
 import { UserService } from '../../service/firebase/UserService';
 import MainStyle from '../../style/MainStyle';
@@ -416,38 +416,24 @@ export default class ProjectLog extends Professional{
                         </View>
                     }
                     </View>
-                    <ScrollView
-                        horizontal
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
+                    <View
                         style={{
                             marginVertical: 10,
                         }}
                     >
-                        {images.map((image, i) => (
-                            <View 
-                                key={i.toString()}
-                                style={{
-                                    padding: 5,
-                                    paddingBottom: 0,
-                                    margin: 5,
-                                    backgroundColor: '#fff',
-                                    borderRadius: 5
-                                }}
-                            >
-                                <Image 
-                                    source={{
-                                        uri: image
-                                    }}
-                                    style={{
-                                        width: 110,
-                                        height: 70
-                                    }}
-                                    resizeMode={'contain'}
-                                />
-                            </View>
-                        ))}
-                    </ScrollView>
+                        <ImageModal 
+                            key={images.length}
+                            dataSource={images.map(image => {
+                                return {
+                                    url: image
+                                }
+                            })}
+                            position={this.state.slidePosition}
+                            onPositionChanged={position => {
+                                this.setState({ slidePosition: position })
+                            }}
+                        />
+                    </View>
                     {!this.readOnly ?
                         <View style={{marginTop: 20,marginBottom:50, marginHorizontal: 20}}>
                             

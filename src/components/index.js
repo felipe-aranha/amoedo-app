@@ -6,4 +6,5 @@ export { default as Select } from './Select';
 export { ImageBase64 } from './ImageBase64';
 export { GradientButton } from './GradientButton';
 export { AppListItem } from './AppListItem'; 
+export { default as ImageModal } from './ImageModal';
 export * from './input';
