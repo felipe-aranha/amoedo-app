@@ -29,7 +29,7 @@ export default class ProjectLog extends Professional{
         this.dobRef = React.createRef();
         const now = new Date();
         const month = now.getMonth() + 1 > 9 ? now.getMonth() + 1 : `0${now.getMonth() + 1}`;
-        const date = log.date || `${now.getDate()}/${month}/${now.getFullYear()}`;
+        const date = log.date || `${now.getDate()}/${month}/${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}`;
         this.state = {
             items: [],
             id: log.id || {},
@@ -198,18 +198,12 @@ export default class ProjectLog extends Professional{
     }
 
     handleFormSubmit(){
-        const { dobValid, activeProject, approved, date, type, images, description, loading } = this.state;
+        const { activeProject, approved, date, type, images, description, loading } = this.state;
         if(loading) return;
-        if(!dobValid){
-            return;
-        }
         if((activeProject == null || !activeProject.value) && !this.props.projectId){
             return;
         }
         if(description.trim().length == 0){
-            return;
-        }
-        if(type == 2 && approved == null){
             return;
         }
         const log = {
@@ -279,18 +273,16 @@ export default class ProjectLog extends Professional{
                     <View style={accountStyle.logFormRow}>
                         <View style={{flex:1}}>
                             <MaskedInput 
+                                disabled
                                 label={I18n.t('log.form.date')}
                                 value={this.state.date}
-                                onChangeText={this.handleDateChange.bind(this)}
                                 keyboardType={'number-pad'}
-                                onEndEditing={this.valiDate.bind(this)}
-                                maxLength={10}
+                                maxLength={16}
                                 type={'datetime'}
                                 options={{
-                                    format: 'DD/MM/YYYY'
+                                    format: 'DD/MM/YYYY HH:ii'
                                 }}
                                 inputRef={this.dobRef}
-                                errorMessage={this.state.dobValid === false ? I18n.t('account.errorMessage.dob') : ''}
                             />
                         </View>
                         <View style={{flex:1}} />
@@ -370,7 +362,7 @@ export default class ProjectLog extends Professional{
                             }
                         </View>
                     }
-                    {type == 2 &&
+                    {type == 9 &&
                         <View style={accountStyle.logInputArea}>
                             <Text numberOfLines={1} style={MainStyle.inputLabel}>{I18n.t(`log.form.approvation`)}</Text>
                             <View style={{ flexDirection: 'row' }}>
