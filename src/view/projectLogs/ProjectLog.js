@@ -29,7 +29,8 @@ export default class ProjectLog extends Professional{
         this.dobRef = React.createRef();
         const now = new Date();
         const month = now.getMonth() + 1 > 9 ? now.getMonth() + 1 : `0${now.getMonth() + 1}`;
-        const date = log.date || `${now.getDate()}/${month}/${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}`;
+        let  minutes = now.getMinutes();
+        const date = log.date || `${now.getDate()}/${month}/${now.getFullYear()} ${now.getHours()}:${minutes < 10 ? `0${minutes}` : minutes}`;
         this.state = {
             items: [],
             id: log.id || {},
