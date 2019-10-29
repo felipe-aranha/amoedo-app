@@ -39,8 +39,9 @@ export default class CustomerRegister extends Register {
 
     updateUser(){
         const { magento } = this.context.user;
-        if(this.isRegistered)
+        if(this.isRegistered){
             this.firebaseRegister(magento.id);
+        }
         else {
             const { personalData } = this.state;
             this.customer = {

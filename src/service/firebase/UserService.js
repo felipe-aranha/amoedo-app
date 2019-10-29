@@ -130,7 +130,7 @@ export class UserService{
         return await snapshot.ref.getDownloadURL();
       }
     
-    static async insertOrUpdateCustomerAsync(customer,verify){
+    static async insertOrUpdateCustomerAsync(customer,verify=false){
         customer = Object.assign({},customer);
         customer.email = customer.email.toLowerCase();
         const db = UserService.getCustomerDB();
@@ -144,9 +144,12 @@ export class UserService{
                 points: 0,
                 transactions: [],
             }
-            if(verify){
+            if(!verify){
                 const cs = new CustomerService();
-                cs.sendEmail(customer.email, 'cliente', customer.name);
+                const additional = {
+                    name: customer.name
+                }
+                cs.sendEmail(customer.email, 'appcustomer', additional);
             }
             return await db.doc(customer.email).set(customer);
         }
@@ -157,7 +160,7 @@ export class UserService{
         return UserService.addCustomerToProfessional(customer,professionalDoc);
     }
 
-    static createOrUpdateProject(professionalId,customer,project,id=null, status){
+    static async createOrUpdateProject(professionalId,customer,project,id=null, status){
         let data = {
             professional: professionalId,
             customer: customer.email.toLowerCase(),
@@ -180,18 +183,32 @@ export class UserService{
                     });
                     if(found){
                         found.forEach( r => {
-                            cs.sendEmail(customer.email.toLowerCase(), 'budget', customer.name);
+                            const additional = {
+                                name: customer.name,
+                                object: r.id
+                            }
+                            cs.sendEmail(customer.email.toLowerCase(), 'budget', additional);
                         })
                     }
                     return transaction.update(projectDoc,data)
                 })
             })
         } else {
-            cs.sendEmail(customer.email.toLowerCase(), 'project', customer.name);
-            data.data.rooms.forEach(() => {
-                cs.sendEmail(customer.email.toLowerCase(), 'budget', customer.name);
+            
+            
+            data.data.rooms.forEach(r => {
+                cs.sendEmail(customer.email.toLowerCase(), 'budget', {
+                    name: customer.name,
+                    object: r.id
+                });
             });
-            return UserService.getProjectDB().add(data)
+            const response = await UserService.getProjectDB().add(data);
+            const additional = {
+                name: customer.name,
+                object: response.id
+            }
+            cs.sendEmail(customer.email.toLowerCase(), 'project', additional);
+            return response;
         }
     }
 
