@@ -4,7 +4,7 @@ import I18n from '../../i18n';
 import Form from '../Form';
 import { mainStyle, accountStyle } from '../../style';
 import { View, ScrollView, Alert } from 'react-native';
-import { Text, Check } from '../../components';
+import { Text, Check, KeyboardSpacer } from '../../components';
 import { Button } from 'react-native-elements';
 import * as Utils from '../../utils';
 import { Address, Customer } from '../../model/firebase';
@@ -102,6 +102,7 @@ export default class AddClient extends Clients{
                         </View>
                     </View>
                 </ScrollView>
+                <KeyboardSpacer />
             </View>
         )
     }
