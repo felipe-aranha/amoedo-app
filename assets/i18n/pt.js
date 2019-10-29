@@ -406,6 +406,7 @@ export default {
         professional: 'Profissional: {{user}}',
         form: {
             select: 'Selecione',
+            dateTime: 'DATA/HORA {{type}}',
             date: 'DATA', 
             project: 'PROJETO',
             client: 'CLIENTE',

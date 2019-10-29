@@ -4,7 +4,7 @@ import { tertiaryColor, accountStyle, projectStyle, secondaryColor } from '../..
 import { getProjectLogs } from '../../utils';
 import I18n from '../../i18n';
 import { View, ScrollView, Image } from 'react-native';
-import { MaskedInput, Text, Select, TextArea, KeyboardSpacer, MediaSelect, ImageModal } from '../../components';
+import { MaskedInput, Text, Select, TextArea, KeyboardSpacer, MediaSelect, ImageModal, DatePicker } from '../../components';
 import { Button, ListItem, CheckBox } from 'react-native-elements';
 import { MainContext } from '../../reducer';
 import { UserService } from '../../service/firebase/UserService';
@@ -29,8 +29,9 @@ export default class ProjectLog extends Professional{
         this.dobRef = React.createRef();
         const now = new Date();
         const month = now.getMonth() + 1 > 9 ? now.getMonth() + 1 : `0${now.getMonth() + 1}`;
-        let  minutes = now.getMinutes();
-        const date = log.date || `${now.getDate()}/${month}/${now.getFullYear()} ${now.getHours()}:${minutes < 10 ? `0${minutes}` : minutes}`;
+        let  minutes = now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes();
+        let hours = now.getHours() < 10 ? `0${now.getHours()}` : now.getHours();
+        const date = log.date || `${now.getDate()}/${month}/${now.getFullYear()} ${hours}:${minutes}`;
         this.state = {
             items: [],
             id: log.id || {},
@@ -47,7 +48,8 @@ export default class ProjectLog extends Professional{
             activeProject: null,
             users: [],
             projects: [],
-            loading: false
+            loading: false,
+            logDate: log.logDate || ''
         }
         this.customerService = new CustomerService();
     }
@@ -141,13 +143,19 @@ export default class ProjectLog extends Professional{
             this.setState({ 
                 type: type.value,
                 images: [],
-                approved: null
+                approved: null,
+                logDate: ''
             })
     }
 
     handleDateChange(date){
         if(!this.readOnly)
             this.setState({ date })
+    }
+
+    handleLogDateChange(logDate){
+        if(!this.readOnly)
+            this.setState({ logDate })
     }
 
     handleTypeChange(type){
@@ -199,7 +207,7 @@ export default class ProjectLog extends Professional{
     }
 
     handleFormSubmit(){
-        const { activeProject, approved, date, type, images, description, loading } = this.state;
+        const { activeProject, approved, date, type, images, description, loading, logDate } = this.state;
         if(loading) return;
         if((activeProject == null || !activeProject.value) && !this.props.projectId){
             return;
@@ -215,7 +223,8 @@ export default class ProjectLog extends Professional{
             images,
             description,
             createdBy: this.isProfessional() ? 'professional' : 'client',
-            createdAt: new Date()
+            createdAt: new Date(),
+            logDate
         }
         this.openModalLoading();
         this.setState({ loading: true })
@@ -345,6 +354,25 @@ export default class ProjectLog extends Professional{
                             value={this.state.description}
                             onChangeText={this.handleDescriptionChange.bind(this)}
                         />
+                    </View>
+                    <View style={accountStyle.logFormRow}>
+                        <View style={{flex:1}}>
+                            <DatePicker
+                                maxDate={type != 1 ? new Date() : undefined}
+                                minDate={type != 1 ? undefined : new Date()} 
+                                withTime    
+                                label={I18n.t('log.form.dateTime', { type: type ? this.getLogTitle(type).toUpperCase() : '' })}
+                                value={this.state.logDate}
+                                onChangeText={this.handleLogDateChange.bind(this)}
+                                keyboardType={'number-pad'}
+                                maxLength={16}
+                                type={'datetime'}
+                                options={{
+                                    format: 'DD/MM/YYYY HH:ii'
+                                }}
+                            />
+                        </View>
+                        <View style={{flex:0.5}} />
                     </View>
                     <View style={accountStyle.logFormRow}>
                     {type == 0 &&
