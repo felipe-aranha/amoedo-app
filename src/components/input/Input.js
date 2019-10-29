@@ -69,8 +69,9 @@ export class DatePicker extends React.PureComponent{
     }
 
     async handleInputFocus(){
-        const { value, withTime, maxDate, minDate } = this.props;
+        const { value, withTime, maxDate, minDate, disabled } = this.props;
         Keyboard.dismiss();
+        if(disabled) return;
         try {
             let dateTime = value && value != '' ? value.split(' ') : [];
             let date = dateTime[0] ? dateTime[0].split('/') : false;
@@ -110,10 +111,31 @@ export class DatePicker extends React.PureComponent{
         }
     }
 
+    handleInputChangeIOS(date){
+        console.log(date);
+    }
+
     renderInputIOS(){
-        const props = this.props;
+        const { value, maxDate, minDate } = this.props;
         return(
-            <></>
+            <>
+                <DatePickerIOS
+                    date={new Date()}
+                    onDateChange={this.handleInputChangeIOS.bind(this)}
+                    mode={'date'}
+                    locale={'pt-BR'}
+                    maximumDate={maxDate}
+                    minimumDate={minDate}
+                />
+                <DatePickerIOS
+                    date={new Date()}
+                    onDateChange={this.handleInputChangeIOS.bind(this)}
+                    mode={'time'}
+                    locale={'pt-BR'}
+                    maximumDate={maxDate}
+                    minimumDate={minDate}
+                />
+            </>
         )
     }
 
@@ -145,7 +167,7 @@ export class DatePicker extends React.PureComponent{
         return(
             <View style={accountStyle.maskedInputArea}>
                 <Text numberOfLines={props.numberOfLines} style={mainStyle.inputLabel}>{props.label}</Text>
-                {Platform.OS == 'ios' ? this.renderInputIOS() : Platform.OS == 'android' ? this.renderInputAndroid() : this.renderOther()}
+                {props.textInputOnly ? this.renderOther() : Platform.OS == 'ios' ? this.renderOther() : Platform.OS == 'android' ? this.renderInputAndroid() : this.renderOther()}
                 <Text style={[accountStyle.inputError,accountStyle.maskedInputError]}>{props.errorMessage}</Text>
 
             </View>

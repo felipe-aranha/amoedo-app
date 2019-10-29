@@ -444,6 +444,7 @@ export default class CustomerCheckout extends CustomerCart{
                             options={{
                                 format: 'MM/YYYY'
                             }}
+                            textInputOnly
                             value={this.state.cardDate}
                             onChangeText={this.handleCardDateChange.bind(this)}
                         />

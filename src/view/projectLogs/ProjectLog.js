@@ -3,7 +3,7 @@ import Professional from '../Professional';
 import { tertiaryColor, accountStyle, projectStyle, secondaryColor } from '../../style';
 import { getProjectLogs } from '../../utils';
 import I18n from '../../i18n';
-import { View, ScrollView, Image } from 'react-native';
+import { View, ScrollView, Image, Platform } from 'react-native';
 import { MaskedInput, Text, Select, TextArea, KeyboardSpacer, MediaSelect, ImageModal, DatePicker } from '../../components';
 import { Button, ListItem, CheckBox } from 'react-native-elements';
 import { MainContext } from '../../reducer';
@@ -358,6 +358,7 @@ export default class ProjectLog extends Professional{
                     <View style={accountStyle.logFormRow}>
                         <View style={{flex:1}}>
                             <DatePicker
+                                disabled={this.readOnly}
                                 maxDate={type != 1 ? new Date() : undefined}
                                 minDate={type != 1 ? undefined : new Date()} 
                                 withTime    
@@ -372,7 +373,7 @@ export default class ProjectLog extends Professional{
                                 }}
                             />
                         </View>
-                        <View style={{flex:0.5}} />
+                        <View style={{flex: Platform.OS == 'ios' ? 0 : 0.5}} />
                     </View>
                     <View style={accountStyle.logFormRow}>
                     {type == 0 &&
