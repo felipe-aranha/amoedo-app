@@ -1,9 +1,21 @@
 import React from 'react';
-import { accountStyle, mainStyle } from '../../style';
+import { accountStyle, mainStyle, secondaryColor } from '../../style';
 import { Input as InputElement } from 'react-native-elements';
-import { View, TextInput, Platform, DatePickerIOS, DatePickerAndroid, TimePickerAndroid, Keyboard } from 'react-native';
+import { 
+    View, 
+    TextInput, 
+    Platform, 
+    DatePickerIOS, 
+    DatePickerAndroid, 
+    TimePickerAndroid, 
+    Keyboard, 
+    TouchableOpacity, 
+    Modal,
+    TouchableWithoutFeedback
+} from 'react-native';
 import { Text } from '../';
 import { TextInputMask } from 'react-native-masked-text';
+import Select from '../Select';
 
 export class Input extends React.PureComponent{
     render(){
@@ -64,7 +76,11 @@ export class DatePicker extends React.PureComponent{
     constructor(props, state){
         super(props, state);
         this.state = {
-            date: ''
+            date: '',
+            modal: false,
+            dateIOS: undefined,
+            timeIOS: undefined,
+            step: 1
         }
     }
 
@@ -115,7 +131,11 @@ export class DatePicker extends React.PureComponent{
         console.log(date);
     }
 
-    renderInputIOS(){
+    handleChangeDateIOS(dateIOS){
+        this.setState({ dateIOS });
+    }
+
+    _renderInputIOS(){
         const { value, maxDate, minDate } = this.props;
         return(
             <>
@@ -134,8 +154,100 @@ export class DatePicker extends React.PureComponent{
                     locale={'pt-BR'}
                     maximumDate={maxDate}
                     minimumDate={minDate}
+
                 />
             </>
+        )
+    }
+
+    goNextIOS(){
+        const { value, maxDate, minDate, withTime, disabled, onChangeText } = this.props;
+        const { step, timeIOS, dateIOS } = this.state;
+        if(step == 1 && withTime){
+            this.setState({
+                step: 2
+            })
+        } else {
+            this.setState({
+                step: 1
+            })
+            this.toggleModal();
+        }
+    }
+
+    renderModal(){
+        const { value, maxDate, minDate, withTime, disabled } = this.props;
+        const { step, timeIOS, dateIOS } = this.state;
+        let dateTime = value && value != '' ? value.split(' ') : [];
+        let date = dateTime[0] ? dateTime[0].split('/') : false;
+        if(disabled) return <></>
+        return(
+            <Modal 
+                transparent={true} 
+                onRequestClose={this.toggleModal.bind(this)}
+                visible={this.state.modal}
+                animationType={'slide'}
+            >
+                <TouchableWithoutFeedback onPress={this.toggleModal.bind(this)}>
+                <View 
+                    style={{
+                        flex: 1,
+                        justifyContent: 'flex-end'
+                    }}
+                >
+                    <TouchableWithoutFeedback>
+                        <View style={{ backgroundColor: '#fff'}}>
+                            <View style={{ flexDirection: 'row', backgroundColor: secondaryColor}}>
+                                <View style={{ flex: 1, alignItems: 'flex-start', padding: 15}}>
+                                    <TouchableOpacity onPress={this.toggleModal.bind(this)}>
+                                        <Text weight={'bold'} size={14} color={'#fff'}>Cancelar</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ flex: 1, alignItems: 'flex-end', padding: 15}}>
+                                    <TouchableOpacity onPress={this.goNextIOS.bind(this)}>
+                                        <Text weight={'bold'} size={14} color={'#fff'}>{step == 1 && withTime ? 'Próximo' : 'OK' }</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            {step == 1 ? 
+                                <DatePickerIOS
+                                    date={date ? new Date(date[2],date[1] - 1 ,date[0]) : new Date()}
+                                    onDateChange={this.handleInputChangeIOS.bind(this)}
+                                    mode={'date'}
+                                    locale={'pt-BR'}
+                                    maximumDate={maxDate}
+                                    minimumDate={minDate}
+                                    onChangeText={this.handleChangeDateIOS.bind(this)}
+                                /> :
+                                <DatePickerIOS
+                                    date={new Date()}
+                                    onDateChange={this.handleInputChangeIOS.bind(this)}
+                                    mode={'time'}
+                                    locale={'pt-BR'}
+                                    maximumDate={maxDate}
+                                    minimumDate={minDate}
+                                />
+                            }
+                        </View>
+                    </TouchableWithoutFeedback>
+                </View>
+                </TouchableWithoutFeedback>
+            </Modal>
+        )
+    }
+
+    toggleModal(){
+        this.setState({
+            modal: !this.state.modal
+        })
+    }
+
+    renderInputIOS(){
+        const props = this.props;
+        return(
+            <TouchableOpacity onPress={this.toggleModal.bind(this)}>
+                <Text style={accountStyle.maskedInputText}>{props.value}</Text>
+            </TouchableOpacity>
         )
     }
 
@@ -167,14 +279,13 @@ export class DatePicker extends React.PureComponent{
         return(
             <View style={accountStyle.maskedInputArea}>
                 <Text numberOfLines={props.numberOfLines} style={mainStyle.inputLabel}>{props.label}</Text>
-                {props.textInputOnly ? this.renderOther() : Platform.OS == 'ios' ? this.renderOther() : Platform.OS == 'android' ? this.renderInputAndroid() : this.renderOther()}
+                {props.textInputOnly ? this.renderOther() : Platform.OS == 'ios' ? this.renderInputIOS() : Platform.OS == 'android' ? this.renderInputAndroid() : this.renderOther()}
                 <Text style={[accountStyle.inputError,accountStyle.maskedInputError]}>{props.errorMessage}</Text>
-
+                {Platform.OS == 'ios' && this.renderModal()}
             </View>
         )
     }
 }
-
 export class SizeInput extends React.PureComponent{
     render(){
         const props = this.props;
