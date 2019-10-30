@@ -66,7 +66,7 @@ export class Pending extends AccountBase{
         const firebaseUser = await UserService.getClient(this.context.user.magento.email).catch(e => {
             this.logout();
         });
-        if(firebaseUser != null){
+        if(firebaseUser != null && firebaseUser.magento_id != null){
             this.context.user.firebase = firebaseUser;
             Actions.reset('customer');
         } else {

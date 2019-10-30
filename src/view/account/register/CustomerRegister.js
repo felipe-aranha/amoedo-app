@@ -133,22 +133,25 @@ export default class CustomerRegister extends Register {
             let customer = new FCustomer(Object.assign({},address));
             customer = {
                 ...customer,
-                avatar: personalData.avatar,
-                cellphone: personalData.cell,
-                document: personType == 1 ? personalData.cpf : personalData.cnpj,
+                avatar: personalData.avatar || '',
+                cellphone: personalData.cell || '',
+                document: personType == 1 ? personalData.cpf || '' : personalData.cnpj || '',
                 documentType: personType == 1 ? "cpf" : "cnpj",
                 email: loggedIn ? magento.email : personalData.email,
-                instagram: personalData.instagram,
+                instagram: personalData.instagram || '',
                 name: loggedIn ? `${magento.firstname} ${magento.lastname}` : personalData.name,
-                rg: personalData.rg,
-                telephone: personalData.phone,
+                rg: personalData.rg || '',
+                telephone: personalData.phone || '',
                 createdAt: new Date(),
                 magento_id: customerId != null ? customerId : magento.id || null
             }
             const response = await UserService.insertOrUpdateCustomerAsync(customer);
             this.context.message(I18n.t(`${response != false ? 'account.register.success' : 'account.errorMessage.registerError'}`))
             if(response != false){
-                this.login(personalData.email,personalData.password);
+                if(!this.isLoggedIn())
+                    this.login(personalData.email,personalData.password);
+                else 
+                    Actions.reset('purgatory');
             }
             else 
                 this.setState({
