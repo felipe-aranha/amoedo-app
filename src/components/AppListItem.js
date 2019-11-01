@@ -5,8 +5,10 @@ import { AppIcon, Text } from '.';
 
 export class AppListItem extends React.PureComponent{
     render(){ 
-        const {icon1, icon2, subtitle1, subtitle2, chevronColor, hideChevron } = this.props;
+        const {icon1, icon2, subtitle1, subtitle2, chevronColor, hideChevron, title } = this.props;
         return <ListItem
+            {...this.props}
+            title={title.replace(/(\r\n|\n|\r)/gm,"")}
             titleProps={{
                 style: {
                     fontFamily: 'system-bold',
@@ -59,7 +61,6 @@ export class AppListItem extends React.PureComponent{
                     </View>
                 </View>
             }
-            {...this.props}
         />
     }
 }

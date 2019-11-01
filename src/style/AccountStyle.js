@@ -285,6 +285,14 @@ export default StyleSheet.create({
         color: 'rgb(88,12,33)',
         fontSize: 14,
         minHeight:40,
+        textAlignVertical: 'center',
+        fontFamily: 'system-medium'
+    },
+    maskedInputTextIOS: {
+        color: 'rgb(88,12,33)',
+        fontSize: 14,
+        paddingVertical:10,
+        textAlignVertical: 'center',
         fontFamily: 'system-medium'
     },
     maskedInputError: {

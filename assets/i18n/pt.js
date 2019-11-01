@@ -131,7 +131,10 @@ export default {
         abd: 'abd*',
         crea: 'crea*',
         proofOfAddress: 'comprovante de residência',
-        customerAgree: 'Atesto que as informações pré-cadastradas pelo profissional tiveram o meu inteiro consentimento.'
+        customerAgree: 'Atesto que as informações pré-cadastradas pelo profissional tiveram o meu inteiro consentimento.',
+        cancel: 'Cancelar',
+        next: 'Próximo',
+        ok: 'OK'
     },
     document: {
         cpf: 'cpf',
