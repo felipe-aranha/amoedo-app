@@ -28,10 +28,11 @@ export default class ProjectLog extends Professional{
         this.title = this.readOnly ? I18n.t('section.logs') : I18n.t('section.newLog');
         this.dobRef = React.createRef();
         const now = new Date();
+        const day = now.getDate() > 9 ? now.getDate() : `0${now.getDate()}`;
         const month = now.getMonth() + 1 > 9 ? now.getMonth() + 1 : `0${now.getMonth() + 1}`;
         let  minutes = now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes();
         let hours = now.getHours() < 10 ? `0${now.getHours()}` : now.getHours();
-        const date = log.date || `${now.getDate()}/${month}/${now.getFullYear()} ${hours}:${minutes}`;
+        const date = log.date || `${day}/${month}/${now.getFullYear()} ${hours}:${minutes}`;
         this.state = {
             items: [],
             id: log.id || {},
