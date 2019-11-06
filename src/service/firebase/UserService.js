@@ -144,12 +144,14 @@ export class UserService{
                 points: 0,
                 transactions: [],
             }
-            if(!verify){
-                const cs = new CustomerService();
+            const cs = new CustomerService();
                 const additional = {
                     name: customer.name
                 }
+            if(verify){
                 cs.sendEmail(customer.email, 'appcustomer', additional);
+            } else {
+                cs.sendEmail(customer.email, 'appcustomerfinish', additional);
             }
             return await db.doc(customer.email).set(customer);
         }

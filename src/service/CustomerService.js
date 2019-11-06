@@ -96,9 +96,7 @@ export class CustomerService extends HttpClient {
             type,
             additional
         }
-        console.log(data);
         const response = await this.postAsync('rest/V1/appamoedo/send-email-notification', data);
-        console.log(response);
         return response;
     }
 

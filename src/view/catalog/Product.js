@@ -40,6 +40,7 @@ export default class Product extends ProductBase{
         },() => {
             this.catalogService.getProductBySku(sku).then(response => {
                 if(response.id){
+                    response.qrcodeURL = `${this.baseUrl}/Qrcode/images/${response.id}.png`;
                     response.qty = qty || 0;
                     this.setState({
                         loading: false,
@@ -110,6 +111,11 @@ export default class Product extends ProductBase{
                     <View style={{marginVertical:20}}>
                         {description != '' &&
                             <HTML html={description} tagsStyles={tagsStyles} />
+                        }
+                    </View>
+                    <View style={{marginVertical:20, alignItems: 'center'}}>
+                        {typeof(item.qrcodeURL)  &&
+                            <Image source={{uri: item.qrcodeURL}} resizeMode={'contain'} style={{ width: 250, height: 250}} />
                         }
                     </View>
                 </ScrollView>
