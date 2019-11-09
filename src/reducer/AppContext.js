@@ -15,6 +15,7 @@ export const AppContext = {
         clients: []
     },
     userType: null,
+    redirect: false,
     message: () => {},
     removeMessage: () => {},
     login: () => {},

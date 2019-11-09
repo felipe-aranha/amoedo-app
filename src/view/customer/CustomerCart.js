@@ -34,18 +34,20 @@ export default class CustomerCart extends Customer{
         this.catalogService = new CatalogService();
         this.checkoutService = new CheckoutService(this.context.user.token);
         this.baseUrl = `${variables.magento.baseURL}/pub/media/catalog/product`;
+        const room = props.room || {};
         this.state = {
             items: [],
             billingAddress: this.getDefaultAddress('billing'),
             shippingAddress: this.getDefaultAddress('shipping'),
-            cart: props.room.cart || [],
+            cart: room.cart || [],
             cartItems: props.cartItems || [],
-            selectedCart: props.selectedCart || this.isCheckout ? [] : props.room.cart || [],
+            selectedCart: props.selectedCart || this.isCheckout ? [] : room.cart || [],
             loading: false,
-            project: props.project,
+            project: props.project || null,
             activeProduct: null,
             updateList: new Date().getTime(),
             showCatalog: false,
+            room: props.room
         }
     }
 
@@ -59,10 +61,60 @@ export default class CustomerCart extends Customer{
     }
 
     componentDidMount(){
-        if(this.state.cart.length > this.state.cartItems.length){
-            this.loadCartItems();
+        const room = this.state.room || false;
+        if(room != false){
+            if(this.state.cart.length > this.state.cartItems.length){
+                this.loadCartItems();
+            }
+            this.cleanCart();
+        } else {
+            this.openModalLoading();
+            const myId = this.context.user.magento.email;
+            const myProjects = UserService.getCustomerProjects(myId);
+            const { budgetID } = this.props;
+            console.log(budgetID);
+            if(!budgetID){
+                this.closeModalLoading();
+                Actions.pop();
+            }
+            myProjects.get().then( snapshot => {
+                if(snapshot.empty){
+                    this.closeModalLoading();
+                    Actions.pop();
+                } else {
+                    let myProject = false;
+                    let myRoom = false;
+                    snapshot.docs.forEach( doc => {
+                        const data = doc.data();
+                        const id = doc.id;
+                        const project = {
+                            ...data,
+                            id,
+                        }
+                        data.data.rooms.forEach(room => {
+                            if(room.id == budgetID){
+                                myRoom = room;
+                                myProject = project
+                            }
+                        })
+                    });
+                    this.closeModalLoading();
+                    if(!myProject || !myRoom){
+                        this.closeModalLoading();
+                        Actions.pop();
+                    }
+                    this.setState({
+                        cart: myRoom.cart,
+                        project: myProject,
+                        room: myRoom
+                    })
+                }
+            }).catch(e => {
+                console.log(e);
+                this.closeModalLoading();
+                Actions.pop();
+            })
         }
-        this.cleanCart();
     }
 
     async loadShipping(){
@@ -390,11 +442,14 @@ export default class CustomerCart extends Customer{
     }
 
     renderCartHeader(){
-        const { room, project } = this.props;
+        const room = this.state.room || {};
+        const label = room.room ? room.room.label || '' : '';
+        const project = this.state.project || {};
+        const data = project.data || { name: '' };
         return(
             <View style={{backgroundColor:'#fff',padding:20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <View style={{flex:1, alignItems: 'flex-start'}}>
-                    <Text numberOfLines={1} style={{textAlign: 'left'}} weight={'bold'} size={12} >{room.name || `${room.room.label} - ${project.data.name}`}</Text>
+                    <Text numberOfLines={1} style={{textAlign: 'left'}} weight={'bold'} size={12} >{room.name || `${label} - ${data.name}`}</Text>
                 </View>
                 {!this.isCheckout &&
                 <View style={{flex:1, alignItems: 'flex-end'}}>
@@ -490,6 +545,7 @@ export default class CustomerCart extends Customer{
                     },() => {
                         Actions.push('checkout', {
                             ...this.props,
+                            ...this.state,
                             cartItems: this.state.cartItems,
                             selectedCart: this.state.selectedCart,
                             billingAddress: this.state.billingAddress,

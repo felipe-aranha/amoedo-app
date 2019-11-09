@@ -33,6 +33,9 @@
         "tabletImage": "./assets/images/splash/splashxxhdpi.png"
       }
     },
+    "notification": {
+      "iosDisplayInForeground": true
+    },
     "android": {
       "package": "br.com.amoedo.amoedoapp",
       "versionCode": 1,

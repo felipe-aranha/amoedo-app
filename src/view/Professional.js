@@ -13,6 +13,14 @@ export default class Professional extends MainView{
         this.state = {
             items:  [],
             refreshList: 0,
+        }
+        if(context.redirect != false){
+            const redirect = Object.assign({},context.redirect);
+            context.redirect = false;
+            switch(redirect.type){
+                case 'budget':
+                    Actions.push(context.user.isProfessional ? 'addProject': 'cart', { budgetID: redirect.id })
+            }
         }   
     }
 

@@ -2,12 +2,13 @@ import React from 'react';
 import { YellowBox } from 'react-native';
 
 import { Routes } from './src/routes';
-import { AppLoading } from 'expo';
+import { AppLoading, Notifications } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import { CustomerService } from './src/service';
 import { AppContext, MainContext } from './src/reducer';
 import { AppStorage } from './src/storage';
+import { Actions } from 'react-native-router-flux';
 
 export default class App extends React.Component {
 
@@ -18,6 +19,32 @@ export default class App extends React.Component {
 		console.ignoredYellowBox = ['Setting a timer'];
 		console.disableYellowBox = true;
 		this.customerService = new CustomerService();
+		this.notificationSubscription = null;
+	}
+
+	componentDidMount(){
+		this.notificationSubscription = Notifications.addListener(this.handleNotification.bind(this))
+	}
+
+	componentWillUnmount(){
+		if(this.notificationSubscription != null)
+			this.notificationSubscription();
+	}
+
+	handleNotification(notification){
+		const { user } = this.state;
+		console.log(notification.data);
+		if(notification.data){
+			if(notification.data.type){
+				this.setState({
+					redirect: notification.data
+				})
+				if(Object.keys(user.firebase) > 0 && ((user.isProfessional && user.firebase.status == 'approved') || !user.isProfessional)){
+					Actions.push( user.isProfessional ? 'professional' : 'customer' )
+				}
+			}
+			
+		}
 	}
 
 	cacheImages(images) {
