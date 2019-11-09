@@ -353,6 +353,20 @@ export class UserService{
         })
     }
 
+    static getProject(id){
+        const doc = UserService.getProjectDB().doc(id);
+        return doc.get().then( snapshot => {
+            if(snapshot.exists){
+                return {
+                    ...snapshot.data(),
+                    id: snapshot.id
+                }
+            } else return false;
+        }).catch( e => {
+            return false;
+        })
+    }
+
     static getProfessionalDoc(docID){
         return UserService.getProfessionalDB().doc(docID.toString());
     }

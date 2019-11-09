@@ -24,6 +24,7 @@ export default class ChatView extends Professional {
     }
 
     componentDidMount(){
+        super.componentDidMount();
         if(!this.isProfessional())
             this.getProfessionals();
     }

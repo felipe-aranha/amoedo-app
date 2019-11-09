@@ -25,8 +25,6 @@ export default class AddClient extends Clients{
         Actions.reset('clients');
     }
 
-    componentDidMount(){}
-
     icon = require('../../../assets/images/icons/user-search-x2.png');
     title = I18n.t('section.addClient');
     floatingButtonTitle = I18n.t('floatButton.clients');

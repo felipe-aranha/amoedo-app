@@ -47,6 +47,7 @@ export default class ClientProjects extends CustomerProjects{
     }
 
     componentDidMount(){
+        super.componentDidMount();
         const myId = this.context.user.magento.id;
         const clientId = this.props.client.email;
         const myProjects = UserService.getMutualProjects(myId, clientId);

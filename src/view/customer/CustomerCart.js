@@ -61,6 +61,7 @@ export default class CustomerCart extends Customer{
     }
 
     componentDidMount(){
+        super.componentDidMount();
         const room = this.state.room || false;
         if(room != false){
             if(this.state.cart.length > this.state.cartItems.length){

@@ -44,6 +44,7 @@ export default class Projects extends Professional{
     }
 
     componentDidMount(){
+        super.componentDidMount();
         if(this.context.openDrawer){
             this.context.openDrawer = false;
             Actions.drawerOpen();

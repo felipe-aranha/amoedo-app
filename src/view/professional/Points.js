@@ -25,6 +25,7 @@ export default class Points extends Professional{
     }
 
     componentDidMount(){
+        super.componentDidMount();
         this.subscription = this.getProfessionalDoc().onSnapshot(doc => {
             const { points, transactions } = doc.data();
             this.setState({

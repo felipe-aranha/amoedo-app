@@ -41,6 +41,7 @@ export default class Logs extends Professional{
     }
 
     componentDidMount(){
+        super.componentDidMount();
         this.listenToProjects();
         if(!this.isProfessional())
             this.getProfessionals();

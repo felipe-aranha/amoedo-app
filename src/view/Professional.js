@@ -5,6 +5,7 @@ import { Keyboard, Image, View, TouchableOpacity, FlatList } from 'react-native'
 import { Actions } from 'react-native-router-flux';
 import { secondaryColor, accountStyle, mainStyle } from '../style';
 import { Input } from 'react-native-elements';
+import { UserService } from '../service/firebase/UserService';
 
 export default class Professional extends MainView{
 
@@ -14,14 +15,26 @@ export default class Professional extends MainView{
             items:  [],
             refreshList: 0,
         }
+         
+    }
+
+    componentDidMount(){
+        const context = this.context;
         if(context.redirect != false){
             const redirect = Object.assign({},context.redirect);
             context.redirect = false;
             switch(redirect.type){
                 case 'budget':
-                    Actions.push(context.user.isProfessional ? 'addProject': 'cart', { budgetID: redirect.id })
+                    Actions.push(context.user.isProfessional ? 'projects': 'cart', { budgetID: redirect.id })
+                    break;
+                case 'project':
+                    UserService.getProject(redirect.id).then( project => {
+                        if(project != false)
+                            Actions.push(context.user.isProfessional ? 'addProject' : 'project', { project: project })
+                    }) 
+                    break;
             }
-        }   
+        }  
     }
 
     title='';
@@ -79,9 +92,6 @@ export default class Professional extends MainView{
             </View>
             </View>
         )
-    }
-
-    componentDidMount(){
     }
 
     toggleDrawer(){

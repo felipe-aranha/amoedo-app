@@ -22,6 +22,7 @@ export default class CustomerProjects extends Customer {
     isProfessional = false;
 
     componentDidMount(){
+        super.componentDidMount();
         if(this.context.openDrawer){
             this.context.openDrawer = false;
             Actions.drawerOpen();

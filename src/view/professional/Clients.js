@@ -103,6 +103,7 @@ export default class Clients extends Professional{
     }
 
     componentDidMount(){
+        super.componentDidMount();
         this.subscription = this.getProfessionalDoc().onSnapshot(doc => {
             this.handleClientsSnapshot(doc.data());
         })

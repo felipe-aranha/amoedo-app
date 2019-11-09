@@ -56,6 +56,7 @@ export default class ProjectLog extends Professional{
     }
 
     componentDidMount(){
+        super.componentDidMount();
         if(this.state.projectId != null) return;
         if(this.isProfessional()){
             this.setState({
