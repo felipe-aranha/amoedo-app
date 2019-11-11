@@ -45,6 +45,11 @@ export default {
             statuses: {
                 0: 'in_progress',
                 1: 'closed'
+            },
+            logs: {
+                0: 'occurrence',
+                1: 'scheduling',
+                2: 'agreement'
             }
         } 
     },

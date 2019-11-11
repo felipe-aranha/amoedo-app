@@ -1,27 +1,28 @@
 export default {
     magento: {
-        baseURL: "http://homologa.amoedo.com.br/",
+        baseURL: "http://www.amoedo.com.br/",
         auth: {
-            "username": "oliadm",
-            "password": "0qwe1478!!!",
-            "consumerKey": "qvvykzuop4rjqy6d4lwv2hk96qvof9z8",
-            "consumerSecret": "v193cvx8wzy89zcy32x5ca3ru1pc19yj",
-            "accessToken": "oo7yxahwjlt83rzec3n15j9394c67fpp",
-            "secretToken": "1bs076sl0cajmgcfiu8lqih1zu6tvrjx"
+            "username": "neivaldo.duraes",
+            "password": "avanter@2019",
+            "consumerKey": "ffurn84u14x9z4gy98v4elcxttbd5heq",
+            "consumerSecret": "t3isjw1j1t1febba5mg49lhebt0a7las",
+            "accessToken": "u7og8s0sqar9ixor8dps2hz3csgv9rvm",
+            "secretToken": "hrv5ynbibxhbgn9nf44p4hwdhc9dfna7"
         }
     },
     firebase: {
-        apiKey: "AIzaSyDz7ZGAcBmNue81aEEcDMbKpg6V8CxKbHY",
-        authDomain: "app-amoedo-dev.firebaseapp.com",
-        databaseURL: "https://app-amoedo-dev.firebaseio.com",
-        projectId: "app-amoedo-dev",
-        storageBucket: "gs://app-amoedo-dev.appspot.com/",
-        messagingSenderId: "259660110621",
-        appId: "1:259660110621:web:2fb9034f44d7cbc3"
+        apiKey: "AIzaSyBUUkebWbTFwKbTQXuepp9cmtGfP43NRr8",
+        authDomain: "app-amoedo.firebaseapp.com",
+        databaseURL: "https://app-amoedo.firebaseio.com",
+        projectId: "app-amoedo",
+        storageBucket: "app-amoedo.appspot.com",
+        messagingSenderId: "892754699544",
+        appId: "1:892754699544:web:d4bb10b9bcf6d47ec86a6d",
+        measurementId: "G-VX4T77B8NS"
     },
     mundipagg: {
-        // appId: 'pk_YMjLq3UvGHyRrpk4' // production
-        appId: 'pk_test_rY1KjxxIdPHBjpLa'
+        appId: 'pk_YMjLq3UvGHyRrpk4'
+        // appId: 'pk_test_rY1KjxxIdPHBjpLa'
     },
     app: {
         project:{
