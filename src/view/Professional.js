@@ -6,6 +6,7 @@ import { Actions } from 'react-native-router-flux';
 import { secondaryColor, accountStyle, mainStyle } from '../style';
 import { Input } from 'react-native-elements';
 import { UserService } from '../service/firebase/UserService';
+import * as WebBrowser from 'expo-web-browser';
 
 export default class Professional extends MainView{
 
@@ -24,6 +25,11 @@ export default class Professional extends MainView{
             const redirect = Object.assign({},context.redirect);
             context.redirect = false;
             switch(redirect.type){
+                case 'promotion': 
+                    if(redirect.link && redirect.link != ''){
+                        WebBrowser.openBrowserAsync(redirect.link);
+                    }
+                    break;
                 case 'budget':
                     Actions.push(context.user.isProfessional ? 'projects': 'cart', { budgetID: redirect.id })
                     break;
