@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "Amoedo Arquiteto",
+    "name": "Amoedo",
     "slug": "amoedo-arquiteto",
     "privacy": "unlisted",
-    "sdkVersion": "33.0.0",
+    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android"
     ],
-    "version": "0.11.0",
+    "version": "0.24.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/icon-android.png",
     "splash": {
       "image": "./assets/images/splash/splashhdpi.png",
       "resizeMode": "cover",
@@ -24,6 +24,7 @@
       "**/*"
     ],
     "ios": {
+      "icon": "./assets/images/icon-ios.png",
       "bundleIdentifier": "br.com.amoedo.amoedoapp",
       "supportsTablet": true,
       "splash": {
@@ -32,6 +33,9 @@
         "image": "./assets/images/splash/splashhdpi.png",
         "tabletImage": "./assets/images/splash/splashxxhdpi.png"
       }
+    },
+    "notification": {
+      "iosDisplayInForeground": true
     },
     "android": {
       "package": "br.com.amoedo.amoedoapp",
