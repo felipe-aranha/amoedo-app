@@ -59,7 +59,7 @@ export default class CustomerCheckout extends CustomerCart{
     }
 
     async componentDidMount(){
-        super.componentDidMount();
+        // super.componentDidMount();
         this.loadCartItems();
         this.loadShipping().then(r => {
             if(r){
