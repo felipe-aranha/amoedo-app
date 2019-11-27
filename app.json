@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "0.25.0",
+    "version": "0.25.4",
     "orientation": "portrait",
     "icon": "./assets/images/icon-android.png",
     "splash": {
@@ -27,6 +27,17 @@
       "icon": "./assets/images/icon-ios.png",
       "bundleIdentifier": "br.com.amoedo.amoedoapp",
       "supportsTablet": true,
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": [
+          "facebook",
+          "fb",
+          "whatsapp",
+          "twitter",
+          "linkedin"
+        ],
+        "NSPhotoLibraryUsageDescription": "Precisamos acessar suas imagens para que você possa enviar os documentos para análise e para alterar a imagem do avatar",
+        "NSCameraUsageDescription": "Precisamos do acesso a sua câmera para que você possa enviar os documentos para análise e para alterar a imagem do avatar"
+      },
       "splash": {
         "backgroundColor": "#F1CE00",
         "resizeMode": "cover",
