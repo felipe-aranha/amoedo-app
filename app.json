@@ -39,7 +39,7 @@
     },
     "android": {
       "package": "br.com.amoedo.amoedoapp",
-      "versionCode": 1,
+      "versionCode": 3,
       "splash": {
         "backgroundColor": "#F1CE00",
         "resizeMode": "cover",
