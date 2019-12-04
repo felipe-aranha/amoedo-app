@@ -66,7 +66,7 @@ export default class CustomerRegister extends Register {
     }
 
     createUser(){
-        const { personalData } = this.state;
+        const { personalData, personType } = this.state;
         if(this.context.user.magento.id){
             this.updateUser();
             return;
@@ -78,7 +78,7 @@ export default class CustomerRegister extends Register {
         customer = {
             ...customer,
             dob: Utils.parseDate(personalData.dob) || null,
-            taxvat: personalData.cpf,
+            taxvat: personType == 1 ? personalData.cpf : personalData.cnpj,
             firstname,
             lastname,
             email: personalData.email,
