@@ -4,6 +4,10 @@ export default variables;
 
 export { default as moment } from './moment';
 
+import * as Product from './product';
+
+export const ProductUtils = Product;
+
 export { UploadMedia } from './UploadMedia';
 
 export const isEmailValid = (email) => {

@@ -10,7 +10,7 @@ import Catalog from '../catalog/Catalog';
 import Product from '../catalog/Product';
 import uuid from 'uuid';
 import { CatalogService } from '../../service/CatalogService';
-import variables from '../../utils';
+import variables, { ProductUtils } from '../../utils';
 
 export default class Room extends React.PureComponent {
 
@@ -26,7 +26,6 @@ export default class Room extends React.PureComponent {
             fileIndex: 0,
             cartItems: []
         }
-        this.baseUrl = `${variables.magento.baseURL}/pub/media/catalog/product`;
         this.catalogService = new CatalogService();
     }
 
@@ -335,75 +334,13 @@ export default class Room extends React.PureComponent {
         )
     }
 
-    getProductImage(item){
-        const image = this.getAttributeValue(item,'image');
-        return image ? `${this.baseUrl}${image}` : null;
-    }
-
-    getProductPrices(item){
-        let prices = {
-            regular: this.value2Currency(item.price),
-            regularPrice: item.price,
-            special: null,
-            specialPrice: null
-        }
-        const specialPrice = this.getAttributeValue(item,'special_price');
-        if(specialPrice){
-            if(Number(specialPrice) < Number(item.price)){
-                prices.special = this.value2Currency(specialPrice)
-                prices.specialPrice = specialPrice
-            }
-        }
-        return prices;
-    }
-
-    value2Currency(value){
-        return `${I18n.t('catalog.currency')}${parseFloat(value).toFixed(2)}`;
-    }
-
-    getProductPrices(item){
-        let prices = {
-            regular: this.value2Currency(item.price),
-            regularPrice: item.price,
-            special: null,
-            specialPrice: null
-        }
-        const specialPrice = this.getAttributeValue(item,'special_price');
-        if(specialPrice){
-            if(Number(specialPrice) < Number(item.price)){
-                prices.special = this.value2Currency(specialPrice)
-                prices.specialPrice = specialPrice
-            }
-        }
-        return prices;
-    }
-
-    getAttributeValue(item,attribute){
-        const attr = item.custom_attributes.find(attr => attr.attribute_code == attribute);
-        return attr ? attr.value : undefined;
-    }
-
-    getQtyMultiplier(item){
-        const value = this.getAttributeValue(item,'revestimento_m2_caixa');
-        if(!value)
-            return {
-                unity: '',
-                x: 1
-            }
-        else 
-            return {
-                unity: 'm²',
-                x: Number(value) > 0 ? Number(value) : 1
-            }
-    }
-
     renderCartItem(item){
         const { cart } = this.state;
         const checked = cart.find(i => i.sku == item.sku) || false;
         if(!checked) return(<></>);
-        const image = this.getProductImage(item);
-        const prices = this.getProductPrices(item);
-        const multiplier = this.getQtyMultiplier(item);
+        const image = ProductUtils.getProductImage(item);
+        const prices = ProductUtils.getProductPrices(item);
+        const multiplier = ProductUtils.getQtyMultiplier(item);
         const divider = Number.isInteger(multiplier.x) ? 
                             Math.ceil(Number(checked.qty) / multiplier.x) : 
                             Number(Number(checked.qty) / multiplier.x).toFixed(2);
@@ -436,7 +373,7 @@ export default class Room extends React.PureComponent {
                         <Text weight={'medium'} size={10}>{item.name}</Text>
                     </View>
                     <View style={{alignSelf:'flex-end'}}>
-                        <Text size={10} weight={'semibold'}>{this.value2Currency(value)}</Text>
+                        <Text size={10} weight={'semibold'}>{ProductUtils.value2Currency(value)}</Text>
                     </View>
                     <Divider />
                 </View>

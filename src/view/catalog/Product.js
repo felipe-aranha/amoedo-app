@@ -7,6 +7,7 @@ import { MainContext } from '../../reducer';
 import { Image, Button } from 'react-native-elements';
 import HTML from 'react-native-render-html';
 import ProductBase from './ProductBase';
+import { ProductUtils } from '../../utils';
 
 export default class Product extends ProductBase{
 
@@ -40,7 +41,7 @@ export default class Product extends ProductBase{
         },() => {
             this.catalogService.getProductBySku(sku).then(response => {
                 if(response.id){
-                    response.qrcodeURL = `${this.baseUrl}/Qrcode/images/${response.id}.png`;
+                    response.qrcodeURL = `${ProductUtils.baseURL}/Qrcode/images/${response.id}.png`;
                     response.qty = qty || 0;
                     this.setState({
                         loading: false,
@@ -80,8 +81,8 @@ export default class Product extends ProductBase{
     renderProduct(){
         const { cart, checkout } = this.props;
         const item = this.state.product;
-        const image = this.getProductImage(item);
-        const description = this.getAttributeValue(item,'description') || '';
+        const image = ProductUtils.getProductImage(item);
+        const description = ProductUtils.getAttributeValue(item,'description') || '';
         const found = cart ? cart.find(c => c.sku == item.sku) : true;
         return(
             <View style={{flex:1}}>

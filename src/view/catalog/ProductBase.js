@@ -3,7 +3,7 @@ import { CatalogService } from '../../service/CatalogService';
 import { FlatList, View, Image, ActivityIndicator, Modal } from 'react-native';
 import { Text } from '../../components';
 import { MainContext } from '../../reducer';
-import variables from '../../utils';
+import variables, { ProductUtils } from '../../utils';
 import I18n from '../../i18n';
 import { catalogStyle, accountStyle, projectStyle } from '../../style';
 import { AntDesign } from '@expo/vector-icons';
@@ -16,7 +16,6 @@ export default class ProductBase extends React.PureComponent{
     constructor(props,context){
         super(props,context);
         this.catalogService = new CatalogService();
-        this.baseUrl = `${variables.magento.baseURL}/pub/media/catalog/product`;
     }
 
     refresh(){
@@ -53,7 +52,7 @@ export default class ProductBase extends React.PureComponent{
             this.getProducts().then(response => { 
                 let items = response.items || [];
                 items = items.map(item => {
-                    const multiplier = this.getQtyMultiplier(item)
+                    const multiplier = ProductUtils.getQtyMultiplier(item)
                     return {
                         ...item,
                         qty: multiplier.x
@@ -79,54 +78,6 @@ export default class ProductBase extends React.PureComponent{
             })
         })
     }
-
-    getAttributeValue(item,attribute){
-        const attr = item.custom_attributes.find(attr => attr.attribute_code == attribute);
-        return attr ? attr.value : undefined;
-    }
-
-    getQtyMultiplier(item){
-        const value = this.getAttributeValue(item,'revestimento_m2_caixa');
-        if(!value)
-            return {
-                unity: '',
-                x: 1
-            }
-        else 
-            return {
-                unity: 'm²',
-                x: Number(value)
-            }
-    }
-
-    getStock(item){
-        let stock = this.getAttributeValue(item,'quantity_and_stock_status');
-        if(Array.isArray(stock) && stock[0]){
-            return stock[1] || -1
-        }
-        return -1;
-    }
-
-    getProductImage(item){
-        const image = this.getAttributeValue(item,'image');
-        return image ? `${this.baseUrl}${image}` : null;
-    }
-
-    getProductPrices(item){
-        let prices = {
-            regular: `${I18n.t('catalog.currency')}${parseFloat(item.price).toFixed(2)}`,
-            special: null
-        }
-        const specialPrice = this.getAttributeValue(item,'special_price');
-        if(specialPrice){
-            if(Number(specialPrice) < Number(item.price)){
-                prices.special = `${I18n.t('catalog.currency')}${parseFloat(specialPrice).toFixed(2)}`
-            }
-        }
-        return prices;
-    }
-
-    
 
     addToCart(item){
         let cart = this.state.cart.slice(0);
@@ -154,7 +105,7 @@ export default class ProductBase extends React.PureComponent{
     }
 
     decrease(item){
-        const multiplier = this.getQtyMultiplier(item);
+        const multiplier = ProductUtils.getQtyMultiplier(item);
         if(item.qty > multiplier.x){
             let newQty = 0;
             if(!Number.isInteger(multiplier.x))
@@ -166,11 +117,11 @@ export default class ProductBase extends React.PureComponent{
     }
 
     async increase(item){
-        let stock = this.getStock(item);
-        const multiplier = this.getQtyMultiplier(item);
+        let stock = ProductUtils.getStock(item);
+        const multiplier = ProductUtils.getQtyMultiplier(item);
         if(stock == -1){
             const response = await this.catalogService.getProductBySku(item.sku);
-            stock = this.getStock(response);
+            stock = ProductUtils.getStock(response);
             response.qty = item.qty;
             const products = this.state.products.map(p => {
                 if(p.sku == response.sku)
@@ -214,7 +165,7 @@ export default class ProductBase extends React.PureComponent{
     }
 
     renderQty(item,big=false){
-        const multiplier = this.getQtyMultiplier(item);
+        const multiplier = ProductUtils.getQtyMultiplier(item);
         const qty = multiplier.unity == '' ? item.qty : `${item.qty} ${multiplier.unity}`;
         return(
             <View style={catalogStyle.qtyArea}>
@@ -227,7 +178,7 @@ export default class ProductBase extends React.PureComponent{
     }
 
     renderPrice(item){
-        const prices = this.getProductPrices(item);
+        const prices = ProductUtils.getProductPrices(item);
         return(
             <View style={catalogStyle.priceArea}>
                 <Text style={catalogStyle.fromTo}>
@@ -242,7 +193,7 @@ export default class ProductBase extends React.PureComponent{
     }
 
     renderItem({item}){
-        const image = this.getProductImage(item);
+        const image = ProductUtils.getProductImage(item);
         let cart = this.state.cart.slice(0);
         const found = cart.find(c => c.sku == item.sku);
         return(

@@ -8,7 +8,7 @@ import { ListItem, Button, Image, Divider } from 'react-native-elements';
 import { SelectAddress } from '../../components/SelectAddress';
 import { CatalogService } from '../../service/CatalogService';
 import { Check, Text, GradientButton } from '../../components';
-import variables from '../../utils';
+import variables, { ProductUtils } from '../../utils';
 import { CheckoutService } from '../../service/CheckoutService';
 import { Actions } from 'react-native-router-flux';
 import { UserService } from '../../service/firebase/UserService';
@@ -33,7 +33,6 @@ export default class CustomerCart extends Customer{
         super(props,context);
         this.catalogService = new CatalogService();
         this.checkoutService = new CheckoutService(this.context.user.token);
-        this.baseUrl = `${variables.magento.baseURL}/pub/media/catalog/product`;
         const room = props.room || {};
         this.state = {
             items: [],
@@ -229,22 +228,8 @@ export default class CustomerCart extends Customer{
         )
     }
 
-    getQtyMultiplier(item){
-        const value = this.getAttributeValue(item,'revestimento_m2_caixa');
-        if(!value)
-            return {
-                unity: '',
-                x: 1
-            }
-        else 
-            return {
-                unity: 'm²',
-                x: Number(value) > 0 ? Number(value) : 1
-            }
-    }
-
     decrease(item){
-        const multiplier = this.getQtyMultiplier(item);
+        const multiplier = ProductUtils.getQtyMultiplier(item);
         if(item.qty > multiplier.x){
             let newQty = 0;
             if(!Number.isInteger(multiplier.x))
@@ -256,11 +241,11 @@ export default class CustomerCart extends Customer{
     }
 
     async increase(item){
-        let stock = this.getStock(item);
-        const multiplier = this.getQtyMultiplier(item);
+        let stock = ProductUtils.getStock(item);
+        const multiplier = ProductUtils.getQtyMultiplier(item);
         if(stock == -1){
             const response = await this.catalogService.getProductBySku(item.sku);
-            stock = this.getStock(response);
+            stock = ProductUtils.getStock(response);
             response.qty = item.qty;
             const selectedCart = this.state.selectedCart.map(p => {
                 if(p.sku == response.sku)
@@ -306,37 +291,6 @@ export default class CustomerCart extends Customer{
             })
     }
 
-    getAttributeValue(item,attribute){
-        const attr = item.custom_attributes.find(attr => attr.attribute_code == attribute);
-        return attr ? attr.value : undefined;
-    }
-
-    getProductImage(item){
-        const image = this.getAttributeValue(item,'image');
-        return image ? `${this.baseUrl}${image}` : null;
-    }
-
-    getProductPrices(item){
-        let prices = {
-            regular: this.value2Currency(item.price),
-            regularPrice: item.price,
-            special: null,
-            specialPrice: null
-        }
-        const specialPrice = this.getAttributeValue(item,'special_price');
-        if(specialPrice){
-            if(Number(specialPrice) < Number(item.price)){
-                prices.special = this.value2Currency(specialPrice)
-                prices.specialPrice = specialPrice
-            }
-        }
-        return prices;
-    }
-
-    value2Currency(value){
-        return `${I18n.t('catalog.currency')}${parseFloat(value).toFixed(2)}`;
-    }
-
     toggleItem(item){
         if(this.isCheckout) return;
         let selectedCart = this.state.selectedCart.slice();
@@ -374,9 +328,9 @@ export default class CustomerCart extends Customer{
         const { selectedCart } = this.state;
         const checked = selectedCart.find(i => i.sku == item.sku) || false;
         if(this.isCheckout && !checked) return <></>;
-        const image = this.getProductImage(item);
-        const prices = this.getProductPrices(item);
-        const multiplier = this.getQtyMultiplier(item);
+        const image = ProductUtils.getProductImage(item);
+        const prices = ProductUtils.getProductPrices(item);
+        const multiplier = ProductUtils.getQtyMultiplier(item);
         const divider = Number.isInteger(multiplier.x) ? 
                             Math.ceil(Number(checked.qty) / multiplier.x) : 
                             Number(Number(checked.qty) / multiplier.x).toFixed(2);
@@ -418,7 +372,7 @@ export default class CustomerCart extends Customer{
                         <Text weight={'medium'} size={10}>{item.name}</Text>
                     </View>
                     <View style={{alignSelf:'flex-end'}}>
-                        <Text size={10} weight={'semibold'}>{this.value2Currency(value)}</Text>
+                        <Text size={10} weight={'semibold'}>{ProductUtils.value2Currency(value)}</Text>
                     </View>
                     <Divider />
                 </View>
@@ -482,12 +436,12 @@ export default class CustomerCart extends Customer{
         let price = 0;
         cartItems.forEach(i => {
             const found = selectedCart.find(ii => ii.sku == i.sku);
-            const prices = this.getProductPrices(i);
+            const prices = ProductUtils.getProductPrices(i);
             if(found) {
                 price += (prices.specialPrice || prices.regularPrice) * found.qty;
             }
         })
-        return this.renderFooterItem(I18n.t('checkout.subtotal'),this.value2Currency(price));
+        return this.renderFooterItem(I18n.t('checkout.subtotal'),ProductUtils.value2Currency(price));
     }
 
     renderFooterItem(label,value){

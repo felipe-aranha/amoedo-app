@@ -7,6 +7,7 @@ import { View, Modal, ScrollView, Keyboard, Alert, Platform, Picker } from 'reac
 import { MainContext } from '../../reducer';
 import { Header, Text, Input, DatePicker, KeyboardSpacer } from '../../components';
 import { Actions } from 'react-native-router-flux';
+import { ProductUtils } from '../../utils';
 
 
 export default class CustomerCheckout extends CustomerCart{
@@ -303,7 +304,7 @@ export default class CustomerCheckout extends CustomerCart{
             selectedCart.forEach(i => {
                 price += i.price * i.qty;
             });
-            value = this.value2Currency(price)
+            value = ProductUtils.value2Currency(price)
         }
         
         return this.renderFooterItem(I18n.t('checkout.subtotal'),value);
@@ -312,7 +313,7 @@ export default class CustomerCheckout extends CustomerCart{
     renderShipping(){
         const { selectedShipping, loadingShipping } = this.state;
         value = loadingShipping ? I18n.t('checkout.loading') : 
-            selectedShipping != null ? this.value2Currency(selectedShipping.amount) : I18n.t('checkout.unavailableShipping')
+            selectedShipping != null ? ProductUtils.value2Currency(selectedShipping.amount) : I18n.t('checkout.unavailableShipping')
         return this.renderFooterItem(I18n.t('checkout.shipping'),value);
     }
 
@@ -324,7 +325,7 @@ export default class CustomerCheckout extends CustomerCart{
         });
         if(selectedShipping != null) 
             price += selectedShipping.amount;
-        return this.renderFooterItem(I18n.t('checkout.total'),this.value2Currency(price));
+        return this.renderFooterItem(I18n.t('checkout.total'),ProductUtils.value2Currency(price));
     }
 
     renderPaymentModal(){
