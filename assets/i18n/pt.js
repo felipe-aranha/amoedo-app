@@ -110,6 +110,7 @@ export default {
         confirmPassword: 'repetir senha*',
         cau: 'registro do cau*',
         cnpj: 'cnpj',
+        cnpjRequired: 'cnpj*',
         projects: 'projetos por mês',
         companyName: 'nome da empresa',
         cpf: 'cpf*',

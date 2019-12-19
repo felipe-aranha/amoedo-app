@@ -391,10 +391,10 @@ export default class Form extends React.PureComponent{
         )
     }
 
-    renderCnpj(){
+    renderCnpj(required='false'){
         return(
             <MaskedInput 
-                label={I18n.t('form.cnpj')}
+                label={I18n.t(`form.cnpj${required ? 'Required' : ''}`)}
                 value={this.state.cnpj}
                 onChangeText={this.handleCnpjChange.bind(this)}
                 type={'cnpj'}

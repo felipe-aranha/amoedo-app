@@ -291,7 +291,7 @@ export class CustomerRegisterForm extends Form {
             <View style={accountStyle.formRow}>
                 {this.props.personType == 1 ?
                     this.renderCpf() :
-                    this.renderCnpj()
+                    this.renderCnpj(true)
                 }
                 {this.renderRg()}
             </View>
