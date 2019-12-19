@@ -97,6 +97,44 @@ export default class Room extends React.PureComponent {
         this.setState({fileIndex})
     }
 
+    renderCartFooter(){
+        return(
+            <View style={{backgroundColor:'#fff',padding:20}}>
+                {this.renderSubtotal()}
+            </View>
+        );
+    }
+
+    renderSubtotal(){
+        const { cartItems, cart } = this.state;
+        let price = 0;
+        cartItems.forEach(i => {
+            const found = cart.find(ii => ii.sku == i.sku);
+            const prices = ProductUtils.getProductPrices(i);
+            if(found) {
+                price += (prices.specialPrice || prices.regularPrice) * found.qty;
+            }
+        })
+        return this.renderFooterItem(I18n.t('checkout.subtotal'),ProductUtils.value2Currency(price));
+    }
+
+    renderFooterItem(label,value){
+        return(
+            <View style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+                <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start'}}>
+                    <Text weight={'medium'} size={10} color={'rgb(57,57,57)'} >{label}</Text>
+                </View>
+                <View style={{flex:1,flexDirection:'row',justifyContent:'flex-end'}}>
+                <Text weight={'medium'} size={10} color={'rgb(57,57,57)'} >{value}</Text>
+                </View>
+            </View>
+        )
+    }
+
     getInitialState(){
         const roomState = this.props.roomState || {};
         let sequential = this.props.sequential || 1;
@@ -586,6 +624,7 @@ export default class Room extends React.PureComponent {
                                         {this.state.cartItems.map(item => {
                                             return this.renderCartItem(item);
                                         })}
+                                        {this.state.cartItems.length > 0  && this.renderCartFooter()}
                                     </View>
                                 }
                             </View>
