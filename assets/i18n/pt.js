@@ -392,7 +392,8 @@ export default {
         balance: 'Seu saldo de pontos',
         credited: 'Acúmulo',
         debited: 'Resgate',
-        points: 'pts'
+        points: 'pts',
+        redeem: 'GERAR RESGATE'
     },
     address: {
         remove: 'Excluir',

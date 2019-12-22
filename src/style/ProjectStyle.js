@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { default as style, secondaryColor } from './variables';
+import { default as style, secondaryColor, tertiaryColor } from './variables';
 
 export default StyleSheet.create({
     projectTypeArea: {
@@ -18,6 +18,9 @@ export default StyleSheet.create({
     },
     buttonSecondary: {
         backgroundColor: secondaryColor
+    },
+    buttonTertiary: {
+        backgroundColor: tertiaryColor
     },
     submitButtonTitle: {
         color: '#fff'

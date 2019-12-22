@@ -141,6 +141,8 @@ export default class Professional extends MainView{
                             refreshing={this.state.loading}
                             style={this.listStyle}
                             key={this.state.refreshList || 0}
+                            extraData={this.state.checked || undefined }
+                            ListFooterComponent={this.renderListFooter}
                         />
                     </View> :
                     this.renderEmptyList()
@@ -148,6 +150,10 @@ export default class Professional extends MainView{
                 
             </>
         )
+    }
+
+    renderListFooter = () => {
+        return <></>
     }
 
     onFloatButtonPress(){}
