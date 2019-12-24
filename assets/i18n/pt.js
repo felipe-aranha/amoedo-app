@@ -393,7 +393,12 @@ export default {
         credited: 'Acúmulo',
         debited: 'Resgate',
         points: 'pts',
-        redeem: 'GERAR RESGATE'
+        redeem: 'GERAR RESGATE',
+        redeemTitle: 'Resgate',
+        redeemDescription: 'Tem certeza que deseja solicitar o resgate de {{qty}} pontos?',
+        cancel: 'Cancelar',
+        confirmRedeem: 'Confirmar resgate',
+        redeemFailed: 'Ocorreu um erro ao solicitar o resgate. Tente novamente.'
     },
     address: {
         remove: 'Excluir',

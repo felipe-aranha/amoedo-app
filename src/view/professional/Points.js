@@ -2,12 +2,13 @@ import React from 'react';
 import Professional from '../Professional';
 import I18n from '../../i18n';
 import { secondaryColor, tertiaryColor, accountStyle, projectStyle } from '../../style';
-import { View } from 'react-native';
+import { View, Alert } from 'react-native';
 import { Text } from '../../components';
 import { MainContext } from '../../reducer';
 import { UserService } from '../../service/firebase/UserService';
 import { ListItem, CheckBox, Button } from 'react-native-elements';
 import { moment } from '../../utils';
+import { CustomerService } from '../../service/';
 
 export default class Points extends Professional{
 
@@ -41,8 +42,43 @@ export default class Points extends Professional{
         return UserService.getProfessionalDoc(this.context.user.magento.id.toString());
     }
 
-    redeem(){
+    getCheckedPoints(){
+        let total = 0;
+        const { checked, items } = this.state;
+        checked.forEach( c => {
+            const t = items.find( i => i.order == c );
+            if(t != null)
+                total += t.points
+        })
+        return Math.abs(Number(total).toFixed(2) || 0);
+    }
 
+    redeem(){
+        let qty = this.getCheckedPoints();
+        Alert.alert(
+            I18n.t('points.redeemTitle'), 
+            I18n.t('points.redeemDescription', { qty }),
+            [
+                { style: 'cancel', text: I18n.t('points.cancel') },
+                { text: I18n.t('points.confirmRedeem'), onPress: this.proceedRedeem }
+            ]
+        )
+    }
+
+    proceedRedeem = () => {
+        const { checked } = this.state;
+        const total = this.getCheckedPoints();
+        const myId = this.context.user.magento.id
+        const service = new CustomerService(this.context.user.token);
+        this.openModalLoading();
+        const additional = { points: checked, total}
+        service.sendEmail(myId, 'pointsredemption', additional).then(r => {
+            this.setState({ checked: [] })
+        }).catch(() => {
+            this.context.message(I18n.t('points.redeemFailed'))
+        }).finally(() => {
+            this.closeModalLoading()
+        })
     }
 
     toggleCheck = (item) => {
@@ -60,18 +96,23 @@ export default class Points extends Professional{
         const points = `${item.points >= 0 ? '+' : '-' } ${Math.abs(Number(item.points).toFixed(2) || 0)}`;
         const textColor = item.points >= 0 ? 'rgb(61,123,186)' : 'rgb(226,0,6)';
         const formatedDate = moment(item.createdAt,'YYYY-MM-DD HH:mm:ss').format('DD/MMM');
-        const selectable = item.points > 0;
+        const selectable = item.points > 0 && item.status == 'waiting';
         const isChecked = checked.find( c => c == item.order) != null;
         return(
             <ListItem 
                 containerStyle={{ marginTop: 5 }}
                 leftElement={(
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            {selectable &&
+                            {selectable ?
                                 <CheckBox 
                                     onPress={() => { this.toggleCheck(item) }}
                                     checked={isChecked}
                                     checkedIcon={'check'}
+                                    checkedColor={tertiaryColor}
+                                /> :
+                                <CheckBox 
+                                    checked={true}
+                                    checkedIcon={'close'}
                                     checkedColor={tertiaryColor}
                                 />
                             }
