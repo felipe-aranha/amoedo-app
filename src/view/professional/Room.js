@@ -1,11 +1,11 @@
 import React from 'react';
 import { Header, Text, KeyboardSpacer, SizeInput, TextArea, Select, MediaSelect, Input } from '../../components';
-import { View, ScrollView, TouchableOpacity, Modal, StyleSheet, Image, Share, Platform } from 'react-native';
-import { accountStyle, secondaryColor, mainStyle, projectStyle } from '../../style';
+import { View, ScrollView, TouchableOpacity, Modal, StyleSheet, Image, Share, Platform, FlatList } from 'react-native';
+import { accountStyle, secondaryColor, mainStyle, projectStyle, catalogStyle } from '../../style';
 import { Actions } from 'react-native-router-flux';
 import I18n from '../../i18n';
 import { AntDesign } from '@expo/vector-icons';
-import { Button, ButtonGroup, Divider } from 'react-native-elements';
+import { Button, ButtonGroup, Divider, CheckBox } from 'react-native-elements';
 import Catalog from '../catalog/Catalog';
 import Product from '../catalog/Product';
 import uuid from 'uuid';
@@ -372,7 +372,67 @@ export default class Room extends React.PureComponent {
         )
     }
 
-    renderCartItem(item){
+    renderPrice(item){
+        const prices = ProductUtils.getProductPrices(item);
+        return(
+            <View style={catalogStyle.priceArea}>
+                <Text style={catalogStyle.fromTo}>
+                    {prices.special != null && I18n.t('catalog.from')}
+                    <Text style={[catalogStyle.productPrice,prices.special != null && catalogStyle.productPriceLine]}>{prices.regular}</Text>
+                </Text>
+                {prices.special != null &&
+                    <Text style={catalogStyle.fromTo}>{I18n.t('catalog.to')}<Text style={catalogStyle.productPrice}>{prices.special}</Text></Text>
+                }
+            </View>
+        )
+    }
+
+    renderQty(item,big=false){
+        const { cart } = this.state;
+        const checked = cart.find(i => i.sku == item.sku) || false;
+        const multiplier = ProductUtils.getQtyMultiplier(item);
+        const qty = multiplier.unity == '' ? checked.qty : `${checked.qty} ${multiplier.unity}`;
+        return(
+            <View style={catalogStyle.qtyArea}>
+                <Text style={catalogStyle.qtdLabel}>{I18n.t('catalog.qty')}</Text>
+                <Text style={catalogStyle.qtyValue}>{qty}</Text>
+            </View>
+        )
+    }
+
+    renderCartItem({item}){
+        const { cart } = this.state;
+        const image = ProductUtils.getProductImage(item);
+        const checked = cart.find(i => i.sku == item.sku) || false;
+        return(
+            <TouchableOpacity style={{flex:0.5}} onPress={this.handleActiveProduct.bind(this,checked)}>
+                <View style={catalogStyle.productListArea}>
+                    
+                    
+                        {image != null &&
+                            <Image 
+                                source={{uri: image}}
+                                resizeMode={'contain'}
+                                style={catalogStyle.productListImage}
+                            />
+                        }
+                    <View style={{
+                        padding: 10
+                    }}>
+                        <Text 
+                            numberOfLines={2}
+                            weight={'medium'} 
+                            size={12}
+                        >{item.name}</Text>
+                        {this.renderPrice(item)}
+                        {this.renderQty(item)}
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    _renderCartItem(item){
         const { cart } = this.state;
         const checked = cart.find(i => i.sku == item.sku) || false;
         if(!checked) return(<></>);
@@ -618,14 +678,15 @@ export default class Room extends React.PureComponent {
                                     }
                                 </View>
                                 {this.state.cart.length > 0 &&
-                                    <View style={{
-                                        marginTop: 20
-                                    }}>
-                                        {this.state.cartItems.map(item => {
-                                            return this.renderCartItem(item);
-                                        })}
-                                        {this.state.cartItems.length > 0  && this.renderCartFooter()}
-                                    </View>
+                                    <FlatList 
+                                        data={this.state.cartItems}
+                                        renderItem={this.renderCartItem.bind(this)}
+                                        numColumns={2}
+                                        containerStyle={{
+                                            marginTop: 20
+                                        }}
+                                        ListFooterComponent={this.state.cartItems.length > 0  && this.renderCartFooter()}
+                                    />
                                 }
                             </View>
                             <View style={{marginTop: 20,marginBottom:50}}>
