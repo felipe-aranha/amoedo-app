@@ -364,14 +364,17 @@ export default class CustomerCart extends Customer{
         return(
             <TouchableOpacity style={{flex:0.5}} onPress={this.handleProductDetails.bind(this,checked)}>
                 <View style={catalogStyle.productListArea}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
-                        <CheckBox 
-                            checked={checked != false}
-                            onPress={this.toggleItem.bind(this,item)}
-                            checkedIcon={'check'}
-                            checkedColor={tertiaryColor}
-                        />
-                    </View>
+                    {!this.isCheckout && 
+                        <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
+                            <CheckBox 
+                                checked={checked != false}
+                                onPress={this.toggleItem.bind(this,item)}
+                                checkedIcon={'check'}
+                                checkedColor={tertiaryColor}
+                            />
+                        </View>
+                    }
+                    
                         {image != null &&
                             <Image 
                                 source={{uri: image}}
@@ -388,7 +391,7 @@ export default class CustomerCart extends Customer{
                             size={12}
                         >{item.name}</Text>
                         {this.renderPrice(item)}
-                        {checked && this.renderQty(item)}
+                        {!this.isCheckout && checked && this.renderQty(item)}
                         
                     </View>
                 </View>
