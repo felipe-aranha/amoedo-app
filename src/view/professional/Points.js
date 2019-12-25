@@ -17,6 +17,8 @@ export default class Points extends Professional{
     title = I18n.t('section.points');
     listStyle = { margin: 20 }
 
+    listColumns = 2;
+
     constructor(props,context){
         super(props,context);
         this.state = {
@@ -92,6 +94,54 @@ export default class Points extends Professional{
     }
 
     renderItem({item}){
+        const { checked } = this.state;
+        const points = `${item.points >= 0 ? '+' : '-' } ${Math.abs(Number(item.points).toFixed(2) || 0)}`;
+        const textColor = item.points >= 0 ? 'rgb(61,123,186)' : 'rgb(226,0,6)';
+        const formatedDate = moment(item.createdAt,'YYYY-MM-DD HH:mm:ss').format('DD/MMM');
+        const selectable = item.points > 0 && item.status == 'waiting';
+        const isChecked = checked.find( c => c == item.order) != null;
+
+        return(
+            <View style={{ flex: 0.5 }}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', margin: 5, padding: 5,  backgroundColor: '#fff' }}>
+                <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center'}}>
+                {selectable ?
+                    <CheckBox 
+                        onPress={() => { this.toggleCheck(item) }}
+                        checked={isChecked}
+                        checkedIcon={'check'}
+                        checkedColor={tertiaryColor}
+                        containerStyle={{ padding: 0}}
+                    /> :
+                    <CheckBox 
+                        checked={true}
+                        checkedIcon={'close'}
+                        checkedColor={tertiaryColor}
+                        containerStyle={{ padding: 0}}
+                    />
+                }
+                </View>
+                <View style={{ flex: 1 }}>
+                    <View style={{flex:1, justifyContent: 'center', alignItems: 'center', marginBottom: 10}}>
+                        <View style={{flex:1}}>
+
+                            <Text style={{textAlign:'center'}} numberOfLines={1} size={12} weight={'medium'}>{item.customer_name}</Text>
+                        </View>
+                        <View style={{flex:1}}>
+                            <Text style={{textAlign:'right'}} numberOfLines={1} size={12} weight={'medium'}>{formatedDate}</Text>
+                        </View>
+                    </View>
+                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <Text weight={'bold'} color={textColor}>{points}</Text>
+                        <Text weight={'medium'} color={textColor} style={{textAlign:'right'}}>{I18n.t('points.points')}</Text>
+                    </View>
+                </View>
+            </View>
+            </View>
+        )
+    }
+
+    _renderItem({item}){
         const { checked } = this.state;
         const points = `${item.points >= 0 ? '+' : '-' } ${Math.abs(Number(item.points).toFixed(2) || 0)}`;
         const textColor = item.points >= 0 ? 'rgb(61,123,186)' : 'rgb(226,0,6)';

@@ -10,6 +10,8 @@ import * as WebBrowser from 'expo-web-browser';
 
 export default class Professional extends MainView{
 
+    listColumns = 1
+
     constructor(props,context){
         super(props,context);
         this.state = {
@@ -143,6 +145,7 @@ export default class Professional extends MainView{
                             key={this.state.refreshList || 0}
                             extraData={this.state.checked || undefined }
                             ListFooterComponent={this.renderListFooter}
+                            numColumns={this.listColumns}
                         />
                     </View> :
                     this.renderEmptyList()
