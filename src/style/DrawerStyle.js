@@ -12,7 +12,8 @@ export default StyleSheet.create({
         backgroundColor: 'rgb(179,179,179)',
         width: 80,
         height: 80,
-        borderRadius: 15
+        borderRadius: 15,
+        marginTop: 20
     },
     userName: {
         fontFamily: 'system-extrabold',
