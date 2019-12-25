@@ -84,6 +84,11 @@ export default class Points extends Professional{
     }
 
     toggleCheck = (item) => {
+        console.log(item)
+        if(item.status != 'waiting'){
+            this.context.message(I18n.t(`points.${item.status}`))
+            return;
+        }
         let checked = this.state.checked.slice();
         if(checked.find( c => c == item.order) != null){
             checked = checked.filter(c => c != item.order)
@@ -100,28 +105,19 @@ export default class Points extends Professional{
         const formatedDate = moment(item.createdAt,'YYYY-MM-DD HH:mm:ss').format('DD/MMM');
         const selectable = item.points > 0 && item.status == 'waiting';
         const isChecked = checked.find( c => c == item.order) != null;
-
         return(
             <View style={{ flex: 0.5 }}>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', margin: 5, padding: 5,  backgroundColor: '#fff' }}>
                 <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center'}}>
-                {selectable ?
                     <CheckBox 
                         onPress={() => { this.toggleCheck(item) }}
-                        checked={isChecked}
-                        checkedIcon={'check'}
-                        checkedColor={tertiaryColor}
-                        containerStyle={{ padding: 0}}
-                    /> :
-                    <CheckBox 
-                        checked={true}
-                        checkedIcon={'close'}
+                        checked={isChecked || !selectable}
+                        checkedIcon={ selectable ? 'check' : 'close' }
                         checkedColor={tertiaryColor}
                         containerStyle={{ padding: 0}}
                     />
-                }
                 </View>
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, opacity: selectable ? 1 : 0.5 }}>
                     <View style={{flex:1, justifyContent: 'center', alignItems: 'center', marginBottom: 10}}>
                         <View style={{flex:1}}>
 

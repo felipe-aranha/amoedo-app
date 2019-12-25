@@ -398,7 +398,9 @@ export default {
         redeemDescription: 'Tem certeza que deseja solicitar o resgate de {{qty}} pontos?',
         cancel: 'Cancelar',
         confirmRedeem: 'Confirmar resgate',
-        redeemFailed: 'Ocorreu um erro ao solicitar o resgate. Tente novamente.'
+        redeemFailed: 'Ocorreu um erro ao solicitar o resgate. Tente novamente.',
+        rescued: 'Você já resgatou esses pontos',
+        released: 'Você já solicitou o resgate desses pontos'
     },
     address: {
         remove: 'Excluir',
