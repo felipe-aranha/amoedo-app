@@ -371,6 +371,7 @@ export default class CustomerCart extends Customer{
                                 onPress={this.toggleItem.bind(this,item)}
                                 checkedIcon={'check'}
                                 checkedColor={tertiaryColor}
+                                containerStyle={{ padding: 0 }}
                             />
                         </View>
                     }
