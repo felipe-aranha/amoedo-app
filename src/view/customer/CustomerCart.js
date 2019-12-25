@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, FlatList, Modal, TouchableOpacity, ScrollView } from 'react-native';
 import Customer from "../Customer";
-import { primaryColor, accountStyle, catalogStyle, drawerStyle } from '../../style';
+import { primaryColor, accountStyle, catalogStyle, drawerStyle, tertiaryColor } from '../../style';
 import I18n from '../../i18n';
 import { MainContext } from '../../reducer';
-import { ListItem, Button, Image, Divider } from 'react-native-elements';
+import { ListItem, Button, Image, Divider, CheckBox } from 'react-native-elements';
 import { SelectAddress } from '../../components/SelectAddress';
 import { CatalogService } from '../../service/CatalogService';
 import { Check, Text, GradientButton } from '../../components';
@@ -229,24 +229,28 @@ export default class CustomerCart extends Customer{
     }
 
     decrease(item){
+        const { selectedCart } = this.state;
+        const checked = selectedCart.find(i => i.sku == item.sku) || false;
         const multiplier = ProductUtils.getQtyMultiplier(item);
-        if(item.qty > multiplier.x){
+        if(checked.qty > multiplier.x){
             let newQty = 0;
             if(!Number.isInteger(multiplier.x))
-                newQty = Number(Number(item.qty) - Number(multiplier.x)).toFixed(2);
+                newQty = Number(Number(checked.qty) - Number(multiplier.x)).toFixed(2);
             else 
-                newQty = Number(item.qty) - Number(multiplier.x)
+                newQty = Number(checked.qty) - Number(multiplier.x)
             this.setQty(item, newQty)
         }
     }
 
     async increase(item){
+        const { selectedCart } = this.state;
+        const checked = selectedCart.find(i => i.sku == item.sku) || false;
         let stock = ProductUtils.getStock(item);
         const multiplier = ProductUtils.getQtyMultiplier(item);
         if(stock == -1){
             const response = await this.catalogService.getProductBySku(item.sku);
             stock = ProductUtils.getStock(response);
-            response.qty = item.qty;
+            response.qty = checked.qty;
             const selectedCart = this.state.selectedCart.map(p => {
                 if(p.sku == response.sku)
                     return response;
@@ -259,12 +263,12 @@ export default class CustomerCart extends Customer{
         if(Array.isArray(stock) && stock[0]){
             stock = stock[1] || 1
         }   
-        if(item.qty < (stock * multiplier.x)){
+        if(checked.qty < (stock * multiplier.x)){
             let newQty = 0;
             if(!Number.isInteger(multiplier.x))
-                newQty = Number(Number(item.qty) + Number(multiplier.x)).toFixed(2);
+                newQty = Number(Number(checked.qty) + Number(multiplier.x)).toFixed(2);
             else 
-                newQty = Number(item.qty) + Number(multiplier.x)
+                newQty = Number(checked.qty) + Number(multiplier.x)
             this.setQty(item, newQty)
         }
         else if(item.qty == (stock * multiplier.x)){
@@ -303,8 +307,7 @@ export default class CustomerCart extends Customer{
                 selectedCart.push(i);
         }
         this.setState({
-            selectedCart,
-            updateList: new Date().getTime()
+            selectedCart
         },() => {
             // console.log(this.state.selectedCart);
         })
@@ -324,7 +327,76 @@ export default class CustomerCart extends Customer{
         }
     }
 
+    renderPrice(item){
+        const prices = ProductUtils.getProductPrices(item);
+        return(
+            <View style={catalogStyle.priceArea}>
+                <Text style={catalogStyle.fromTo}>
+                    {prices.special != null && I18n.t('catalog.from')}
+                    <Text style={[catalogStyle.productPrice,prices.special != null && catalogStyle.productPriceLine]}>{prices.regular}</Text>
+                </Text>
+                {prices.special != null &&
+                    <Text style={catalogStyle.fromTo}>{I18n.t('catalog.to')}<Text style={catalogStyle.productPrice}>{prices.special}</Text></Text>
+                }
+            </View>
+        )
+    }
+
+    renderQty(item,big=false){
+        const { selectedCart } = this.state;
+        const checked = selectedCart.find(i => i.sku == item.sku) || false;
+        const multiplier = ProductUtils.getQtyMultiplier(item);
+        const qty = multiplier.unity == '' ? checked.qty : `${checked.qty} ${multiplier.unity}`;
+        return(
+            <View style={catalogStyle.qtyArea}>
+                <Text style={catalogStyle.qtdLabel}>{I18n.t('catalog.qty')}</Text>
+                <AntDesign onPress={this.decrease.bind(this,item)} name={'minuscircleo'} size={big? 20 : 16} color={'rgb(77,77,77)'} />
+                <Text style={catalogStyle.qtyValue}>{qty}</Text>
+                <AntDesign onPress={this.increase.bind(this,item)} name={'pluscircleo'} size={big? 20 : 16} color={'rgb(77,77,77)'} />
+            </View>
+        )
+    }
+
     renderCartItem({item}){
+        const { selectedCart } = this.state;
+        const image = ProductUtils.getProductImage(item);
+        const checked = selectedCart.find(i => i.sku == item.sku) || false;
+        return(
+            <TouchableOpacity style={{flex:0.5}} onPress={this.handleProductDetails.bind(this,checked)}>
+                <View style={catalogStyle.productListArea}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
+                        <CheckBox 
+                            checked={checked != false}
+                            onPress={this.toggleItem.bind(this,item)}
+                            checkedIcon={'check'}
+                            checkedColor={tertiaryColor}
+                        />
+                    </View>
+                        {image != null &&
+                            <Image 
+                                source={{uri: image}}
+                                resizeMode={'contain'}
+                                style={catalogStyle.productListImage}
+                            />
+                        }
+                    <View style={{
+                        padding: 10
+                    }}>
+                        <Text 
+                            numberOfLines={2}
+                            weight={'medium'} 
+                            size={12}
+                        >{item.name}</Text>
+                        {this.renderPrice(item)}
+                        {checked && this.renderQty(item)}
+                        
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    _renderCartItem({item}){
         const { selectedCart } = this.state;
         const checked = selectedCart.find(i => i.sku == item.sku) || false;
         if(this.isCheckout && !checked) return <></>;
@@ -385,11 +457,13 @@ export default class CustomerCart extends Customer{
             <View style={{flex:1}}>
                 {this.renderCartHeader()}
                 <FlatList
-                    key={`${this.state.updateList}${this.state.selectedCart.length}`}
+                    key={`${this.state.updateList}`}
                     data={this.state.cartItems}
                     renderItem={this.renderCartItem.bind(this)}
                     keyExtractor={(i,k) => k.toString()}
                     removeClippedSubviews={false}
+                    numColumns={2}
+                    extraData={this.state.selectedCart}
                 />
                 {this.renderCartFooter()}
             </View>
