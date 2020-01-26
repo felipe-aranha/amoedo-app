@@ -24,6 +24,7 @@ export default class CustomerRegister extends Register {
         const address = typeof(customer.address) == 'object' ? customer.address : {};
         this.state = {
             activeSection: 'personal-data',
+            personType: 1,
             personalData: {
                 ...customer,
                 phone: customer.telephone,
@@ -78,7 +79,7 @@ export default class CustomerRegister extends Register {
         customer = {
             ...customer,
             dob: Utils.parseDate(personalData.dob) || null,
-            taxvat: personType == 1 ? personalData.cpf : personalData.cnpj,
+            taxvat: personType === 1 ? personalData.cpf : personalData.cnpj,
             firstname,
             lastname,
             email: personalData.email,
@@ -90,6 +91,7 @@ export default class CustomerRegister extends Register {
             this.firebaseRegister();
             return;
         }
+        console.log(personType)
         this.customerService.register(customerRegister.customer,customerRegister.password).then(response => {
             this.processApiReturn(response);
         }).catch(e => {
