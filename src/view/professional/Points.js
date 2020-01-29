@@ -17,7 +17,7 @@ export default class Points extends Professional{
     title = I18n.t('section.points');
     listStyle = { margin: 20 }
 
-    listColumns = 2;
+    listColumns = 1;
 
     constructor(props,context){
         super(props,context);
@@ -84,7 +84,9 @@ export default class Points extends Professional{
     }
 
     toggleCheck = (item) => {
-        console.log(item)
+        const debit = item.transactionType == 'debito';
+        if(debit)
+            return; 
         if(item.status != 'waiting'){
             this.context.message(I18n.t(`points.${item.status}`))
             return;
@@ -98,7 +100,7 @@ export default class Points extends Professional{
         this.setState({ checked })
     }
 
-    renderItem({item}){
+    _renderItem({item}){
         const { checked } = this.state;
         const points = `${item.points >= 0 ? '+' : '-' } ${Math.abs(Number(item.points).toFixed(2) || 0)}`;
         const textColor = item.points >= 0 ? 'rgb(61,123,186)' : 'rgb(226,0,6)';
@@ -137,10 +139,11 @@ export default class Points extends Professional{
         )
     }
 
-    _renderItem({item}){
+    renderItem({item}){
         const { checked } = this.state;
-        const points = `${item.points >= 0 ? '+' : '-' } ${Math.abs(Number(item.points).toFixed(2) || 0)}`;
-        const textColor = item.points >= 0 ? 'rgb(61,123,186)' : 'rgb(226,0,6)';
+        const debit = item.transactionType == 'debito'
+        const points = `${debit ? '-' : '+' } ${Math.abs(Number(item.points).toFixed(2) || 0)}`;
+        const textColor = !debit ? 'rgb(61,123,186)' : 'rgb(226,0,6)';
         const formatedDate = moment(item.createdAt,'YYYY-MM-DD HH:mm:ss').format('DD/MMM');
         const selectable = item.points > 0 && item.status == 'waiting';
         const isChecked = checked.find( c => c == item.order) != null;
@@ -149,19 +152,13 @@ export default class Points extends Professional{
                 containerStyle={{ marginTop: 5 }}
                 leftElement={(
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            {selectable ?
-                                <CheckBox 
-                                    onPress={() => { this.toggleCheck(item) }}
-                                    checked={isChecked}
-                                    checkedIcon={'check'}
-                                    checkedColor={tertiaryColor}
-                                /> :
-                                <CheckBox 
-                                    checked={true}
-                                    checkedIcon={'close'}
-                                    checkedColor={tertiaryColor}
-                                />
-                            }
+                            <CheckBox 
+                                onPress={() => { this.toggleCheck(item) }}
+                                checked={isChecked || !selectable}
+                                checkedIcon={ selectable ? 'check' : 'close' }
+                                checkedColor={debit ? 'transparent' : tertiaryColor}
+                                containerStyle={{ padding: 0}}
+                            />
                         <Text size={12} weight={'medium'}>{formatedDate}</Text>
                     </View>
                 )}
@@ -171,7 +168,7 @@ export default class Points extends Professional{
                             <Text style={{textAlign:'center'}} numberOfLines={1} size={12} weight={'medium'}>{item.customer_name}</Text>
                         </View>
                         <View style={{flex:1}}>
-                            <Text style={{textAlign:'right'}} numberOfLines={1} size={12} weight={'medium'}>{I18n.t(`points.${item.points >= 0 ? 'credited' : 'debited'}`)}</Text>
+                            <Text style={{textAlign:'right'}} numberOfLines={1} size={12} weight={'medium'}>{I18n.t(`points.${!debit ? 'credited' : 'debited'}`)}</Text>
                         </View>
                     </View>
                 )}
