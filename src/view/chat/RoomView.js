@@ -11,6 +11,8 @@ import { Text, KeyboardSpacer } from '../../components';
 import { GiftedChat, Bubble, Composer, Send, InputToolbar } from 'react-native-gifted-chat';
 import * as Localization from 'expo-localization';
 import { ChatService } from '../../service/firebase/ChatService';
+import { UserService } from '../../service/firebase/UserService';
+import { CustomerService } from '../../service/CustomerService';
 import _ from 'lodash';
 
 export default class RoomView extends MainView{
@@ -25,13 +27,15 @@ export default class RoomView extends MainView{
             messages: [],
             initializing: true,
             db: '',
-            keyboard: false
+            keyboard: false,
+            roommate: props.roommate
         }
         this.listener = null;
+        this.customerService = new CustomerService();
     }
 
     componentDidMount(){
-        this.getDbRoom();
+        this.initializeRoom();
         Keyboard.addListener('keyboardDidShow',this.showKeyboard.bind(this));
         Keyboard.addListener('keyboardDidHide',this.hideKeyboard.bind(this));
     }
@@ -55,8 +59,53 @@ export default class RoomView extends MainView{
             this.listener();
     }
 
+    async initializeRoom(){
+        const db = await this.getDbRoom();
+        this.listener = db.onSnapshot( snapshot => {
+            const data = snapshot.data();
+            if(!this.state.roommate){
+                this.loadRoommate(data);
+            }
+            if(!_.isEqual(data.messages,this.state.messages)){
+                this.setState({
+                    messages: data.messages.reverse()
+                })
+            }
+        })
+        this.setState({
+            initializing: false,
+            db: db.id
+        })
+    }
+
+    async loadRoommate(data){
+        if(this.isProfessional()){
+            const client = data.client;
+            UserService.getClient(client).then( r => {
+                const roommate = {
+                    avatar: r.avatar,
+                    name: r.name
+                }
+                this.setState({ roommate })
+            });
+        } else {
+            const professional = data.professional;
+            UserService.getProfessionalDoc(professional).get().then(async r => {
+                const p = r.data();
+                const customer = await this.customerService.getCustomer(professional);
+                const roommate = {
+                    name: `${customer.firstname} ${customer.lastname}`,
+                    avatar: p.user.avatar
+                }
+                this.setState({ roommate })
+            })
+        }
+    }
+
     async getDbRoom(){
-        const { roommate } = this.props;
+        const { roommate, roomId } = this.props;
+        if(roomId)
+            return ChatService.getChatDB().doc(roomId)
         const { user } = this.context;
         const myId = this.isProfessional() ? user.magento.id : user.magento.email;
         const hisId = this.isProfessional() ? roommate.email : roommate.id;
@@ -68,19 +117,7 @@ export default class RoomView extends MainView{
             users.professional = hisId;
             users.client = myId;
         }
-        const db = await ChatService.getRoom(users);
-        this.listener = db.onSnapshot( snapshot => {
-            const data = snapshot.data();
-            if(!_.isEqual(data.messages,this.state.messages)){
-                this.setState({
-                    messages: data.messages.reverse()
-                })
-            }
-        })
-        this.setState({
-            initializing: false,
-            db: db.id
-        })
+        return await ChatService.getRoom(users);
     }
 
     isProfessional(){
@@ -137,16 +174,18 @@ export default class RoomView extends MainView{
     }
 
     renderTitle(){
-        const { roommate } = this.props;
+        const { roommate } = this.state;
+        const avatar = roommate ? roommate.avatar : '';
+        const name = roommate ? roommate.name : '';
         return(
             <View style={chatStyle.roomTitle}>
                 <Avatar 
                     rounded
-                    source={{ uri: roommate.avatar != '' ? roommate.avatar : null }}
+                    source={{ uri: avatar != '' ? avatar : null }}
                     // avatarStyle={{ width: 40, height: 40, borderRadius: 20 }}
                     containerStyle={{ marginHorizontal: 20 }}
                 />
-                <Text numberOfLines={1} color={'#fff'} weight={'medium'} size={14} >{roommate.name}</Text>
+                <Text numberOfLines={1} color={'#fff'} weight={'medium'} size={14} >{name}</Text>
             </View>
         )
     }

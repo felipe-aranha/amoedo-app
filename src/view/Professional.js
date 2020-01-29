@@ -32,6 +32,11 @@ export default class Professional extends MainView{
                         WebBrowser.openBrowserAsync(redirect.link);
                     }
                     break;
+                case 'chat': 
+                    const roomId = redirect.id || undefined;
+                    const screen = roomId ? 'chatRoom' : 'chat';
+                    Actions.push(screen, { roomId })
+                    break;
                 case 'budget':
                     Actions.push(context.user.isProfessional ? 'projects': 'cart', { budgetID: redirect.id })
                     break;

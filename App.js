@@ -33,7 +33,6 @@ export default class App extends React.Component {
 
 	handleNotification(notification){
 		const { user } = this.state;
-		console.log(notification.data);
 		if(notification.data){
 			if(notification.data.type){
 				this.setState({
