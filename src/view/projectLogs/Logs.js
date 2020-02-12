@@ -136,7 +136,7 @@ export default class Logs extends Professional{
         return(
             <>
             {super.renderSearch()}
-            <View style={{marginHorizontal:40, marginTop: 20}}>
+            <View style={{marginHorizontal:20, marginTop: 20}}>
                 <ButtonGroup 
                     onPress={activeLog => { this.setState({ activeLog, refreshList: activeLog }) }}
                     selectedIndex={this.state.activeLog}

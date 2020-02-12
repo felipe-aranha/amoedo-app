@@ -424,10 +424,8 @@ export default class EditProfile extends MainView{
                                     imageProps={{
                                         resizeMode: 'contain',
                                         tintColor: 'rgb(71,71,71)',
-                                        style:{
-                                            width: 30,
-                                            height: 30,
-                                            alignSelf: 'center',
+                                        style: {
+                                            tintColor: 'rgb(71,71,71)',
                                         }
                                     }}
                                 />
@@ -534,6 +532,7 @@ export default class EditProfile extends MainView{
                             onPress={this.handleDeleteAccount.bind(this)}
                         />
                     </View>
+                    <View style={{ height: 30 }} />
                 </ScrollView>
                 {this.renderModal()}
             </View>
