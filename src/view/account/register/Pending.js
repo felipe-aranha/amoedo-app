@@ -44,6 +44,12 @@ export class Pending extends AccountBase{
                             this.subscription();
                             Actions.reset('professional');
                             break;
+                        case 'deactivated':
+                            UserService.toggleActiveAccount(user, isProfessional, true);
+                            this.context.openDrawer = !this.context.redirect;
+                            this.subscription();
+                            Actions.reset('professional');
+                            break;
                         default:
                             this.setState({
                                 loading: false

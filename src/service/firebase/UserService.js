@@ -62,6 +62,29 @@ export class UserService{
         })
     }
 
+    static toggleActiveAccount(user, professional, activate=false){
+        const doc = professional ? UserService.getProfessionalDB().doc(user.id.toString()) : UserService.getCustomerDB().doc(user.email);
+        return FirebaseDB.getFirestore().runTransaction(transaction => {
+            return transaction.get(doc).then(d => {
+                let { user } = d.data();
+                if(professional){
+                    let prevStatus = user.status;
+                    let status = activate ? prevStatus : 'deactivated';
+                    user = {
+                        ...user,
+                        prevStatus,
+                        status
+                    }
+                    return transaction.update(doc, { user })
+                } else {
+                    let status = activate ? 'activated' : 'deactivated'
+                    return transaction.update(doc, { status })
+                }
+                
+            })
+        })
+    }
+
     static async updateAvatar(user, avatar, professional){
         let avatarUrl = false;
         if(avatar!= '' && avatar != null)

@@ -204,14 +204,21 @@ export default class Login extends AccountBase{
                 this.customerService.sendRecoveryEmail(this.state.email).then(r => {
                     this.setState({
                         forgotLoading: false,
+                    },() => {
+                        Alert.alert(
+                            '',
+                            I18n.t(`account.login.forgot${!r.message ? 'Success' : 'Error'}`),
+                            [
+                                 {text: 'OK', onPress: () => {
+                                     if(!r.message)
+                                        this.togglePasswordRecovery();
+                                 }},
+                            ]
+                        );
                     })
-                    if(!r.message)
-                        this.togglePasswordRecovery();
-                    Alert.alert(
-                        '',
-                        I18n.t(`account.login.forgot${!r.message ? 'Success' : 'Error'}`)
-                    )
+                    
                 }).catch(e => {
+                    console.log(e)
                     this.setState({
                         forgotLoading: false,
                     })

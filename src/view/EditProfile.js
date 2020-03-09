@@ -92,9 +92,14 @@ export default class EditProfile extends MainView{
             I18n.t('editProfile.deleteAccountText'),
             [
                 { text: I18n.t('editProfile.no'), style: 'cancel' },
-                { text: I18n.t('editProfile.yes'), onPress: this.logout.bind(this) }
+                { text: I18n.t('editProfile.yes'), onPress: this.deleteAccount.bind(this) }
             ]
         )
+    }
+
+    deleteAccount(){
+        UserService.toggleActiveAccount(this.context.user.firebase, this.isProfessional())
+        this.logout();
     }
 
     toggleModal(){
