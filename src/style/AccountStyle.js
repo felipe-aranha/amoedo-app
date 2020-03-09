@@ -229,7 +229,7 @@ export default StyleSheet.create({
     registerHeaderText: {
         fontFamily: 'system-medium',
         color: 'rgb(242,242,242)',
-        fontSize: 15,
+        fontSize: 14,
         textTransform: 'uppercase'
     },
     registerContentArea: {
